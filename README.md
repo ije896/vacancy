@@ -19,5 +19,11 @@ Construct an open source plugin for personal education and hopefully for usable 
  - Stand-alone application
  - Cross-platform
  
+ ## Brainstorming 
+ (these feel like they should be separate plugins)
+ - Granulation
+ - Feedback/distortion
+ - Downsampling/bitcrushing
+ 
  
  
