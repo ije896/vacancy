@@ -14,6 +14,7 @@
 
 #include "AppConfig.h"
 
+#include <dRowAudio/dRowAudio.h>
 #include <juce_audio_basics/juce_audio_basics.h>
 #include <juce_audio_devices/juce_audio_devices.h>
 #include <juce_audio_formats/juce_audio_formats.h>
@@ -40,8 +41,8 @@
 #if ! JUCE_DONT_DECLARE_PROJECTINFO
 namespace ProjectInfo
 {
-    const char* const  projectName    = "vacancy";
-    const char* const  versionString  = "1.0.0";
-    const int          versionNumber  = 0x10000;
+    const char* const  projectName    = "Vacancy";
+    const char* const  versionString  = "0.0.1";
+    const int          versionNumber  = 0x1;
 }
 #endif

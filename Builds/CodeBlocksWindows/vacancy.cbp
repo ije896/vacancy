@@ -3,12 +3,12 @@
 <CodeBlocks_project_file>
   <FileVersion major="1" minor="6"/>
   <Project>
-    <Option title="vacancy"/>
+    <Option title="Vacancy"/>
     <Option pch_mode="2"/>
     <Option compiler="gcc"/>
     <Build>
       <Target title="Shared Code | Debug">
-        <Option output="bin/Debug/vacancy.lib"
+        <Option output="bin/Debug/Vacancy.lib"
                 prefix_auto="0"
                 extension_auto="0"/>
         <Option object_output="obj/Debug"/>
@@ -20,8 +20,8 @@
           <Add option="-DDEBUG=1"/>
           <Add option="-D_DEBUG=1"/>
           <Add option="-DJUCER_CODEBLOCKS_WINDOWS_8F9AFD66=1"/>
-          <Add option="-DJUCE_APP_VERSION=1.0.0"/>
-          <Add option="-DJUCE_APP_VERSION_HEX=0x10000"/>
+          <Add option="-DJUCE_APP_VERSION=0.0.1"/>
+          <Add option="-DJUCE_APP_VERSION_HEX=0x1"/>
           <Add option="-DJucePlugin_Build_VST=1"/>
           <Add option="-DJucePlugin_Build_VST3=0"/>
           <Add option="-DJucePlugin_Build_AU=0"/>
@@ -57,21 +57,21 @@
         </Linker>
       </Target>
       <Target title="VST | Debug">
-        <Option output="bin/Debug/vacancy.dll"
+        <Option output="bin/Debug/Vacancy.dll"
                 prefix_auto="0"
                 extension_auto="0"/>
         <Option object_output="obj/Debug"/>
         <Option type="3"/>
         <Option compiler="gcc"/>
-        <Option external_deps="bin/Debug/vacancy.lib"/>
+        <Option external_deps="bin/Debug/Vacancy.lib"/>
         <Compiler>
           <Add option="-D__MINGW__=1"/>
           <Add option="-D__MINGW_EXTENSION="/>
           <Add option="-DDEBUG=1"/>
           <Add option="-D_DEBUG=1"/>
           <Add option="-DJUCER_CODEBLOCKS_WINDOWS_8F9AFD66=1"/>
-          <Add option="-DJUCE_APP_VERSION=1.0.0"/>
-          <Add option="-DJUCE_APP_VERSION_HEX=0x10000"/>
+          <Add option="-DJUCE_APP_VERSION=0.0.1"/>
+          <Add option="-DJUCE_APP_VERSION_HEX=0x1"/>
           <Add option="-DJucePlugin_Build_VST=1"/>
           <Add option="-DJucePlugin_Build_VST3=0"/>
           <Add option="-DJucePlugin_Build_AU=0"/>
@@ -89,7 +89,7 @@
           <Add directory="../../../../../../Applications/JUCE/modules"/>
         </Compiler>
         <Linker>
-          <Add option="bin/Debug/vacancy.lib"/>
+          <Add option="bin/Debug/Vacancy.lib"/>
           <Add option="-m64"/>
           <Add library="comdlg32"/>
           <Add library="imm32"/>
@@ -108,21 +108,21 @@
         </Linker>
       </Target>
       <Target title="Standalone Plugin | Debug">
-        <Option output="bin/Debug/vacancy.exe"
+        <Option output="bin/Debug/Vacancy.exe"
                 prefix_auto="0"
                 extension_auto="0"/>
         <Option object_output="obj/Debug"/>
         <Option type="0"/>
         <Option compiler="gcc"/>
-        <Option external_deps="bin/Debug/vacancy.lib"/>
+        <Option external_deps="bin/Debug/Vacancy.lib"/>
         <Compiler>
           <Add option="-D__MINGW__=1"/>
           <Add option="-D__MINGW_EXTENSION="/>
           <Add option="-DDEBUG=1"/>
           <Add option="-D_DEBUG=1"/>
           <Add option="-DJUCER_CODEBLOCKS_WINDOWS_8F9AFD66=1"/>
-          <Add option="-DJUCE_APP_VERSION=1.0.0"/>
-          <Add option="-DJUCE_APP_VERSION_HEX=0x10000"/>
+          <Add option="-DJUCE_APP_VERSION=0.0.1"/>
+          <Add option="-DJUCE_APP_VERSION_HEX=0x1"/>
           <Add option="-DJucePlugin_Build_VST=0"/>
           <Add option="-DJucePlugin_Build_VST3=0"/>
           <Add option="-DJucePlugin_Build_AU=0"/>
@@ -140,7 +140,7 @@
           <Add directory="../../../../../../Applications/JUCE/modules"/>
         </Compiler>
         <Linker>
-          <Add option="bin/Debug/vacancy.lib"/>
+          <Add option="bin/Debug/Vacancy.lib"/>
           <Add option="-m64"/>
           <Add library="comdlg32"/>
           <Add library="imm32"/>
@@ -159,7 +159,7 @@
         </Linker>
       </Target>
       <Target title="Shared Code | Release">
-        <Option output="bin/Release/vacancy.lib"
+        <Option output="bin/Release/Vacancy.lib"
                 prefix_auto="0"
                 extension_auto="0"/>
         <Option object_output="obj/Release"/>
@@ -170,8 +170,8 @@
           <Add option="-D__MINGW_EXTENSION="/>
           <Add option="-DNDEBUG=1"/>
           <Add option="-DJUCER_CODEBLOCKS_WINDOWS_8F9AFD66=1"/>
-          <Add option="-DJUCE_APP_VERSION=1.0.0"/>
-          <Add option="-DJUCE_APP_VERSION_HEX=0x10000"/>
+          <Add option="-DJUCE_APP_VERSION=0.0.1"/>
+          <Add option="-DJUCE_APP_VERSION_HEX=0x1"/>
           <Add option="-DJucePlugin_Build_VST=1"/>
           <Add option="-DJucePlugin_Build_VST3=0"/>
           <Add option="-DJucePlugin_Build_AU=0"/>
@@ -207,20 +207,20 @@
         </Linker>
       </Target>
       <Target title="VST | Release">
-        <Option output="bin/Release/vacancy.dll"
+        <Option output="bin/Release/Vacancy.dll"
                 prefix_auto="0"
                 extension_auto="0"/>
         <Option object_output="obj/Release"/>
         <Option type="3"/>
         <Option compiler="gcc"/>
-        <Option external_deps="bin/Release/vacancy.lib"/>
+        <Option external_deps="bin/Release/Vacancy.lib"/>
         <Compiler>
           <Add option="-D__MINGW__=1"/>
           <Add option="-D__MINGW_EXTENSION="/>
           <Add option="-DNDEBUG=1"/>
           <Add option="-DJUCER_CODEBLOCKS_WINDOWS_8F9AFD66=1"/>
-          <Add option="-DJUCE_APP_VERSION=1.0.0"/>
-          <Add option="-DJUCE_APP_VERSION_HEX=0x10000"/>
+          <Add option="-DJUCE_APP_VERSION=0.0.1"/>
+          <Add option="-DJUCE_APP_VERSION_HEX=0x1"/>
           <Add option="-DJucePlugin_Build_VST=1"/>
           <Add option="-DJucePlugin_Build_VST3=0"/>
           <Add option="-DJucePlugin_Build_AU=0"/>
@@ -237,7 +237,7 @@
           <Add directory="../../../../../../Applications/JUCE/modules"/>
         </Compiler>
         <Linker>
-          <Add option="bin/Release/vacancy.lib"/>
+          <Add option="bin/Release/Vacancy.lib"/>
           <Add option="-m64"/>
           <Add option="-s"/>
           <Add library="comdlg32"/>
@@ -257,20 +257,20 @@
         </Linker>
       </Target>
       <Target title="Standalone Plugin | Release">
-        <Option output="bin/Release/vacancy.exe"
+        <Option output="bin/Release/Vacancy.exe"
                 prefix_auto="0"
                 extension_auto="0"/>
         <Option object_output="obj/Release"/>
         <Option type="0"/>
         <Option compiler="gcc"/>
-        <Option external_deps="bin/Release/vacancy.lib"/>
+        <Option external_deps="bin/Release/Vacancy.lib"/>
         <Compiler>
           <Add option="-D__MINGW__=1"/>
           <Add option="-D__MINGW_EXTENSION="/>
           <Add option="-DNDEBUG=1"/>
           <Add option="-DJUCER_CODEBLOCKS_WINDOWS_8F9AFD66=1"/>
-          <Add option="-DJUCE_APP_VERSION=1.0.0"/>
-          <Add option="-DJUCE_APP_VERSION_HEX=0x10000"/>
+          <Add option="-DJUCE_APP_VERSION=0.0.1"/>
+          <Add option="-DJUCE_APP_VERSION_HEX=0x1"/>
           <Add option="-DJucePlugin_Build_VST=0"/>
           <Add option="-DJucePlugin_Build_VST3=0"/>
           <Add option="-DJucePlugin_Build_AU=0"/>
@@ -287,7 +287,7 @@
           <Add directory="../../../../../../Applications/JUCE/modules"/>
         </Compiler>
         <Linker>
-          <Add option="bin/Release/vacancy.lib"/>
+          <Add option="bin/Release/Vacancy.lib"/>
           <Add option="-m64"/>
           <Add option="-s"/>
           <Add library="comdlg32"/>
@@ -339,6 +339,1068 @@
       <Option target="Shared Code | Release"/>
     </Unit>
     <Unit filename="../../Source/PluginEditor.h">
+      <Option target="Shared Code | Debug"/>
+      <Option target="Shared Code | Release"/>
+      <Option compile="0"/>
+      <Option link="0"/>
+    </Unit>
+    <Unit filename="../../../../../../Applications/JUCE/modules/dRowAudio/audio/fft/fftreal/Array.h">
+      <Option target="Shared Code | Debug"/>
+      <Option target="Shared Code | Release"/>
+      <Option compile="0"/>
+      <Option link="0"/>
+    </Unit>
+    <Unit filename="../../../../../../Applications/JUCE/modules/dRowAudio/audio/fft/fftreal/Array.hpp">
+      <Option target="Shared Code | Debug"/>
+      <Option target="Shared Code | Release"/>
+      <Option compile="0"/>
+      <Option link="0"/>
+    </Unit>
+    <Unit filename="../../../../../../Applications/JUCE/modules/dRowAudio/audio/fft/fftreal/def.h">
+      <Option target="Shared Code | Debug"/>
+      <Option target="Shared Code | Release"/>
+      <Option compile="0"/>
+      <Option link="0"/>
+    </Unit>
+    <Unit filename="../../../../../../Applications/JUCE/modules/dRowAudio/audio/fft/fftreal/DynArray.h">
+      <Option target="Shared Code | Debug"/>
+      <Option target="Shared Code | Release"/>
+      <Option compile="0"/>
+      <Option link="0"/>
+    </Unit>
+    <Unit filename="../../../../../../Applications/JUCE/modules/dRowAudio/audio/fft/fftreal/DynArray.hpp">
+      <Option target="Shared Code | Debug"/>
+      <Option target="Shared Code | Release"/>
+      <Option compile="0"/>
+      <Option link="0"/>
+    </Unit>
+    <Unit filename="../../../../../../Applications/JUCE/modules/dRowAudio/audio/fft/fftreal/FFTReal.h">
+      <Option target="Shared Code | Debug"/>
+      <Option target="Shared Code | Release"/>
+      <Option compile="0"/>
+      <Option link="0"/>
+    </Unit>
+    <Unit filename="../../../../../../Applications/JUCE/modules/dRowAudio/audio/fft/fftreal/FFTReal.hpp">
+      <Option target="Shared Code | Debug"/>
+      <Option target="Shared Code | Release"/>
+      <Option compile="0"/>
+      <Option link="0"/>
+    </Unit>
+    <Unit filename="../../../../../../Applications/JUCE/modules/dRowAudio/audio/fft/fftreal/FFTRealFixLen.h">
+      <Option target="Shared Code | Debug"/>
+      <Option target="Shared Code | Release"/>
+      <Option compile="0"/>
+      <Option link="0"/>
+    </Unit>
+    <Unit filename="../../../../../../Applications/JUCE/modules/dRowAudio/audio/fft/fftreal/FFTRealFixLen.hpp">
+      <Option target="Shared Code | Debug"/>
+      <Option target="Shared Code | Release"/>
+      <Option compile="0"/>
+      <Option link="0"/>
+    </Unit>
+    <Unit filename="../../../../../../Applications/JUCE/modules/dRowAudio/audio/fft/fftreal/FFTRealFixLenParam.h">
+      <Option target="Shared Code | Debug"/>
+      <Option target="Shared Code | Release"/>
+      <Option compile="0"/>
+      <Option link="0"/>
+    </Unit>
+    <Unit filename="../../../../../../Applications/JUCE/modules/dRowAudio/audio/fft/fftreal/FFTRealPassDirect.h">
+      <Option target="Shared Code | Debug"/>
+      <Option target="Shared Code | Release"/>
+      <Option compile="0"/>
+      <Option link="0"/>
+    </Unit>
+    <Unit filename="../../../../../../Applications/JUCE/modules/dRowAudio/audio/fft/fftreal/FFTRealPassDirect.hpp">
+      <Option target="Shared Code | Debug"/>
+      <Option target="Shared Code | Release"/>
+      <Option compile="0"/>
+      <Option link="0"/>
+    </Unit>
+    <Unit filename="../../../../../../Applications/JUCE/modules/dRowAudio/audio/fft/fftreal/FFTRealPassInverse.h">
+      <Option target="Shared Code | Debug"/>
+      <Option target="Shared Code | Release"/>
+      <Option compile="0"/>
+      <Option link="0"/>
+    </Unit>
+    <Unit filename="../../../../../../Applications/JUCE/modules/dRowAudio/audio/fft/fftreal/FFTRealPassInverse.hpp">
+      <Option target="Shared Code | Debug"/>
+      <Option target="Shared Code | Release"/>
+      <Option compile="0"/>
+      <Option link="0"/>
+    </Unit>
+    <Unit filename="../../../../../../Applications/JUCE/modules/dRowAudio/audio/fft/fftreal/FFTRealSelect.h">
+      <Option target="Shared Code | Debug"/>
+      <Option target="Shared Code | Release"/>
+      <Option compile="0"/>
+      <Option link="0"/>
+    </Unit>
+    <Unit filename="../../../../../../Applications/JUCE/modules/dRowAudio/audio/fft/fftreal/FFTRealSelect.hpp">
+      <Option target="Shared Code | Debug"/>
+      <Option target="Shared Code | Release"/>
+      <Option compile="0"/>
+      <Option link="0"/>
+    </Unit>
+    <Unit filename="../../../../../../Applications/JUCE/modules/dRowAudio/audio/fft/fftreal/FFTRealUseTrigo.h">
+      <Option target="Shared Code | Debug"/>
+      <Option target="Shared Code | Release"/>
+      <Option compile="0"/>
+      <Option link="0"/>
+    </Unit>
+    <Unit filename="../../../../../../Applications/JUCE/modules/dRowAudio/audio/fft/fftreal/FFTRealUseTrigo.hpp">
+      <Option target="Shared Code | Debug"/>
+      <Option target="Shared Code | Release"/>
+      <Option compile="0"/>
+      <Option link="0"/>
+    </Unit>
+    <Unit filename="../../../../../../Applications/JUCE/modules/dRowAudio/audio/fft/fftreal/OscSinCos.h">
+      <Option target="Shared Code | Debug"/>
+      <Option target="Shared Code | Release"/>
+      <Option compile="0"/>
+      <Option link="0"/>
+    </Unit>
+    <Unit filename="../../../../../../Applications/JUCE/modules/dRowAudio/audio/fft/fftreal/OscSinCos.hpp">
+      <Option target="Shared Code | Debug"/>
+      <Option target="Shared Code | Release"/>
+      <Option compile="0"/>
+      <Option link="0"/>
+    </Unit>
+    <Unit filename="../../../../../../Applications/JUCE/modules/dRowAudio/audio/fft/dRowAudio_FFT.cpp">
+      <Option target="Shared Code | Debug"/>
+      <Option target="Shared Code | Release"/>
+      <Option compile="0"/>
+      <Option link="0"/>
+    </Unit>
+    <Unit filename="../../../../../../Applications/JUCE/modules/dRowAudio/audio/fft/dRowAudio_FFT.h">
+      <Option target="Shared Code | Debug"/>
+      <Option target="Shared Code | Release"/>
+      <Option compile="0"/>
+      <Option link="0"/>
+    </Unit>
+    <Unit filename="../../../../../../Applications/JUCE/modules/dRowAudio/audio/fft/dRowAudio_LTAS.cpp">
+      <Option target="Shared Code | Debug"/>
+      <Option target="Shared Code | Release"/>
+      <Option compile="0"/>
+      <Option link="0"/>
+    </Unit>
+    <Unit filename="../../../../../../Applications/JUCE/modules/dRowAudio/audio/fft/dRowAudio_LTAS.h">
+      <Option target="Shared Code | Debug"/>
+      <Option target="Shared Code | Release"/>
+      <Option compile="0"/>
+      <Option link="0"/>
+    </Unit>
+    <Unit filename="../../../../../../Applications/JUCE/modules/dRowAudio/audio/fft/dRowAudio_mac_FFTOperation.cpp">
+      <Option target="Shared Code | Debug"/>
+      <Option target="Shared Code | Release"/>
+      <Option compile="0"/>
+      <Option link="0"/>
+    </Unit>
+    <Unit filename="../../../../../../Applications/JUCE/modules/dRowAudio/audio/fft/dRowAudio_Window.cpp">
+      <Option target="Shared Code | Debug"/>
+      <Option target="Shared Code | Release"/>
+      <Option compile="0"/>
+      <Option link="0"/>
+    </Unit>
+    <Unit filename="../../../../../../Applications/JUCE/modules/dRowAudio/audio/fft/dRowAudio_Window.h">
+      <Option target="Shared Code | Debug"/>
+      <Option target="Shared Code | Release"/>
+      <Option compile="0"/>
+      <Option link="0"/>
+    </Unit>
+    <Unit filename="../../../../../../Applications/JUCE/modules/dRowAudio/audio/filters/dRowAudio_BiquadFilter.cpp">
+      <Option target="Shared Code | Debug"/>
+      <Option target="Shared Code | Release"/>
+      <Option compile="0"/>
+      <Option link="0"/>
+    </Unit>
+    <Unit filename="../../../../../../Applications/JUCE/modules/dRowAudio/audio/filters/dRowAudio_BiquadFilter.h">
+      <Option target="Shared Code | Debug"/>
+      <Option target="Shared Code | Release"/>
+      <Option compile="0"/>
+      <Option link="0"/>
+    </Unit>
+    <Unit filename="../../../../../../Applications/JUCE/modules/dRowAudio/audio/filters/dRowAudio_OnePoleFilter.cpp">
+      <Option target="Shared Code | Debug"/>
+      <Option target="Shared Code | Release"/>
+      <Option compile="0"/>
+      <Option link="0"/>
+    </Unit>
+    <Unit filename="../../../../../../Applications/JUCE/modules/dRowAudio/audio/filters/dRowAudio_OnePoleFilter.h">
+      <Option target="Shared Code | Debug"/>
+      <Option target="Shared Code | Release"/>
+      <Option compile="0"/>
+      <Option link="0"/>
+    </Unit>
+    <Unit filename="../../../../../../Applications/JUCE/modules/dRowAudio/audio/soundtouch/AAFilter.cpp">
+      <Option target="Shared Code | Debug"/>
+      <Option target="Shared Code | Release"/>
+      <Option compile="0"/>
+      <Option link="0"/>
+    </Unit>
+    <Unit filename="../../../../../../Applications/JUCE/modules/dRowAudio/audio/soundtouch/AAFilter.h">
+      <Option target="Shared Code | Debug"/>
+      <Option target="Shared Code | Release"/>
+      <Option compile="0"/>
+      <Option link="0"/>
+    </Unit>
+    <Unit filename="../../../../../../Applications/JUCE/modules/dRowAudio/audio/soundtouch/BPMDetect.cpp">
+      <Option target="Shared Code | Debug"/>
+      <Option target="Shared Code | Release"/>
+      <Option compile="0"/>
+      <Option link="0"/>
+    </Unit>
+    <Unit filename="../../../../../../Applications/JUCE/modules/dRowAudio/audio/soundtouch/BPMDetect.h">
+      <Option target="Shared Code | Debug"/>
+      <Option target="Shared Code | Release"/>
+      <Option compile="0"/>
+      <Option link="0"/>
+    </Unit>
+    <Unit filename="../../../../../../Applications/JUCE/modules/dRowAudio/audio/soundtouch/cpu_detect.h">
+      <Option target="Shared Code | Debug"/>
+      <Option target="Shared Code | Release"/>
+      <Option compile="0"/>
+      <Option link="0"/>
+    </Unit>
+    <Unit filename="../../../../../../Applications/JUCE/modules/dRowAudio/audio/soundtouch/cpu_detect_x64_gcc.cpp">
+      <Option target="Shared Code | Debug"/>
+      <Option target="Shared Code | Release"/>
+      <Option compile="0"/>
+      <Option link="0"/>
+    </Unit>
+    <Unit filename="../../../../../../Applications/JUCE/modules/dRowAudio/audio/soundtouch/cpu_detect_x64_win.cpp">
+      <Option target="Shared Code | Debug"/>
+      <Option target="Shared Code | Release"/>
+      <Option compile="0"/>
+      <Option link="0"/>
+    </Unit>
+    <Unit filename="../../../../../../Applications/JUCE/modules/dRowAudio/audio/soundtouch/cpu_detect_x86_gcc.cpp">
+      <Option target="Shared Code | Debug"/>
+      <Option target="Shared Code | Release"/>
+      <Option compile="0"/>
+      <Option link="0"/>
+    </Unit>
+    <Unit filename="../../../../../../Applications/JUCE/modules/dRowAudio/audio/soundtouch/cpu_detect_x86_win.cpp">
+      <Option target="Shared Code | Debug"/>
+      <Option target="Shared Code | Release"/>
+      <Option compile="0"/>
+      <Option link="0"/>
+    </Unit>
+    <Unit filename="../../../../../../Applications/JUCE/modules/dRowAudio/audio/soundtouch/FIFOSampleBuffer.cpp">
+      <Option target="Shared Code | Debug"/>
+      <Option target="Shared Code | Release"/>
+      <Option compile="0"/>
+      <Option link="0"/>
+    </Unit>
+    <Unit filename="../../../../../../Applications/JUCE/modules/dRowAudio/audio/soundtouch/FIFOSampleBuffer.h">
+      <Option target="Shared Code | Debug"/>
+      <Option target="Shared Code | Release"/>
+      <Option compile="0"/>
+      <Option link="0"/>
+    </Unit>
+    <Unit filename="../../../../../../Applications/JUCE/modules/dRowAudio/audio/soundtouch/FIFOSamplePipe.h">
+      <Option target="Shared Code | Debug"/>
+      <Option target="Shared Code | Release"/>
+      <Option compile="0"/>
+      <Option link="0"/>
+    </Unit>
+    <Unit filename="../../../../../../Applications/JUCE/modules/dRowAudio/audio/soundtouch/FIRFilter.cpp">
+      <Option target="Shared Code | Debug"/>
+      <Option target="Shared Code | Release"/>
+      <Option compile="0"/>
+      <Option link="0"/>
+    </Unit>
+    <Unit filename="../../../../../../Applications/JUCE/modules/dRowAudio/audio/soundtouch/FIRFilter.h">
+      <Option target="Shared Code | Debug"/>
+      <Option target="Shared Code | Release"/>
+      <Option compile="0"/>
+      <Option link="0"/>
+    </Unit>
+    <Unit filename="../../../../../../Applications/JUCE/modules/dRowAudio/audio/soundtouch/mmx_optimized.cpp">
+      <Option target="Shared Code | Debug"/>
+      <Option target="Shared Code | Release"/>
+      <Option compile="0"/>
+      <Option link="0"/>
+    </Unit>
+    <Unit filename="../../../../../../Applications/JUCE/modules/dRowAudio/audio/soundtouch/PeakFinder.cpp">
+      <Option target="Shared Code | Debug"/>
+      <Option target="Shared Code | Release"/>
+      <Option compile="0"/>
+      <Option link="0"/>
+    </Unit>
+    <Unit filename="../../../../../../Applications/JUCE/modules/dRowAudio/audio/soundtouch/PeakFinder.h">
+      <Option target="Shared Code | Debug"/>
+      <Option target="Shared Code | Release"/>
+      <Option compile="0"/>
+      <Option link="0"/>
+    </Unit>
+    <Unit filename="../../../../../../Applications/JUCE/modules/dRowAudio/audio/soundtouch/RateTransposer.cpp">
+      <Option target="Shared Code | Debug"/>
+      <Option target="Shared Code | Release"/>
+      <Option compile="0"/>
+      <Option link="0"/>
+    </Unit>
+    <Unit filename="../../../../../../Applications/JUCE/modules/dRowAudio/audio/soundtouch/RateTransposer.h">
+      <Option target="Shared Code | Debug"/>
+      <Option target="Shared Code | Release"/>
+      <Option compile="0"/>
+      <Option link="0"/>
+    </Unit>
+    <Unit filename="../../../../../../Applications/JUCE/modules/dRowAudio/audio/soundtouch/SoundTouch.cpp">
+      <Option target="Shared Code | Debug"/>
+      <Option target="Shared Code | Release"/>
+      <Option compile="0"/>
+      <Option link="0"/>
+    </Unit>
+    <Unit filename="../../../../../../Applications/JUCE/modules/dRowAudio/audio/soundtouch/SoundTouch.h">
+      <Option target="Shared Code | Debug"/>
+      <Option target="Shared Code | Release"/>
+      <Option compile="0"/>
+      <Option link="0"/>
+    </Unit>
+    <Unit filename="../../../../../../Applications/JUCE/modules/dRowAudio/audio/soundtouch/soundtouch_config.h">
+      <Option target="Shared Code | Debug"/>
+      <Option target="Shared Code | Release"/>
+      <Option compile="0"/>
+      <Option link="0"/>
+    </Unit>
+    <Unit filename="../../../../../../Applications/JUCE/modules/dRowAudio/audio/soundtouch/SoundTouch_Includes.h">
+      <Option target="Shared Code | Debug"/>
+      <Option target="Shared Code | Release"/>
+      <Option compile="0"/>
+      <Option link="0"/>
+    </Unit>
+    <Unit filename="../../../../../../Applications/JUCE/modules/dRowAudio/audio/soundtouch/SoundTouch_Source.cpp">
+      <Option target="Shared Code | Debug"/>
+      <Option target="Shared Code | Release"/>
+      <Option compile="0"/>
+      <Option link="0"/>
+    </Unit>
+    <Unit filename="../../../../../../Applications/JUCE/modules/dRowAudio/audio/soundtouch/sse_optimized.cpp">
+      <Option target="Shared Code | Debug"/>
+      <Option target="Shared Code | Release"/>
+      <Option compile="0"/>
+      <Option link="0"/>
+    </Unit>
+    <Unit filename="../../../../../../Applications/JUCE/modules/dRowAudio/audio/soundtouch/STTypes.h">
+      <Option target="Shared Code | Debug"/>
+      <Option target="Shared Code | Release"/>
+      <Option compile="0"/>
+      <Option link="0"/>
+    </Unit>
+    <Unit filename="../../../../../../Applications/JUCE/modules/dRowAudio/audio/soundtouch/TDStretch.cpp">
+      <Option target="Shared Code | Debug"/>
+      <Option target="Shared Code | Release"/>
+      <Option compile="0"/>
+      <Option link="0"/>
+    </Unit>
+    <Unit filename="../../../../../../Applications/JUCE/modules/dRowAudio/audio/soundtouch/TDStretch.h">
+      <Option target="Shared Code | Debug"/>
+      <Option target="Shared Code | Release"/>
+      <Option compile="0"/>
+      <Option link="0"/>
+    </Unit>
+    <Unit filename="../../../../../../Applications/JUCE/modules/dRowAudio/audio/dRowAudio_AudioFilePlayer.cpp">
+      <Option target="Shared Code | Debug"/>
+      <Option target="Shared Code | Release"/>
+      <Option compile="0"/>
+      <Option link="0"/>
+    </Unit>
+    <Unit filename="../../../../../../Applications/JUCE/modules/dRowAudio/audio/dRowAudio_AudioFilePlayer.h">
+      <Option target="Shared Code | Debug"/>
+      <Option target="Shared Code | Release"/>
+      <Option compile="0"/>
+      <Option link="0"/>
+    </Unit>
+    <Unit filename="../../../../../../Applications/JUCE/modules/dRowAudio/audio/dRowAudio_AudioFilePlayerExt.cpp">
+      <Option target="Shared Code | Debug"/>
+      <Option target="Shared Code | Release"/>
+      <Option compile="0"/>
+      <Option link="0"/>
+    </Unit>
+    <Unit filename="../../../../../../Applications/JUCE/modules/dRowAudio/audio/dRowAudio_AudioFilePlayerExt.h">
+      <Option target="Shared Code | Debug"/>
+      <Option target="Shared Code | Release"/>
+      <Option compile="0"/>
+      <Option link="0"/>
+    </Unit>
+    <Unit filename="../../../../../../Applications/JUCE/modules/dRowAudio/audio/dRowAudio_AudioSampleBufferAudioFormat.cpp">
+      <Option target="Shared Code | Debug"/>
+      <Option target="Shared Code | Release"/>
+      <Option compile="0"/>
+      <Option link="0"/>
+    </Unit>
+    <Unit filename="../../../../../../Applications/JUCE/modules/dRowAudio/audio/dRowAudio_AudioSampleBufferAudioFormat.h">
+      <Option target="Shared Code | Debug"/>
+      <Option target="Shared Code | Release"/>
+      <Option compile="0"/>
+      <Option link="0"/>
+    </Unit>
+    <Unit filename="../../../../../../Applications/JUCE/modules/dRowAudio/audio/dRowAudio_AudioUtility.h">
+      <Option target="Shared Code | Debug"/>
+      <Option target="Shared Code | Release"/>
+      <Option compile="0"/>
+      <Option link="0"/>
+    </Unit>
+    <Unit filename="../../../../../../Applications/JUCE/modules/dRowAudio/audio/dRowAudio_AudioUtilityUnitTests.cpp">
+      <Option target="Shared Code | Debug"/>
+      <Option target="Shared Code | Release"/>
+      <Option compile="0"/>
+      <Option link="0"/>
+    </Unit>
+    <Unit filename="../../../../../../Applications/JUCE/modules/dRowAudio/audio/dRowAudio_Buffer.h">
+      <Option target="Shared Code | Debug"/>
+      <Option target="Shared Code | Release"/>
+      <Option compile="0"/>
+      <Option link="0"/>
+    </Unit>
+    <Unit filename="../../../../../../Applications/JUCE/modules/dRowAudio/audio/dRowAudio_EnvelopeFollower.cpp">
+      <Option target="Shared Code | Debug"/>
+      <Option target="Shared Code | Release"/>
+      <Option compile="0"/>
+      <Option link="0"/>
+    </Unit>
+    <Unit filename="../../../../../../Applications/JUCE/modules/dRowAudio/audio/dRowAudio_EnvelopeFollower.h">
+      <Option target="Shared Code | Debug"/>
+      <Option target="Shared Code | Release"/>
+      <Option compile="0"/>
+      <Option link="0"/>
+    </Unit>
+    <Unit filename="../../../../../../Applications/JUCE/modules/dRowAudio/audio/dRowAudio_FifoBuffer.h">
+      <Option target="Shared Code | Debug"/>
+      <Option target="Shared Code | Release"/>
+      <Option compile="0"/>
+      <Option link="0"/>
+    </Unit>
+    <Unit filename="../../../../../../Applications/JUCE/modules/dRowAudio/audio/dRowAudio_FilteringAudioSource.cpp">
+      <Option target="Shared Code | Debug"/>
+      <Option target="Shared Code | Release"/>
+      <Option compile="0"/>
+      <Option link="0"/>
+    </Unit>
+    <Unit filename="../../../../../../Applications/JUCE/modules/dRowAudio/audio/dRowAudio_FilteringAudioSource.h">
+      <Option target="Shared Code | Debug"/>
+      <Option target="Shared Code | Release"/>
+      <Option compile="0"/>
+      <Option link="0"/>
+    </Unit>
+    <Unit filename="../../../../../../Applications/JUCE/modules/dRowAudio/audio/dRowAudio_LoopingAudioSource.cpp">
+      <Option target="Shared Code | Debug"/>
+      <Option target="Shared Code | Release"/>
+      <Option compile="0"/>
+      <Option link="0"/>
+    </Unit>
+    <Unit filename="../../../../../../Applications/JUCE/modules/dRowAudio/audio/dRowAudio_LoopingAudioSource.h">
+      <Option target="Shared Code | Debug"/>
+      <Option target="Shared Code | Release"/>
+      <Option compile="0"/>
+      <Option link="0"/>
+    </Unit>
+    <Unit filename="../../../../../../Applications/JUCE/modules/dRowAudio/audio/dRowAudio_Pitch.h">
+      <Option target="Shared Code | Debug"/>
+      <Option target="Shared Code | Release"/>
+      <Option compile="0"/>
+      <Option link="0"/>
+    </Unit>
+    <Unit filename="../../../../../../Applications/JUCE/modules/dRowAudio/audio/dRowAudio_PitchDetector.cpp">
+      <Option target="Shared Code | Debug"/>
+      <Option target="Shared Code | Release"/>
+      <Option compile="0"/>
+      <Option link="0"/>
+    </Unit>
+    <Unit filename="../../../../../../Applications/JUCE/modules/dRowAudio/audio/dRowAudio_PitchDetector.h">
+      <Option target="Shared Code | Debug"/>
+      <Option target="Shared Code | Release"/>
+      <Option compile="0"/>
+      <Option link="0"/>
+    </Unit>
+    <Unit filename="../../../../../../Applications/JUCE/modules/dRowAudio/audio/dRowAudio_ReversibleAudioSource.cpp">
+      <Option target="Shared Code | Debug"/>
+      <Option target="Shared Code | Release"/>
+      <Option compile="0"/>
+      <Option link="0"/>
+    </Unit>
+    <Unit filename="../../../../../../Applications/JUCE/modules/dRowAudio/audio/dRowAudio_ReversibleAudioSource.h">
+      <Option target="Shared Code | Debug"/>
+      <Option target="Shared Code | Release"/>
+      <Option compile="0"/>
+      <Option link="0"/>
+    </Unit>
+    <Unit filename="../../../../../../Applications/JUCE/modules/dRowAudio/audio/dRowAudio_SampleRateConverter.cpp">
+      <Option target="Shared Code | Debug"/>
+      <Option target="Shared Code | Release"/>
+      <Option compile="0"/>
+      <Option link="0"/>
+    </Unit>
+    <Unit filename="../../../../../../Applications/JUCE/modules/dRowAudio/audio/dRowAudio_SampleRateConverter.h">
+      <Option target="Shared Code | Debug"/>
+      <Option target="Shared Code | Release"/>
+      <Option compile="0"/>
+      <Option link="0"/>
+    </Unit>
+    <Unit filename="../../../../../../Applications/JUCE/modules/dRowAudio/audio/dRowAudio_SoundTouchAudioSource.cpp">
+      <Option target="Shared Code | Debug"/>
+      <Option target="Shared Code | Release"/>
+      <Option compile="0"/>
+      <Option link="0"/>
+    </Unit>
+    <Unit filename="../../../../../../Applications/JUCE/modules/dRowAudio/audio/dRowAudio_SoundTouchAudioSource.h">
+      <Option target="Shared Code | Debug"/>
+      <Option target="Shared Code | Release"/>
+      <Option compile="0"/>
+      <Option link="0"/>
+    </Unit>
+    <Unit filename="../../../../../../Applications/JUCE/modules/dRowAudio/audio/dRowAudio_SoundTouchProcessor.cpp">
+      <Option target="Shared Code | Debug"/>
+      <Option target="Shared Code | Release"/>
+      <Option compile="0"/>
+      <Option link="0"/>
+    </Unit>
+    <Unit filename="../../../../../../Applications/JUCE/modules/dRowAudio/audio/dRowAudio_SoundTouchProcessor.h">
+      <Option target="Shared Code | Debug"/>
+      <Option target="Shared Code | Release"/>
+      <Option compile="0"/>
+      <Option link="0"/>
+    </Unit>
+    <Unit filename="../../../../../../Applications/JUCE/modules/dRowAudio/gui/audiothumbnail/dRowAudio_AudioThumbnailImage.cpp">
+      <Option target="Shared Code | Debug"/>
+      <Option target="Shared Code | Release"/>
+      <Option compile="0"/>
+      <Option link="0"/>
+    </Unit>
+    <Unit filename="../../../../../../Applications/JUCE/modules/dRowAudio/gui/audiothumbnail/dRowAudio_AudioThumbnailImage.h">
+      <Option target="Shared Code | Debug"/>
+      <Option target="Shared Code | Release"/>
+      <Option compile="0"/>
+      <Option link="0"/>
+    </Unit>
+    <Unit filename="../../../../../../Applications/JUCE/modules/dRowAudio/gui/audiothumbnail/dRowAudio_ColouredAudioThumbnail.cpp">
+      <Option target="Shared Code | Debug"/>
+      <Option target="Shared Code | Release"/>
+      <Option compile="0"/>
+      <Option link="0"/>
+    </Unit>
+    <Unit filename="../../../../../../Applications/JUCE/modules/dRowAudio/gui/audiothumbnail/dRowAudio_ColouredAudioThumbnail.h">
+      <Option target="Shared Code | Debug"/>
+      <Option target="Shared Code | Release"/>
+      <Option compile="0"/>
+      <Option link="0"/>
+    </Unit>
+    <Unit filename="../../../../../../Applications/JUCE/modules/dRowAudio/gui/audiothumbnail/dRowAudio_DraggableWaveDisplay.cpp">
+      <Option target="Shared Code | Debug"/>
+      <Option target="Shared Code | Release"/>
+      <Option compile="0"/>
+      <Option link="0"/>
+    </Unit>
+    <Unit filename="../../../../../../Applications/JUCE/modules/dRowAudio/gui/audiothumbnail/dRowAudio_DraggableWaveDisplay.h">
+      <Option target="Shared Code | Debug"/>
+      <Option target="Shared Code | Release"/>
+      <Option compile="0"/>
+      <Option link="0"/>
+    </Unit>
+    <Unit filename="../../../../../../Applications/JUCE/modules/dRowAudio/gui/audiothumbnail/dRowAudio_PositionableWaveDisplay.cpp">
+      <Option target="Shared Code | Debug"/>
+      <Option target="Shared Code | Release"/>
+      <Option compile="0"/>
+      <Option link="0"/>
+    </Unit>
+    <Unit filename="../../../../../../Applications/JUCE/modules/dRowAudio/gui/audiothumbnail/dRowAudio_PositionableWaveDisplay.h">
+      <Option target="Shared Code | Debug"/>
+      <Option target="Shared Code | Release"/>
+      <Option compile="0"/>
+      <Option link="0"/>
+    </Unit>
+    <Unit filename="../../../../../../Applications/JUCE/modules/dRowAudio/gui/filebrowser/dRowAudio_BasicFileBrowser.cpp">
+      <Option target="Shared Code | Debug"/>
+      <Option target="Shared Code | Release"/>
+      <Option compile="0"/>
+      <Option link="0"/>
+    </Unit>
+    <Unit filename="../../../../../../Applications/JUCE/modules/dRowAudio/gui/filebrowser/dRowAudio_BasicFileBrowser.h">
+      <Option target="Shared Code | Debug"/>
+      <Option target="Shared Code | Release"/>
+      <Option compile="0"/>
+      <Option link="0"/>
+    </Unit>
+    <Unit filename="../../../../../../Applications/JUCE/modules/dRowAudio/gui/filebrowser/dRowAudio_ColumnFileBrowser.cpp">
+      <Option target="Shared Code | Debug"/>
+      <Option target="Shared Code | Release"/>
+      <Option compile="0"/>
+      <Option link="0"/>
+    </Unit>
+    <Unit filename="../../../../../../Applications/JUCE/modules/dRowAudio/gui/filebrowser/dRowAudio_ColumnFileBrowser.h">
+      <Option target="Shared Code | Debug"/>
+      <Option target="Shared Code | Release"/>
+      <Option compile="0"/>
+      <Option link="0"/>
+    </Unit>
+    <Unit filename="../../../../../../Applications/JUCE/modules/dRowAudio/gui/filebrowser/dRowAudio_ColumnFileBrowserLookAndFeel.h">
+      <Option target="Shared Code | Debug"/>
+      <Option target="Shared Code | Release"/>
+      <Option compile="0"/>
+      <Option link="0"/>
+    </Unit>
+    <Unit filename="../../../../../../Applications/JUCE/modules/dRowAudio/gui/dRowAudio_AudioFileDropTarget.cpp">
+      <Option target="Shared Code | Debug"/>
+      <Option target="Shared Code | Release"/>
+      <Option compile="0"/>
+      <Option link="0"/>
+    </Unit>
+    <Unit filename="../../../../../../Applications/JUCE/modules/dRowAudio/gui/dRowAudio_AudioFileDropTarget.h">
+      <Option target="Shared Code | Debug"/>
+      <Option target="Shared Code | Release"/>
+      <Option compile="0"/>
+      <Option link="0"/>
+    </Unit>
+    <Unit filename="../../../../../../Applications/JUCE/modules/dRowAudio/gui/dRowAudio_AudioOscilloscope.cpp">
+      <Option target="Shared Code | Debug"/>
+      <Option target="Shared Code | Release"/>
+      <Option compile="0"/>
+      <Option link="0"/>
+    </Unit>
+    <Unit filename="../../../../../../Applications/JUCE/modules/dRowAudio/gui/dRowAudio_AudioOscilloscope.h">
+      <Option target="Shared Code | Debug"/>
+      <Option target="Shared Code | Release"/>
+      <Option compile="0"/>
+      <Option link="0"/>
+    </Unit>
+    <Unit filename="../../../../../../Applications/JUCE/modules/dRowAudio/gui/dRowAudio_AudioTransportCursor.cpp">
+      <Option target="Shared Code | Debug"/>
+      <Option target="Shared Code | Release"/>
+      <Option compile="0"/>
+      <Option link="0"/>
+    </Unit>
+    <Unit filename="../../../../../../Applications/JUCE/modules/dRowAudio/gui/dRowAudio_AudioTransportCursor.h">
+      <Option target="Shared Code | Debug"/>
+      <Option target="Shared Code | Release"/>
+      <Option compile="0"/>
+      <Option link="0"/>
+    </Unit>
+    <Unit filename="../../../../../../Applications/JUCE/modules/dRowAudio/gui/dRowAudio_CentreAlignViewport.cpp">
+      <Option target="Shared Code | Debug"/>
+      <Option target="Shared Code | Release"/>
+      <Option compile="0"/>
+      <Option link="0"/>
+    </Unit>
+    <Unit filename="../../../../../../Applications/JUCE/modules/dRowAudio/gui/dRowAudio_CentreAlignViewport.h">
+      <Option target="Shared Code | Debug"/>
+      <Option target="Shared Code | Release"/>
+      <Option compile="0"/>
+      <Option link="0"/>
+    </Unit>
+    <Unit filename="../../../../../../Applications/JUCE/modules/dRowAudio/gui/dRowAudio_Clock.cpp">
+      <Option target="Shared Code | Debug"/>
+      <Option target="Shared Code | Release"/>
+      <Option compile="0"/>
+      <Option link="0"/>
+    </Unit>
+    <Unit filename="../../../../../../Applications/JUCE/modules/dRowAudio/gui/dRowAudio_Clock.h">
+      <Option target="Shared Code | Debug"/>
+      <Option target="Shared Code | Release"/>
+      <Option compile="0"/>
+      <Option link="0"/>
+    </Unit>
+    <Unit filename="../../../../../../Applications/JUCE/modules/dRowAudio/gui/dRowAudio_CpuMeter.cpp">
+      <Option target="Shared Code | Debug"/>
+      <Option target="Shared Code | Release"/>
+      <Option compile="0"/>
+      <Option link="0"/>
+    </Unit>
+    <Unit filename="../../../../../../Applications/JUCE/modules/dRowAudio/gui/dRowAudio_CpuMeter.h">
+      <Option target="Shared Code | Debug"/>
+      <Option target="Shared Code | Release"/>
+      <Option compile="0"/>
+      <Option link="0"/>
+    </Unit>
+    <Unit filename="../../../../../../Applications/JUCE/modules/dRowAudio/gui/dRowAudio_DefaultColours.cpp">
+      <Option target="Shared Code | Debug"/>
+      <Option target="Shared Code | Release"/>
+      <Option compile="0"/>
+      <Option link="0"/>
+    </Unit>
+    <Unit filename="../../../../../../Applications/JUCE/modules/dRowAudio/gui/dRowAudio_DefaultColours.h">
+      <Option target="Shared Code | Debug"/>
+      <Option target="Shared Code | Release"/>
+      <Option compile="0"/>
+      <Option link="0"/>
+    </Unit>
+    <Unit filename="../../../../../../Applications/JUCE/modules/dRowAudio/gui/dRowAudio_GraphicalComponent.cpp">
+      <Option target="Shared Code | Debug"/>
+      <Option target="Shared Code | Release"/>
+      <Option compile="0"/>
+      <Option link="0"/>
+    </Unit>
+    <Unit filename="../../../../../../Applications/JUCE/modules/dRowAudio/gui/dRowAudio_GraphicalComponent.h">
+      <Option target="Shared Code | Debug"/>
+      <Option target="Shared Code | Release"/>
+      <Option compile="0"/>
+      <Option link="0"/>
+    </Unit>
+    <Unit filename="../../../../../../Applications/JUCE/modules/dRowAudio/gui/dRowAudio_GuiHelpers.h">
+      <Option target="Shared Code | Debug"/>
+      <Option target="Shared Code | Release"/>
+      <Option compile="0"/>
+      <Option link="0"/>
+    </Unit>
+    <Unit filename="../../../../../../Applications/JUCE/modules/dRowAudio/gui/dRowAudio_MusicLibraryTable.cpp">
+      <Option target="Shared Code | Debug"/>
+      <Option target="Shared Code | Release"/>
+      <Option compile="0"/>
+      <Option link="0"/>
+    </Unit>
+    <Unit filename="../../../../../../Applications/JUCE/modules/dRowAudio/gui/dRowAudio_MusicLibraryTable.h">
+      <Option target="Shared Code | Debug"/>
+      <Option target="Shared Code | Release"/>
+      <Option compile="0"/>
+      <Option link="0"/>
+    </Unit>
+    <Unit filename="../../../../../../Applications/JUCE/modules/dRowAudio/gui/dRowAudio_SegmentedMeter.cpp">
+      <Option target="Shared Code | Debug"/>
+      <Option target="Shared Code | Release"/>
+      <Option compile="0"/>
+      <Option link="0"/>
+    </Unit>
+    <Unit filename="../../../../../../Applications/JUCE/modules/dRowAudio/gui/dRowAudio_SegmentedMeter.h">
+      <Option target="Shared Code | Debug"/>
+      <Option target="Shared Code | Release"/>
+      <Option compile="0"/>
+      <Option link="0"/>
+    </Unit>
+    <Unit filename="../../../../../../Applications/JUCE/modules/dRowAudio/gui/dRowAudio_Sonogram.cpp">
+      <Option target="Shared Code | Debug"/>
+      <Option target="Shared Code | Release"/>
+      <Option compile="0"/>
+      <Option link="0"/>
+    </Unit>
+    <Unit filename="../../../../../../Applications/JUCE/modules/dRowAudio/gui/dRowAudio_Sonogram.h">
+      <Option target="Shared Code | Debug"/>
+      <Option target="Shared Code | Release"/>
+      <Option compile="0"/>
+      <Option link="0"/>
+    </Unit>
+    <Unit filename="../../../../../../Applications/JUCE/modules/dRowAudio/gui/dRowAudio_Spectrograph.cpp">
+      <Option target="Shared Code | Debug"/>
+      <Option target="Shared Code | Release"/>
+      <Option compile="0"/>
+      <Option link="0"/>
+    </Unit>
+    <Unit filename="../../../../../../Applications/JUCE/modules/dRowAudio/gui/dRowAudio_Spectrograph.h">
+      <Option target="Shared Code | Debug"/>
+      <Option target="Shared Code | Release"/>
+      <Option compile="0"/>
+      <Option link="0"/>
+    </Unit>
+    <Unit filename="../../../../../../Applications/JUCE/modules/dRowAudio/gui/dRowAudio_Spectroscope.cpp">
+      <Option target="Shared Code | Debug"/>
+      <Option target="Shared Code | Release"/>
+      <Option compile="0"/>
+      <Option link="0"/>
+    </Unit>
+    <Unit filename="../../../../../../Applications/JUCE/modules/dRowAudio/gui/dRowAudio_Spectroscope.h">
+      <Option target="Shared Code | Debug"/>
+      <Option target="Shared Code | Release"/>
+      <Option compile="0"/>
+      <Option link="0"/>
+    </Unit>
+    <Unit filename="../../../../../../Applications/JUCE/modules/dRowAudio/gui/dRowAudio_TriggeredScope.cpp">
+      <Option target="Shared Code | Debug"/>
+      <Option target="Shared Code | Release"/>
+      <Option compile="0"/>
+      <Option link="0"/>
+    </Unit>
+    <Unit filename="../../../../../../Applications/JUCE/modules/dRowAudio/gui/dRowAudio_TriggeredScope.h">
+      <Option target="Shared Code | Debug"/>
+      <Option target="Shared Code | Release"/>
+      <Option compile="0"/>
+      <Option link="0"/>
+    </Unit>
+    <Unit filename="../../../../../../Applications/JUCE/modules/dRowAudio/maths/dRowAudio_BezierCurve.h">
+      <Option target="Shared Code | Debug"/>
+      <Option target="Shared Code | Release"/>
+      <Option compile="0"/>
+      <Option link="0"/>
+    </Unit>
+    <Unit filename="../../../../../../Applications/JUCE/modules/dRowAudio/maths/dRowAudio_CumulativeMovingAverage.h">
+      <Option target="Shared Code | Debug"/>
+      <Option target="Shared Code | Release"/>
+      <Option compile="0"/>
+      <Option link="0"/>
+    </Unit>
+    <Unit filename="../../../../../../Applications/JUCE/modules/dRowAudio/maths/dRowAudio_MathsUnitTests.cpp">
+      <Option target="Shared Code | Debug"/>
+      <Option target="Shared Code | Release"/>
+      <Option compile="0"/>
+      <Option link="0"/>
+    </Unit>
+    <Unit filename="../../../../../../Applications/JUCE/modules/dRowAudio/maths/dRowAudio_MathsUtilities.h">
+      <Option target="Shared Code | Debug"/>
+      <Option target="Shared Code | Release"/>
+      <Option compile="0"/>
+      <Option link="0"/>
+    </Unit>
+    <Unit filename="../../../../../../Applications/JUCE/modules/dRowAudio/native/dRowAudio_AudioPicker.h">
+      <Option target="Shared Code | Debug"/>
+      <Option target="Shared Code | Release"/>
+      <Option compile="0"/>
+      <Option link="0"/>
+    </Unit>
+    <Unit filename="../../../../../../Applications/JUCE/modules/dRowAudio/native/dRowAudio_AudioPicker.mm">
+      <Option target="Shared Code | Debug"/>
+      <Option target="Shared Code | Release"/>
+      <Option compile="0"/>
+      <Option link="0"/>
+    </Unit>
+    <Unit filename="../../../../../../Applications/JUCE/modules/dRowAudio/native/dRowAudio_AVAssetAudioFormat.h">
+      <Option target="Shared Code | Debug"/>
+      <Option target="Shared Code | Release"/>
+      <Option compile="0"/>
+      <Option link="0"/>
+    </Unit>
+    <Unit filename="../../../../../../Applications/JUCE/modules/dRowAudio/native/dRowAudio_AVAssetAudioFormat.mm">
+      <Option target="Shared Code | Debug"/>
+      <Option target="Shared Code | Release"/>
+      <Option compile="0"/>
+      <Option link="0"/>
+    </Unit>
+    <Unit filename="../../../../../../Applications/JUCE/modules/dRowAudio/native/dRowAudio_IOSAudioConverter.h">
+      <Option target="Shared Code | Debug"/>
+      <Option target="Shared Code | Release"/>
+      <Option compile="0"/>
+      <Option link="0"/>
+    </Unit>
+    <Unit filename="../../../../../../Applications/JUCE/modules/dRowAudio/native/dRowAudio_IOSAudioConverter.mm">
+      <Option target="Shared Code | Debug"/>
+      <Option target="Shared Code | Release"/>
+      <Option compile="0"/>
+      <Option link="0"/>
+    </Unit>
+    <Unit filename="../../../../../../Applications/JUCE/modules/dRowAudio/network/curl/include/curl/curl.h">
+      <Option target="Shared Code | Debug"/>
+      <Option target="Shared Code | Release"/>
+      <Option compile="0"/>
+      <Option link="0"/>
+    </Unit>
+    <Unit filename="../../../../../../Applications/JUCE/modules/dRowAudio/network/curl/include/curl/curlbuild.h">
+      <Option target="Shared Code | Debug"/>
+      <Option target="Shared Code | Release"/>
+      <Option compile="0"/>
+      <Option link="0"/>
+    </Unit>
+    <Unit filename="../../../../../../Applications/JUCE/modules/dRowAudio/network/curl/include/curl/curlrules.h">
+      <Option target="Shared Code | Debug"/>
+      <Option target="Shared Code | Release"/>
+      <Option compile="0"/>
+      <Option link="0"/>
+    </Unit>
+    <Unit filename="../../../../../../Applications/JUCE/modules/dRowAudio/network/curl/include/curl/curlver.h">
+      <Option target="Shared Code | Debug"/>
+      <Option target="Shared Code | Release"/>
+      <Option compile="0"/>
+      <Option link="0"/>
+    </Unit>
+    <Unit filename="../../../../../../Applications/JUCE/modules/dRowAudio/network/curl/include/curl/easy.h">
+      <Option target="Shared Code | Debug"/>
+      <Option target="Shared Code | Release"/>
+      <Option compile="0"/>
+      <Option link="0"/>
+    </Unit>
+    <Unit filename="../../../../../../Applications/JUCE/modules/dRowAudio/network/curl/include/curl/mprintf.h">
+      <Option target="Shared Code | Debug"/>
+      <Option target="Shared Code | Release"/>
+      <Option compile="0"/>
+      <Option link="0"/>
+    </Unit>
+    <Unit filename="../../../../../../Applications/JUCE/modules/dRowAudio/network/curl/include/curl/multi.h">
+      <Option target="Shared Code | Debug"/>
+      <Option target="Shared Code | Release"/>
+      <Option compile="0"/>
+      <Option link="0"/>
+    </Unit>
+    <Unit filename="../../../../../../Applications/JUCE/modules/dRowAudio/network/curl/include/curl/stdcheaders.h">
+      <Option target="Shared Code | Debug"/>
+      <Option target="Shared Code | Release"/>
+      <Option compile="0"/>
+      <Option link="0"/>
+    </Unit>
+    <Unit filename="../../../../../../Applications/JUCE/modules/dRowAudio/network/curl/include/curl/typecheck-gcc.h">
+      <Option target="Shared Code | Debug"/>
+      <Option target="Shared Code | Release"/>
+      <Option compile="0"/>
+      <Option link="0"/>
+    </Unit>
+    <Unit filename="../../../../../../Applications/JUCE/modules/dRowAudio/network/dRowAudio_CURLEasySession.cpp">
+      <Option target="Shared Code | Debug"/>
+      <Option target="Shared Code | Release"/>
+      <Option compile="0"/>
+      <Option link="0"/>
+    </Unit>
+    <Unit filename="../../../../../../Applications/JUCE/modules/dRowAudio/network/dRowAudio_CURLEasySession.h">
+      <Option target="Shared Code | Debug"/>
+      <Option target="Shared Code | Release"/>
+      <Option compile="0"/>
+      <Option link="0"/>
+    </Unit>
+    <Unit filename="../../../../../../Applications/JUCE/modules/dRowAudio/network/dRowAudio_CURLManager.cpp">
+      <Option target="Shared Code | Debug"/>
+      <Option target="Shared Code | Release"/>
+      <Option compile="0"/>
+      <Option link="0"/>
+    </Unit>
+    <Unit filename="../../../../../../Applications/JUCE/modules/dRowAudio/network/dRowAudio_CURLManager.h">
+      <Option target="Shared Code | Debug"/>
+      <Option target="Shared Code | Release"/>
+      <Option compile="0"/>
+      <Option link="0"/>
+    </Unit>
+    <Unit filename="../../../../../../Applications/JUCE/modules/dRowAudio/parameters/dRowAudio_PluginParameter.cpp">
+      <Option target="Shared Code | Debug"/>
+      <Option target="Shared Code | Release"/>
+      <Option compile="0"/>
+      <Option link="0"/>
+    </Unit>
+    <Unit filename="../../../../../../Applications/JUCE/modules/dRowAudio/parameters/dRowAudio_PluginParameter.h">
+      <Option target="Shared Code | Debug"/>
+      <Option target="Shared Code | Release"/>
+      <Option compile="0"/>
+      <Option link="0"/>
+    </Unit>
+    <Unit filename="../../../../../../Applications/JUCE/modules/dRowAudio/streams/dRowAudio_MemoryInputSource.cpp">
+      <Option target="Shared Code | Debug"/>
+      <Option target="Shared Code | Release"/>
+      <Option compile="0"/>
+      <Option link="0"/>
+    </Unit>
+    <Unit filename="../../../../../../Applications/JUCE/modules/dRowAudio/streams/dRowAudio_MemoryInputSource.h">
+      <Option target="Shared Code | Debug"/>
+      <Option target="Shared Code | Release"/>
+      <Option compile="0"/>
+      <Option link="0"/>
+    </Unit>
+    <Unit filename="../../../../../../Applications/JUCE/modules/dRowAudio/streams/dRowAudio_StreamAndFileHandler.h">
+      <Option target="Shared Code | Debug"/>
+      <Option target="Shared Code | Release"/>
+      <Option compile="0"/>
+      <Option link="0"/>
+    </Unit>
+    <Unit filename="../../../../../../Applications/JUCE/modules/dRowAudio/utility/dRowAudio_Comparators.h">
+      <Option target="Shared Code | Debug"/>
+      <Option target="Shared Code | Release"/>
+      <Option compile="0"/>
+      <Option link="0"/>
+    </Unit>
+    <Unit filename="../../../../../../Applications/JUCE/modules/dRowAudio/utility/dRowAudio_Constants.h">
+      <Option target="Shared Code | Debug"/>
+      <Option target="Shared Code | Release"/>
+      <Option compile="0"/>
+      <Option link="0"/>
+    </Unit>
+    <Unit filename="../../../../../../Applications/JUCE/modules/dRowAudio/utility/dRowAudio_DebugObject.h">
+      <Option target="Shared Code | Debug"/>
+      <Option target="Shared Code | Release"/>
+      <Option compile="0"/>
+      <Option link="0"/>
+    </Unit>
+    <Unit filename="../../../../../../Applications/JUCE/modules/dRowAudio/utility/dRowAudio_EncryptedString.cpp">
+      <Option target="Shared Code | Debug"/>
+      <Option target="Shared Code | Release"/>
+      <Option compile="0"/>
+      <Option link="0"/>
+    </Unit>
+    <Unit filename="../../../../../../Applications/JUCE/modules/dRowAudio/utility/dRowAudio_EncryptedString.h">
+      <Option target="Shared Code | Debug"/>
+      <Option target="Shared Code | Release"/>
+      <Option compile="0"/>
+      <Option link="0"/>
+    </Unit>
+    <Unit filename="../../../../../../Applications/JUCE/modules/dRowAudio/utility/dRowAudio_ITunesLibrary.cpp">
+      <Option target="Shared Code | Debug"/>
+      <Option target="Shared Code | Release"/>
+      <Option compile="0"/>
+      <Option link="0"/>
+    </Unit>
+    <Unit filename="../../../../../../Applications/JUCE/modules/dRowAudio/utility/dRowAudio_ITunesLibrary.h">
+      <Option target="Shared Code | Debug"/>
+      <Option target="Shared Code | Release"/>
+      <Option compile="0"/>
+      <Option link="0"/>
+    </Unit>
+    <Unit filename="../../../../../../Applications/JUCE/modules/dRowAudio/utility/dRowAudio_ITunesLibraryParser.cpp">
+      <Option target="Shared Code | Debug"/>
+      <Option target="Shared Code | Release"/>
+      <Option compile="0"/>
+      <Option link="0"/>
+    </Unit>
+    <Unit filename="../../../../../../Applications/JUCE/modules/dRowAudio/utility/dRowAudio_ITunesLibraryParser.h">
+      <Option target="Shared Code | Debug"/>
+      <Option target="Shared Code | Release"/>
+      <Option compile="0"/>
+      <Option link="0"/>
+    </Unit>
+    <Unit filename="../../../../../../Applications/JUCE/modules/dRowAudio/utility/dRowAudio_LockedPointer.h">
+      <Option target="Shared Code | Debug"/>
+      <Option target="Shared Code | Release"/>
+      <Option compile="0"/>
+      <Option link="0"/>
+    </Unit>
+    <Unit filename="../../../../../../Applications/JUCE/modules/dRowAudio/utility/dRowAudio_MusicLibraryHelpers.h">
+      <Option target="Shared Code | Debug"/>
+      <Option target="Shared Code | Release"/>
+      <Option compile="0"/>
+      <Option link="0"/>
+    </Unit>
+    <Unit filename="../../../../../../Applications/JUCE/modules/dRowAudio/utility/dRowAudio_StateVariable.h">
+      <Option target="Shared Code | Debug"/>
+      <Option target="Shared Code | Release"/>
+      <Option compile="0"/>
+      <Option link="0"/>
+    </Unit>
+    <Unit filename="../../../../../../Applications/JUCE/modules/dRowAudio/utility/dRowAudio_UnityBuilder.cpp">
+      <Option target="Shared Code | Debug"/>
+      <Option target="Shared Code | Release"/>
+      <Option compile="0"/>
+      <Option link="0"/>
+    </Unit>
+    <Unit filename="../../../../../../Applications/JUCE/modules/dRowAudio/utility/dRowAudio_UnityBuilder.h">
+      <Option target="Shared Code | Debug"/>
+      <Option target="Shared Code | Release"/>
+      <Option compile="0"/>
+      <Option link="0"/>
+    </Unit>
+    <Unit filename="../../../../../../Applications/JUCE/modules/dRowAudio/utility/dRowAudio_UnityProjectBuilder.cpp">
+      <Option target="Shared Code | Debug"/>
+      <Option target="Shared Code | Release"/>
+      <Option compile="0"/>
+      <Option link="0"/>
+    </Unit>
+    <Unit filename="../../../../../../Applications/JUCE/modules/dRowAudio/utility/dRowAudio_UnityProjectBuilder.h">
+      <Option target="Shared Code | Debug"/>
+      <Option target="Shared Code | Release"/>
+      <Option compile="0"/>
+      <Option link="0"/>
+    </Unit>
+    <Unit filename="../../../../../../Applications/JUCE/modules/dRowAudio/utility/dRowAudio_Utility.h">
+      <Option target="Shared Code | Debug"/>
+      <Option target="Shared Code | Release"/>
+      <Option compile="0"/>
+      <Option link="0"/>
+    </Unit>
+    <Unit filename="../../../../../../Applications/JUCE/modules/dRowAudio/utility/dRowAudio_XmlHelpers.h">
+      <Option target="Shared Code | Debug"/>
+      <Option target="Shared Code | Release"/>
+      <Option compile="0"/>
+      <Option link="0"/>
+    </Unit>
+    <Unit filename="../../../../../../Applications/JUCE/modules/dRowAudio/dRowAudio.cpp">
+      <Option target="Shared Code | Debug"/>
+      <Option target="Shared Code | Release"/>
+      <Option compile="0"/>
+      <Option link="0"/>
+    </Unit>
+    <Unit filename="../../../../../../Applications/JUCE/modules/dRowAudio/dRowAudio.mm">
+      <Option target="Shared Code | Debug"/>
+      <Option target="Shared Code | Release"/>
+      <Option compile="0"/>
+      <Option link="0"/>
+    </Unit>
+    <Unit filename="../../../../../../Applications/JUCE/modules/dRowAudio/dRowAudio.h">
       <Option target="Shared Code | Debug"/>
       <Option target="Shared Code | Release"/>
       <Option compile="0"/>
@@ -8155,6 +9217,10 @@
       <Option target="Shared Code | Release"/>
       <Option compile="0"/>
       <Option link="0"/>
+    </Unit>
+    <Unit filename="../../JuceLibraryCode/include_dRowAudio.cpp">
+      <Option target="Shared Code | Debug"/>
+      <Option target="Shared Code | Release"/>
     </Unit>
     <Unit filename="../../JuceLibraryCode/include_juce_audio_basics.cpp">
       <Option target="Shared Code | Debug"/>

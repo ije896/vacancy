@@ -25,6 +25,7 @@ VacancyAudioProcessor::VacancyAudioProcessor()
                        )
 #endif
 {
+    
 }
 
 VacancyAudioProcessor::~VacancyAudioProcessor()
@@ -96,14 +97,18 @@ void VacancyAudioProcessor::changeProgramName (int index, const String& newName)
 //==============================================================================
 void VacancyAudioProcessor::prepareToPlay (double sampleRate, int samplesPerBlock)
 {
+    
     // Use this method as the place to do any pre-playback
     // initialisation that you need..
+    setPlayConfigDetails(2, 2, sampleRate, samplesPerBlock);
+    //VacancyAudioProcessorEditor::transportSource.prepareToPlay(samplesPerBlock, sampleRate);
 }
 
 void VacancyAudioProcessor::releaseResources()
 {
     // When playback stops, you can use this as an opportunity to free up any
     // spare memory, etc.
+    //VacancyAudioProcessorEditor::transportSource.releaseResources();
 }
 
 #ifndef JucePlugin_PreferredChannelConfigurations
