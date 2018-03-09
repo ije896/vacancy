@@ -8,19 +8,19 @@
     <key>CFBundleIconFile</key>
     <string></string>
     <key>CFBundleIdentifier</key>
-    <string>com.yourcompany.vacancy</string>
+    <string>com.yourcompany.Vacancy</string>
     <key>CFBundleName</key>
-    <string>vacancy</string>
+    <string>Vacancy</string>
     <key>CFBundleDisplayName</key>
-    <string>vacancy</string>
+    <string>Vacancy</string>
     <key>CFBundlePackageType</key>
     <string>BNDL</string>
     <key>CFBundleSignature</key>
     <string>????</string>
     <key>CFBundleShortVersionString</key>
-    <string>1.0.0</string>
+    <string>0.0.1</string>
     <key>CFBundleVersion</key>
-    <string>1.0.0</string>
+    <string>0.0.1</string>
     <key>NSHumanReadableCopyright</key>
     <string></string>
     <key>NSHighResolutionCapable</key>
@@ -29,19 +29,19 @@
     <array>
       <dict>
         <key>name</key>
-        <string>yourcompany: JUCE Project</string>
+        <string>yourcompany: Vacancy</string>
         <key>description</key>
-        <string>JUCE Project</string>
+        <string>Vacancy</string>
         <key>factoryFunction</key>
-        <string>JUCEProjectAUFactory</string>
+        <string>VacancyAUFactory</string>
         <key>manufacturer</key>
         <string>Manu</string>
         <key>type</key>
         <string>aufx</string>
         <key>subtype</key>
-        <string>Iuin</string>
+        <string>U6ls</string>
         <key>version</key>
-        <integer>65536</integer>
+        <integer>1</integer>
       </dict>
     </array>
   </dict>
