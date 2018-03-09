@@ -16,7 +16,7 @@ Construct an open source plugin for personal education and hopefully for usable 
   - etc.
   
  ## Stretch goals
-  - Convolve input with an image. Things to consider:
+ - Convolve input with an image. Things to consider:
    - How do you get 1-D data from an image?
    - What values from the image will you use?
  
