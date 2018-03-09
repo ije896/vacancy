@@ -36,10 +36,25 @@ VacancyAudioProcessor::~VacancyAudioProcessor()
 }
 
 //==============================================================================
+void VacancyAudioProcessor::changeState(TransportState newState){
+    if(transport_state != newState){
+        transport_state = newState;
+        switch (transport_state) {
+            case Starting:
+                _transportSource.start();
+                break;
+            case Stopped:
+                _transportSource.stop();
+                _transportSource.setPosition(0.0);
+                break;
+            default:
+                break;
+        }
+        
+    }
+}
 
 void VacancyAudioProcessor::loadIR(File file){
-    DBG("in load file");
-    
     AudioFormatReader* reader = _formatManager.createReaderFor(file);
     
     if (reader != nullptr)
@@ -48,18 +63,20 @@ void VacancyAudioProcessor::loadIR(File file){
         _transportSource.setSource (newSource, 0, nullptr, reader->sampleRate);
         _readerSource = newSource.release();
     }
-    
 }
 void VacancyAudioProcessor::playIR(){
-    _transportSource.start();
+    changeState(Starting);
 }
 
 void VacancyAudioProcessor::changeListenerCallback(ChangeBroadcaster* source){
-//    if (source == &_thumbnail){
-//        // make the GUI repaint
-//        guiShouldRepaint = true;
-//        //VacancyAudioProcessorEditor::repaint();
-//    }
+    if(source==&_transportSource){
+        if(_transportSource.isPlaying()){
+            changeState(Playing);
+        }
+        else if (transport_state==Playing){
+            changeState(Stopped);
+        }
+    }
 }
 //==============================================================================
 const String VacancyAudioProcessor::getName() const

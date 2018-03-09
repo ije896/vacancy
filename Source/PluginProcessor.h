@@ -26,7 +26,7 @@ public:
     //==============================================================================
     void loadIR(File file);
     void playIR();
-    float dry_gain;
+    float _dry_gain;
     bool guiShouldRepaint = false;
     
     //Convolution convolver;
@@ -74,7 +74,9 @@ private:
         Paused,
         Stopping
     };
+    void changeState(TransportState newState);
     //==============================================================================
+    TransportState transport_state;
     AudioTransportSource _transportSource;
     AudioFormatManager _formatManager;
     ScopedPointer<AudioFormatReaderSource> _readerSource;

@@ -29,23 +29,20 @@ VacancyAudioProcessorEditor::VacancyAudioProcessorEditor (VacancyAudioProcessor&
     playIRButton.addListener(this);
     
     // volume slider parameters
-    level.setSliderStyle(Slider::LinearVertical);
-    level.setRange(-60.0, 0.0);
-    level.setTextBoxStyle(Slider::NoTextBox, false, 90, 0);
-    level.setPopupDisplayEnabled(true, false, this);
-    level.setTextValueSuffix(" dB");
-    level.setValue(-50.0);
-    level.addListener(this);
+    dry_gain.setSliderStyle(Slider::LinearVertical);
+    dry_gain.setRange(-60.0, 0.0);
+    dry_gain.setTextBoxStyle(Slider::NoTextBox, false, 90, 0);
+    dry_gain.setPopupDisplayEnabled(true, false, this);
+    dry_gain.setTextValueSuffix(" dB");
+    dry_gain.setValue(-50.0);
+    dry_gain.addListener(this);
     
     // add format manager
     formatManager.registerBasicFormats();
-//    transportSource->addChangeListener(this);
-    
     thumbnail.addChangeListener(this);
-    // processor._thumbnail.addChangeListener(this);
     
     // display items
-    addAndMakeVisible(&level);
+    addAndMakeVisible(&dry_gain);
     addAndMakeVisible(&openFileButton);
     addAndMakeVisible(&playIRButton);
     
@@ -74,7 +71,7 @@ void VacancyAudioProcessorEditor::buttonClicked (Button* button)
     if (button == &playIRButton) playIRButtonClicked();
 }
 void VacancyAudioProcessorEditor::sliderValueChanged(Slider* slider){
-    processor.dry_gain = level.getValue();
+    processor._dry_gain = dry_gain.getValue();
 }
 
 // this loads the file and passes it to the backend
@@ -130,6 +127,7 @@ void VacancyAudioProcessorEditor::paintWithFileLoaded(Graphics& g, const Rectang
 void VacancyAudioProcessorEditor::paint (Graphics& g)
 {
     const Rectangle<int> thumbnailBounds (80, 120, getWidth() - 100, getHeight() - 180);
+    g.fillAll(Colours::black);
     
     if(thumbnail.getNumChannels()==0) paintNoFileLoaded(g, thumbnailBounds);
     else paintWithFileLoaded(g, thumbnailBounds);
@@ -146,5 +144,5 @@ void VacancyAudioProcessorEditor::resized()
     // actually add our components to the window
     openFileButton.setBounds(150, 30, getWidth() - 300, 30);
     playIRButton.setBounds(150, 70, getWidth()-300, 30);
-    level.setBounds(40, 30, 40, getHeight() - 60);
+    dry_gain.setBounds(40, 30, 40, getHeight() - 60);
 }

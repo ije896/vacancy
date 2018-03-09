@@ -52,7 +52,7 @@ private:
     VacancyAudioProcessor& processor;
     
     // physical objects
-    Slider level;
+    Slider dry_gain;
     TextButton openFileButton;
     TextButton playIRButton;
     
