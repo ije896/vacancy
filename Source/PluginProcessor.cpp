@@ -30,7 +30,6 @@ VacancyAudioProcessor::VacancyAudioProcessor()
     _parameters.state = ValueTree(Identifier("VacancyParams"));
     _formatManager.registerBasicFormats();
     _transportSource.addChangeListener(this);
-    // _thumbnail.addChangeListener(this);
 }
 
 VacancyAudioProcessor::~VacancyAudioProcessor()
@@ -146,9 +145,9 @@ void VacancyAudioProcessor::changeProgramName (int index, const String& newName)
 //==============================================================================
 void VacancyAudioProcessor::prepareToPlay (double sampleRate, int samplesPerBlock)
 {
-    prev_dry_gain = *_parameters.getRawParameterValue("dry_gain");
     // Use this method as the place to do any pre-playback
     // initialisation that you need..
+    prev_dry_gain = *_parameters.getRawParameterValue("dry_gain");
     setPlayConfigDetails(2, 2, sampleRate, samplesPerBlock);
     _transportSource.prepareToPlay(samplesPerBlock, sampleRate);
 }
@@ -206,40 +205,36 @@ void VacancyAudioProcessor::processBlock (AudioBuffer<float>& buffer, MidiBuffer
     // the samples and the outer loop is handling the channels.
     // Alternatively, you can process the samples with the channels
     // interleaved by keeping the same state.
+        for (int channel = 0; channel < totalNumInputChannels; ++channel)
+        {
+            const int actualInputChannel = channel % totalNumInputChannels;
+            
+            auto* inputData = buffer.getReadPointer(actualInputChannel);
+            auto* channelData = buffer.getWritePointer (channel);
+            // ..do something to the data...
+            // _transportSource.getNextAudioBlock(channelData);
+            for (int sample = 0; sample < buffer.getNumSamples(); ++sample)
+                channelData[sample] = inputData[sample];
+        }
     
-    AudioSourceChannelInfo bufferToFill;
-    bufferToFill.buffer = &buffer;
-    bufferToFill.startSample = 0;
-    bufferToFill.numSamples = buffer.getNumSamples();
     
-    _transportSource.getNextAudioBlock(bufferToFill);
-    
-    if(curr_dry_gain == prev_dry_gain){
-        bufferToFill.buffer->applyGain(curr_dry_gain);
-    }
-    else{
-        bufferToFill.buffer->applyGainRamp(0, bufferToFill.numSamples, prev_dry_gain, curr_dry_gain);
-        prev_dry_gain = curr_dry_gain;
-    }
-    
-//    for (int channel = 0; channel < totalNumInputChannels; ++channel)
-//    {
-//        auto* channelData = buffer.getWritePointer (channel);
-//        // ..do something to the data...
-//        // _transportSource.getNextAudioBlock(channelData);
+//    AudioSourceChannelInfo bufferToFill;
+//    bufferToFill.buffer = &buffer;
+//    bufferToFill.startSample = 0;
+//    bufferToFill.numSamples = buffer.getNumSamples();
+//
+//    _transportSource.getNextAudioBlock(bufferToFill);
+//
+//    if(curr_dry_gain == prev_dry_gain){
+//        bufferToFill.buffer->applyGain(curr_dry_gain);
 //    }
+//    else{
+//        bufferToFill.buffer->applyGainRamp(0, bufferToFill.numSamples, prev_dry_gain, curr_dry_gain);
+//        prev_dry_gain = curr_dry_gain;
+//    }
+    
 }
 
-void VacancyAudioProcessor::getNextAudioBlock (const AudioSourceChannelInfo& bufferToFill)
-{
-    if (_readerSource == nullptr)
-    {
-        bufferToFill.clearActiveBufferRegion();
-        return;
-    }
-    
-    _transportSource.getNextAudioBlock(bufferToFill);
-}
 //==============================================================================
 bool VacancyAudioProcessor::hasEditor() const
 {
@@ -265,6 +260,10 @@ void VacancyAudioProcessor::setStateInformation (const void* data, int sizeInByt
 {
     // You should use this method to restore your parameters from this memory block,
     // whose contents will have been created by the getStateInformation() call.
+    ScopedPointer<XmlElement> xmlState (getXmlFromBinary (data, sizeInBytes));
+    if (xmlState != nullptr)
+        if (xmlState->hasTagName (_parameters.state.getType()))
+            _parameters.state = ValueTree::fromXml (*xmlState);
 }
 
 //==============================================================================

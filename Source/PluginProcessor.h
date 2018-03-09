@@ -37,7 +37,6 @@ public:
    #endif
 
     void processBlock (AudioBuffer<float>&, MidiBuffer&) override;
-    void getNextAudioBlock (const AudioSourceChannelInfo& bufferToFill);
 
     //==============================================================================
     AudioProcessorEditor* createEditor() override;
