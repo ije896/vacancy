@@ -62,7 +62,7 @@ private:
     Label dryGainLabel;
     Slider dryGainSlider;
     ScopedPointer<SliderAttachment> dryGainAttachment;
-    
+
     TextButton openFileButton;
     TextButton playIRButton;
     

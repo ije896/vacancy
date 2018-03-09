@@ -28,6 +28,7 @@ public:
     void playIR();
     //Convolution convolver;
     //==============================================================================
+    void updateParams();
     void prepareToPlay (double sampleRate, int samplesPerBlock) override;
     void releaseResources() override;
     void changeListenerCallback(ChangeBroadcaster* source) override;
@@ -62,7 +63,9 @@ public:
     void setStateInformation (const void* data, int sizeInBytes) override;
 
 private:
+    dsp::Convolution _convolution;
     float prev_dry_gain;
+    float prev_wet_gain;
     enum TransportState {
         Stopped,
         Starting,

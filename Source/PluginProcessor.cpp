@@ -30,6 +30,7 @@ VacancyAudioProcessor::VacancyAudioProcessor()
     _parameters.state = ValueTree(Identifier("VacancyParams"));
     _formatManager.registerBasicFormats();
     _transportSource.addChangeListener(this);
+    
 }
 
 VacancyAudioProcessor::~VacancyAudioProcessor()
@@ -56,10 +57,14 @@ void VacancyAudioProcessor::changeState(TransportState newState){
 }
 
 void VacancyAudioProcessor::loadIR(File file){
+    // we need to set the convolutionIR in this, not load it into a player
     AudioFormatReader* reader = _formatManager.createReaderFor(file);
     
     if (reader != nullptr)
     {
+        _convolution.loadImpulseResponse(file, true, false, 0);
+        
+        // sample player
         ScopedPointer<AudioFormatReaderSource> newSource = new AudioFormatReaderSource (reader, true);
         _transportSource.setSource (newSource, 0, nullptr, reader->sampleRate);
         _readerSource = newSource.release();
@@ -143,6 +148,9 @@ void VacancyAudioProcessor::changeProgramName (int index, const String& newName)
 }
 
 //==============================================================================
+void VacancyAudioProcessor::updateParams(){
+    
+}
 void VacancyAudioProcessor::prepareToPlay (double sampleRate, int samplesPerBlock)
 {
     // Use this method as the place to do any pre-playback
@@ -150,6 +158,11 @@ void VacancyAudioProcessor::prepareToPlay (double sampleRate, int samplesPerBloc
     prev_dry_gain = *_parameters.getRawParameterValue("dry_gain");
     setPlayConfigDetails(2, 2, sampleRate, samplesPerBlock);
     _transportSource.prepareToPlay(samplesPerBlock, sampleRate);
+    
+    // setup convolution
+    auto channels = static_cast<uint32> (jmin (getMainBusNumInputChannels(), getMainBusNumOutputChannels()));
+    dsp::ProcessSpec spec { sampleRate, static_cast<uint32> (samplesPerBlock), channels };
+    _convolution.prepare(spec);
 }
 
 void VacancyAudioProcessor::releaseResources()
@@ -205,19 +218,25 @@ void VacancyAudioProcessor::processBlock (AudioBuffer<float>& buffer, MidiBuffer
     // the samples and the outer loop is handling the channels.
     // Alternatively, you can process the samples with the channels
     // interleaved by keeping the same state.
-        for (int channel = 0; channel < totalNumInputChannels; ++channel)
-        {
-            const int actualInputChannel = channel % totalNumInputChannels;
-            
-            auto* inputData = buffer.getReadPointer(actualInputChannel);
-            auto* channelData = buffer.getWritePointer (channel);
-            // ..do something to the data...
-            // _transportSource.getNextAudioBlock(channelData);
-            for (int sample = 0; sample < buffer.getNumSamples(); ++sample)
-                channelData[sample] = inputData[sample];
-        }
+//        for (int channel = 0; channel < totalNumInputChannels; ++channel)
+//        {
+//            const int actualInputChannel = channel % totalNumInputChannels;
+//
+//            auto* inputData = buffer.getReadPointer(actualInputChannel);
+//            auto* channelData = buffer.getWritePointer (channel);
+//            // ..do something to the data...
+//            // _transportSource.getNextAudioBlock(channelData);
+//            for (int sample = 0; sample < buffer.getNumSamples(); ++sample)
+//                channelData[sample] = inputData[sample];
+//        }
     
+    dsp::AudioBlock<float> block (buffer);
     
+    if (block.getNumChannels() > 2)
+        block = block.getSubsetChannelBlock (0, 2);
+    
+    _convolution.process(dsp::ProcessContextReplacing<float> (block));
+
 //    AudioSourceChannelInfo bufferToFill;
 //    bufferToFill.buffer = &buffer;
 //    bufferToFill.startSample = 0;

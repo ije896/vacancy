@@ -113,7 +113,7 @@ void VacancyAudioProcessorEditor::changeListenerCallback(ChangeBroadcaster* sour
 
 VacancyAudioProcessorEditor::~VacancyAudioProcessorEditor()
 {
-    
+    dryGainAttachment = nullptr;
 }
 
 //==============================================================================
