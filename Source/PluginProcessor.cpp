@@ -22,9 +22,12 @@ VacancyAudioProcessor::VacancyAudioProcessor()
                       #endif
                        .withOutput ("Output", AudioChannelSet::stereo(), true)
                      #endif
-                       )
+                       ),
+        _parameters(*this, nullptr)
 #endif
 {
+    _parameters.createAndAddParameter("dry_gain", "Dry Gain", String(), NormalisableRange<float> (0.0f, 1.0f), 0.7f, nullptr, nullptr);
+    _parameters.state = ValueTree(Identifier("VacancyParams"));
     _formatManager.registerBasicFormats();
     _transportSource.addChangeListener(this);
     // _thumbnail.addChangeListener(this);
@@ -50,7 +53,6 @@ void VacancyAudioProcessor::changeState(TransportState newState){
             default:
                 break;
         }
-        
     }
 }
 
@@ -64,6 +66,7 @@ void VacancyAudioProcessor::loadIR(File file){
         _readerSource = newSource.release();
     }
 }
+
 void VacancyAudioProcessor::playIR(){
     changeState(Starting);
 }
@@ -143,7 +146,7 @@ void VacancyAudioProcessor::changeProgramName (int index, const String& newName)
 //==============================================================================
 void VacancyAudioProcessor::prepareToPlay (double sampleRate, int samplesPerBlock)
 {
-    
+    prev_dry_gain = *_parameters.getRawParameterValue("dry_gain");
     // Use this method as the place to do any pre-playback
     // initialisation that you need..
     setPlayConfigDetails(2, 2, sampleRate, samplesPerBlock);
@@ -186,6 +189,7 @@ void VacancyAudioProcessor::processBlock (AudioBuffer<float>& buffer, MidiBuffer
     ScopedNoDenormals noDenormals;
     auto totalNumInputChannels  = getTotalNumInputChannels();
     auto totalNumOutputChannels = getTotalNumOutputChannels();
+    const float curr_dry_gain = *_parameters.getRawParameterValue("dry_gain");
 
     // In case we have more outputs than inputs, this code clears any output
     // channels that didn't contain input data, (because these aren't
@@ -207,7 +211,16 @@ void VacancyAudioProcessor::processBlock (AudioBuffer<float>& buffer, MidiBuffer
     bufferToFill.buffer = &buffer;
     bufferToFill.startSample = 0;
     bufferToFill.numSamples = buffer.getNumSamples();
+    
     _transportSource.getNextAudioBlock(bufferToFill);
+    
+    if(curr_dry_gain == prev_dry_gain){
+        bufferToFill.buffer->applyGain(curr_dry_gain);
+    }
+    else{
+        bufferToFill.buffer->applyGainRamp(0, bufferToFill.numSamples, prev_dry_gain, curr_dry_gain);
+        prev_dry_gain = curr_dry_gain;
+    }
     
 //    for (int channel = 0; channel < totalNumInputChannels; ++channel)
 //    {
@@ -225,7 +238,7 @@ void VacancyAudioProcessor::getNextAudioBlock (const AudioSourceChannelInfo& buf
         return;
     }
     
-    _transportSource.getNextAudioBlock (bufferToFill);
+    _transportSource.getNextAudioBlock(bufferToFill);
 }
 //==============================================================================
 bool VacancyAudioProcessor::hasEditor() const
@@ -235,7 +248,7 @@ bool VacancyAudioProcessor::hasEditor() const
 
 AudioProcessorEditor* VacancyAudioProcessor::createEditor()
 {
-    return new VacancyAudioProcessorEditor (*this);
+    return new VacancyAudioProcessorEditor (*this, _parameters);
 }
 
 //==============================================================================
@@ -244,6 +257,8 @@ void VacancyAudioProcessor::getStateInformation (MemoryBlock& destData)
     // You should use this method to store your parameters in the memory block.
     // You could do that either as raw data, or use the XML or ValueTree classes
     // as intermediaries to make it easy to save and load complex data.
+    ScopedPointer<XmlElement> xml (_parameters.state.createXml());
+    copyXmlToBinary (*xml, destData);
 }
 
 void VacancyAudioProcessor::setStateInformation (const void* data, int sizeInBytes)

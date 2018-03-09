@@ -13,14 +13,11 @@
 
 
 //==============================================================================
-VacancyAudioProcessorEditor::VacancyAudioProcessorEditor (VacancyAudioProcessor& p)
-: AudioProcessorEditor (&p), processor (p), thumbnailCache(5), thumbnail(512, formatManager, thumbnailCache)
+VacancyAudioProcessorEditor::VacancyAudioProcessorEditor (VacancyAudioProcessor& p, AudioProcessorValueTreeState& vts)
+: AudioProcessorEditor (&p), processor (p), valueTreeState(vts),
+thumbnailCache(5), thumbnail(512, formatManager, thumbnailCache)
+
 {
-    // Make sure that before the constructor has finished, you've set the
-    // editor's size to whatever you need it to be.
-    setSize(600, 400);
-    
-   
     // sample open button params
     openFileButton.setButtonText("Load IR");
     openFileButton.addListener(this);
@@ -29,22 +26,32 @@ VacancyAudioProcessorEditor::VacancyAudioProcessorEditor (VacancyAudioProcessor&
     playIRButton.addListener(this);
     
     // volume slider parameters
-    dry_gain.setSliderStyle(Slider::LinearVertical);
-    dry_gain.setRange(-60.0, 0.0);
-    dry_gain.setTextBoxStyle(Slider::NoTextBox, false, 90, 0);
-    dry_gain.setPopupDisplayEnabled(true, false, this);
-    dry_gain.setTextValueSuffix(" dB");
-    dry_gain.setValue(-50.0);
-    dry_gain.addListener(this);
+    dryGainSlider.setSliderStyle(Slider::LinearVertical);
+
+    dryGainSlider.setTextBoxStyle(Slider::NoTextBox, false, 90, 30);
+    dryGainSlider.setPopupDisplayEnabled(true, false, this);
+    //    dryGainSlider.setRange(-60.0, 0.0);
+//    dryGainSlider.setTextValueSuffix(" dB");
+//    dryGainSlider.setValue(-50.0);
+    // dryGainSlider.addListener(this);
+    
+    dryGainLabel.setText ("Dry Gain", dontSendNotification);
+    addAndMakeVisible (dryGainLabel);
+    addAndMakeVisible (dryGainSlider);
+    dryGainAttachment = new SliderAttachment (valueTreeState, "dry_gain", dryGainSlider);
     
     // add format manager
     formatManager.registerBasicFormats();
     thumbnail.addChangeListener(this);
     
     // display items
-    addAndMakeVisible(&dry_gain);
+    addAndMakeVisible(&dryGainSlider);
     addAndMakeVisible(&openFileButton);
     addAndMakeVisible(&playIRButton);
+    
+    // Make sure that before the constructor has finished, you've set the
+    // editor's size to whatever you need it to be.
+    setSize(600, 400);
     
 }
 
@@ -71,7 +78,7 @@ void VacancyAudioProcessorEditor::buttonClicked (Button* button)
     if (button == &playIRButton) playIRButtonClicked();
 }
 void VacancyAudioProcessorEditor::sliderValueChanged(Slider* slider){
-    processor._dry_gain = dry_gain.getValue();
+    // processor._dryGainSlider = dryGainSlider.getValue();
 }
 
 // this loads the file and passes it to the backend
@@ -96,7 +103,7 @@ void VacancyAudioProcessorEditor::playIRButtonClicked(){
     processor.playIR();
 }
 
-// this is what gets called if there are changes in any broadcaster
+// callback for changes in a broadcaster
 void VacancyAudioProcessorEditor::changeListenerCallback(ChangeBroadcaster* source){
     if(source == &thumbnail){
         repaint();
@@ -114,19 +121,19 @@ void VacancyAudioProcessorEditor::paintNoFileLoaded(Graphics& g, const Rectangle
     g.setColour (Colours::darkgrey);
     g.fillRect (thumbnailBounds);
     g.setColour (Colours::white);
-    g.drawFittedText ("No File Loaded", thumbnailBounds, Justification::centred, 1.0f);
+    g.drawFittedText ("No IR Loaded", thumbnailBounds, Justification::centred, 1.0f);
 }
 
 void VacancyAudioProcessorEditor::paintWithFileLoaded(Graphics& g, const Rectangle<int>& thumbnailBounds){
     g.setColour (Colours::white);
     g.fillRect (thumbnailBounds);
     g.setColour (Colours::black);
-    thumbnail.drawChannels (g, thumbnailBounds, -0.2f, thumbnail.getTotalLength(),  1.0f);
+    thumbnail.drawChannels (g, thumbnailBounds, 0.0f, thumbnail.getTotalLength(),  1.0f);
 }
 
 void VacancyAudioProcessorEditor::paint (Graphics& g)
 {
-    const Rectangle<int> thumbnailBounds (80, 120, getWidth() - 100, getHeight() - 180);
+    const Rectangle<int> thumbnailBounds (80, 120, getWidth() - 150, getHeight() - 180);
     g.fillAll(Colours::black);
     
     if(thumbnail.getNumChannels()==0) paintNoFileLoaded(g, thumbnailBounds);
@@ -144,5 +151,6 @@ void VacancyAudioProcessorEditor::resized()
     // actually add our components to the window
     openFileButton.setBounds(150, 30, getWidth() - 300, 30);
     playIRButton.setBounds(150, 70, getWidth()-300, 30);
-    dry_gain.setBounds(40, 30, 40, getHeight() - 60);
+    dryGainSlider.setBounds(getWidth()-70, 80, 60, 280);
+    dryGainLabel.setBounds(getWidth()-70, 350, 60, 20);
 }

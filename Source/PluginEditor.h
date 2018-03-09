@@ -23,13 +23,16 @@ class VacancyAudioProcessorEditor  : public AudioProcessorEditor,
                                      public Slider::Listener
 {
 public:
-    VacancyAudioProcessorEditor (VacancyAudioProcessor& p);
+    VacancyAudioProcessorEditor (VacancyAudioProcessor& p, AudioProcessorValueTreeState& vts);
     ~VacancyAudioProcessorEditor();
     //==============================================================================
     void paint (Graphics&) override;
     void paintNoFileLoaded(Graphics& g, const Rectangle<int>& thumbnailBounds);
     void paintWithFileLoaded(Graphics& g, const Rectangle<int>& thumbnailBounds);
     void resized() override;
+    
+    // to reduce how much we have to type
+    typedef AudioProcessorValueTreeState::SliderAttachment SliderAttachment;
     
     void buttonClicked (Button* button) override;
     void changeListenerCallback(ChangeBroadcaster* source) override;
@@ -47,12 +50,19 @@ private:
     void changeState(TransportState nextState);
     void openFileButtonClicked();
     void playIRButtonClicked();
+    
     // This reference is provided as a quick way for your editor to
     // access the processor object that created it.
     VacancyAudioProcessor& processor;
     
+    // for our plugin params
+    AudioProcessorValueTreeState& valueTreeState;
+    
     // physical objects
-    Slider dry_gain;
+    Label dryGainLabel;
+    Slider dryGainSlider;
+    ScopedPointer<SliderAttachment> dryGainAttachment;
+    
     TextButton openFileButton;
     TextButton playIRButton;
     
@@ -61,6 +71,7 @@ private:
     // controls playback of AudioFormatReaderSource object
     // can also do SR conversions and buffer audio
     TransportState state;
+    // thumbnail objects
     AudioThumbnailCache thumbnailCache;
     AudioThumbnail thumbnail;
 

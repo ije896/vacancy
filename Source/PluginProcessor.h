@@ -26,9 +26,6 @@ public:
     //==============================================================================
     void loadIR(File file);
     void playIR();
-    float _dry_gain;
-    bool guiShouldRepaint = false;
-    
     //Convolution convolver;
     //==============================================================================
     void prepareToPlay (double sampleRate, int samplesPerBlock) override;
@@ -66,6 +63,7 @@ public:
     void setStateInformation (const void* data, int sizeInBytes) override;
 
 private:
+    float prev_dry_gain;
     enum TransportState {
         Stopped,
         Starting,
@@ -80,6 +78,7 @@ private:
     AudioTransportSource _transportSource;
     AudioFormatManager _formatManager;
     ScopedPointer<AudioFormatReaderSource> _readerSource;
+    AudioProcessorValueTreeState _parameters;
     
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (VacancyAudioProcessor)
 };
