@@ -33,6 +33,7 @@ public:
     
     // to reduce how much we have to type
     typedef AudioProcessorValueTreeState::SliderAttachment SliderAttachment;
+    typedef AudioProcessorValueTreeState::ButtonAttachment ButtonAttachment;
     
     void buttonClicked (Button* button) override;
     void changeListenerCallback(ChangeBroadcaster* source) override;
@@ -62,6 +63,10 @@ private:
     Label dryGainLabel;
     Slider dryGainSlider;
     ScopedPointer<SliderAttachment> dryGainAttachment;
+    
+//    Label reverseLabel;
+    ToggleButton reverseIRButton;
+    ScopedPointer<ButtonAttachment> reverseIRAttachment;
 
     TextButton openFileButton;
     TextButton playIRButton;

@@ -18,14 +18,14 @@ VacancyAudioProcessorEditor::VacancyAudioProcessorEditor (VacancyAudioProcessor&
 thumbnailCache(5), thumbnail(512, formatManager, thumbnailCache)
 
 {
-    // sample open button params
+    // openIR button init
     openFileButton.setButtonText("Load IR");
     openFileButton.addListener(this);
     
     playIRButton.setButtonText("Play IR");
     playIRButton.addListener(this);
     
-    // volume slider parameters
+    // gain slider init
     dryGainSlider.setSliderStyle(Slider::LinearVertical);
 
     dryGainSlider.setTextBoxStyle(Slider::NoTextBox, false, 90, 30);
@@ -39,6 +39,11 @@ thumbnailCache(5), thumbnail(512, formatManager, thumbnailCache)
     addAndMakeVisible (dryGainLabel);
     addAndMakeVisible (dryGainSlider);
     dryGainAttachment = new SliderAttachment (valueTreeState, "dry_gain", dryGainSlider);
+    
+    // reverse button
+    reverseIRButton.setButtonText("Reverse");
+    addAndMakeVisible(reverseIRButton);
+    reverseIRAttachment = new ButtonAttachment(valueTreeState, "revrseIR", reverseIRButton);
     
     // add format manager
     formatManager.registerBasicFormats();
@@ -76,6 +81,7 @@ void VacancyAudioProcessorEditor::buttonClicked (Button* button)
 {
     if (button == &openFileButton) openFileButtonClicked();
     if (button == &playIRButton) playIRButtonClicked();
+    // if (button == &reverseIRButton) reverseIRButtonClicked();
 }
 void VacancyAudioProcessorEditor::sliderValueChanged(Slider* slider){
     // processor._dryGainSlider = dryGainSlider.getValue();
@@ -103,6 +109,10 @@ void VacancyAudioProcessorEditor::playIRButtonClicked(){
     processor.playIR();
 }
 
+//void VacancyAudioProcessorEditor::reverseIRButtonClicked(){
+//    DBG("reverse toggled");
+//}
+
 // callback for changes in a broadcaster
 void VacancyAudioProcessorEditor::changeListenerCallback(ChangeBroadcaster* source){
     if(source == &thumbnail){
@@ -114,6 +124,7 @@ void VacancyAudioProcessorEditor::changeListenerCallback(ChangeBroadcaster* sour
 VacancyAudioProcessorEditor::~VacancyAudioProcessorEditor()
 {
     dryGainAttachment = nullptr;
+    reverseIRAttachment = nullptr;
 }
 
 //==============================================================================
@@ -133,7 +144,7 @@ void VacancyAudioProcessorEditor::paintWithFileLoaded(Graphics& g, const Rectang
 
 void VacancyAudioProcessorEditor::paint (Graphics& g)
 {
-    const Rectangle<int> thumbnailBounds (80, 120, getWidth() - 150, getHeight() - 180);
+    const Rectangle<int> thumbnailBounds (50, 120, getWidth() - 150, getHeight() - 180);
     g.fillAll(Colours::black);
     
     if(thumbnail.getNumChannels()==0) paintNoFileLoaded(g, thumbnailBounds);
@@ -153,4 +164,5 @@ void VacancyAudioProcessorEditor::resized()
     playIRButton.setBounds(150, 70, getWidth()-300, 30);
     dryGainSlider.setBounds(getWidth()-70, 80, 60, 280);
     dryGainLabel.setBounds(getWidth()-70, 350, 60, 20);
+    reverseIRButton.setBounds(50, 345, 80, 20);
 }

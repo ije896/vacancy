@@ -26,7 +26,14 @@ public:
     //==============================================================================
     void loadIR(File file);
     void playIR();
-    //Convolution convolver;
+    static String reverseToText(float value){
+            return value < 0.5 ? "Normal" : "Reversed";
+    };
+    static float textToReverse(const String& text){
+        if (text == "Normal")    return 0.0f;
+        if (text == "Reversed")  return 1.0f;
+        return 0.0f;
+    };
     //==============================================================================
     void updateParams();
     void prepareToPlay (double sampleRate, int samplesPerBlock) override;

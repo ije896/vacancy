@@ -8,6 +8,29 @@
   ==============================================================================
 */
 
+
+/* TODO
+ True dry/wet gain (mix input signals)
+ Wet gain slider
+ gain in dB
+ Reverse IR
+ Reverse IR Button
+ Reverse IR button currently doesn't change values
+ Remove the play IR button
+ Add level meters?
+     I guess you can load IR into a readerSource, and then manually reverse it into
+     another buffer and convolve with that or save to tmp file worst case?
+ Change Length/Start of IR
+ Filtering, whether it knobs or visual points like SD
+ Volume envelope
+ Variable SR
+ Predelay
+ Check for mono vs stereo IR
+ Maybe accept different types of IR's? Like mp3?...
+ Image parsing and convolution!!!!!
+ Make all buttons APVTS params
+ */
+
 #include "PluginProcessor.h"
 #include "PluginEditor.h"
 
@@ -27,6 +50,9 @@ VacancyAudioProcessor::VacancyAudioProcessor()
 #endif
 {
     _parameters.createAndAddParameter("dry_gain", "Dry Gain", String(), NormalisableRange<float> (0.0f, 1.0f), 0.7f, nullptr, nullptr);
+    _parameters.createAndAddParameter("reverseIR", "Reverse IR", String(), NormalisableRange<float> (0.0f, 1.0f, 1.0f), 0.0f,
+                                      reverseToText, textToReverse);
+    
     _parameters.state = ValueTree(Identifier("VacancyParams"));
     _formatManager.registerBasicFormats();
     _transportSource.addChangeListener(this);
@@ -50,6 +76,10 @@ void VacancyAudioProcessor::changeState(TransportState newState){
                 _transportSource.stop();
                 _transportSource.setPosition(0.0);
                 break;
+            case Playing:
+                _transportSource.stop();
+                _transportSource.setPosition(0.0);
+                _transportSource.start();
             default:
                 break;
         }
@@ -57,7 +87,7 @@ void VacancyAudioProcessor::changeState(TransportState newState){
 }
 
 void VacancyAudioProcessor::loadIR(File file){
-    // we need to set the convolutionIR in this, not load it into a player
+    // somewhere in here, we could pre-emptively reverse the file
     AudioFormatReader* reader = _formatManager.createReaderFor(file);
     
     if (reader != nullptr)
@@ -85,6 +115,7 @@ void VacancyAudioProcessor::changeListenerCallback(ChangeBroadcaster* source){
         }
     }
 }
+
 //==============================================================================
 const String VacancyAudioProcessor::getName() const
 {
@@ -153,6 +184,7 @@ void VacancyAudioProcessor::updateParams(){
 }
 void VacancyAudioProcessor::prepareToPlay (double sampleRate, int samplesPerBlock)
 {
+    
     // Use this method as the place to do any pre-playback
     // initialisation that you need..
     prev_dry_gain = *_parameters.getRawParameterValue("dry_gain");
@@ -201,8 +233,17 @@ void VacancyAudioProcessor::processBlock (AudioBuffer<float>& buffer, MidiBuffer
     ScopedNoDenormals noDenormals;
     auto totalNumInputChannels  = getTotalNumInputChannels();
     auto totalNumOutputChannels = getTotalNumOutputChannels();
+    
+    const bool val = *_parameters.getRawParameterValue("reverseIR") < 0.5f ? false : true;
+    //DBG(val);
+    if(val){
+        DBG("hit");
+    }
+    else if (!val){
+        DBG("miss");
+    }
     const float curr_dry_gain = *_parameters.getRawParameterValue("dry_gain");
-
+    DBG(curr_dry_gain);
     // In case we have more outputs than inputs, this code clears any output
     // channels that didn't contain input data, (because these aren't
     // guaranteed to be empty - they may contain garbage).
@@ -244,13 +285,14 @@ void VacancyAudioProcessor::processBlock (AudioBuffer<float>& buffer, MidiBuffer
 //
 //    _transportSource.getNextAudioBlock(bufferToFill);
 //
-//    if(curr_dry_gain == prev_dry_gain){
-//        bufferToFill.buffer->applyGain(curr_dry_gain);
-//    }
-//    else{
-//        bufferToFill.buffer->applyGainRamp(0, bufferToFill.numSamples, prev_dry_gain, curr_dry_gain);
-//        prev_dry_gain = curr_dry_gain;
-//    }
+    // this is really just overall gain rn
+    if(curr_dry_gain == prev_dry_gain){
+        buffer.applyGain(curr_dry_gain);
+    }
+    else{
+        buffer.applyGainRamp(0, buffer.getNumSamples(), prev_dry_gain, curr_dry_gain);
+        prev_dry_gain = curr_dry_gain;
+    }
     
 }
 
