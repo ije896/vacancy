@@ -25,13 +25,42 @@ VacancyAudioProcessor::VacancyAudioProcessor()
                        )
 #endif
 {
-    
+    _formatManager.registerBasicFormats();
+    _transportSource.addChangeListener(this);
+    // _thumbnail.addChangeListener(this);
 }
 
 VacancyAudioProcessor::~VacancyAudioProcessor()
 {
+    releaseResources();
 }
 
+//==============================================================================
+
+void VacancyAudioProcessor::loadIR(File file){
+    DBG("in load file");
+    
+    AudioFormatReader* reader = _formatManager.createReaderFor(file);
+    
+    if (reader != nullptr)
+    {
+        ScopedPointer<AudioFormatReaderSource> newSource = new AudioFormatReaderSource (reader, true);
+        _transportSource.setSource (newSource, 0, nullptr, reader->sampleRate);
+        _readerSource = newSource.release();
+    }
+    
+}
+void VacancyAudioProcessor::playIR(){
+    _transportSource.start();
+}
+
+void VacancyAudioProcessor::changeListenerCallback(ChangeBroadcaster* source){
+//    if (source == &_thumbnail){
+//        // make the GUI repaint
+//        guiShouldRepaint = true;
+//        //VacancyAudioProcessorEditor::repaint();
+//    }
+}
 //==============================================================================
 const String VacancyAudioProcessor::getName() const
 {
@@ -101,14 +130,14 @@ void VacancyAudioProcessor::prepareToPlay (double sampleRate, int samplesPerBloc
     // Use this method as the place to do any pre-playback
     // initialisation that you need..
     setPlayConfigDetails(2, 2, sampleRate, samplesPerBlock);
-    //VacancyAudioProcessorEditor::transportSource.prepareToPlay(samplesPerBlock, sampleRate);
+    _transportSource.prepareToPlay(samplesPerBlock, sampleRate);
 }
 
 void VacancyAudioProcessor::releaseResources()
 {
     // When playback stops, you can use this as an opportunity to free up any
     // spare memory, etc.
-    //VacancyAudioProcessorEditor::transportSource.releaseResources();
+    _transportSource.releaseResources();
 }
 
 #ifndef JucePlugin_PreferredChannelConfigurations
@@ -156,14 +185,31 @@ void VacancyAudioProcessor::processBlock (AudioBuffer<float>& buffer, MidiBuffer
     // the samples and the outer loop is handling the channels.
     // Alternatively, you can process the samples with the channels
     // interleaved by keeping the same state.
-    for (int channel = 0; channel < totalNumInputChannels; ++channel)
-    {
-        auto* channelData = buffer.getWritePointer (channel);
-
-        // ..do something to the data...
-    }
+    
+    AudioSourceChannelInfo bufferToFill;
+    bufferToFill.buffer = &buffer;
+    bufferToFill.startSample = 0;
+    bufferToFill.numSamples = buffer.getNumSamples();
+    _transportSource.getNextAudioBlock(bufferToFill);
+    
+//    for (int channel = 0; channel < totalNumInputChannels; ++channel)
+//    {
+//        auto* channelData = buffer.getWritePointer (channel);
+//        // ..do something to the data...
+//        // _transportSource.getNextAudioBlock(channelData);
+//    }
 }
 
+void VacancyAudioProcessor::getNextAudioBlock (const AudioSourceChannelInfo& bufferToFill)
+{
+    if (_readerSource == nullptr)
+    {
+        bufferToFill.clearActiveBufferRegion();
+        return;
+    }
+    
+    _transportSource.getNextAudioBlock (bufferToFill);
+}
 //==============================================================================
 bool VacancyAudioProcessor::hasEditor() const
 {

@@ -18,22 +18,24 @@
 /**
 */
 class VacancyAudioProcessorEditor  : public AudioProcessorEditor,
-                                    public Button::Listener,
-                                    public ChangeListener
-//public Slider::Listener
+                                     public Button::Listener,
+                                     public ChangeListener,
+                                     public Slider::Listener
 {
 public:
-    VacancyAudioProcessorEditor (VacancyAudioProcessor&);
+    VacancyAudioProcessorEditor (VacancyAudioProcessor& p);
     ~VacancyAudioProcessorEditor();
-
     //==============================================================================
     void paint (Graphics&) override;
+    void paintNoFileLoaded(Graphics& g, const Rectangle<int>& thumbnailBounds);
+    void paintWithFileLoaded(Graphics& g, const Rectangle<int>& thumbnailBounds);
     void resized() override;
     
     void buttonClicked (Button* button) override;
     void changeListenerCallback(ChangeBroadcaster* source) override;
-
+    
 private:
+    void sliderValueChanged(Slider* slider) override;
     enum TransportState
     {
         Stopped,
@@ -58,8 +60,9 @@ private:
     ScopedPointer<AudioFormatReaderSource> readerSource;
     // controls playback of AudioFormatReaderSource object
     // can also do SR conversions and buffer audio
-    AudioTransportSource transportSource;
     TransportState state;
+    AudioThumbnailCache thumbnailCache;
+    AudioThumbnail thumbnail;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (VacancyAudioProcessorEditor)
 };

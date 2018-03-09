@@ -29,17 +29,17 @@
     <array>
       <dict>
         <key>name</key>
-        <string>yourcompany: vacancy</string>
+        <string>yourcompany: Vacancy</string>
         <key>description</key>
-        <string>vacancy</string>
+        <string>Vacancy</string>
         <key>factoryFunction</key>
-        <string>vacancyAUFactory</string>
+        <string>VacancyAUFactory</string>
         <key>manufacturer</key>
         <string>Manu</string>
         <key>type</key>
         <string>aufx</string>
         <key>subtype</key>
-        <string>Gu9k</string>
+        <string>U6ls</string>
         <key>version</key>
         <integer>1</integer>
       </dict>

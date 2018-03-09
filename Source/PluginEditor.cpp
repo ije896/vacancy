@@ -13,13 +13,13 @@
 
 
 //==============================================================================
-// copy constructor
 VacancyAudioProcessorEditor::VacancyAudioProcessorEditor (VacancyAudioProcessor& p)
-    : AudioProcessorEditor (&p), processor (p)
+: AudioProcessorEditor (&p), processor (p), thumbnailCache(5), thumbnail(512, formatManager, thumbnailCache)
 {
     // Make sure that before the constructor has finished, you've set the
     // editor's size to whatever you need it to be.
-    setSize (400, 300);
+    setSize(600, 400);
+    
    
     // sample open button params
     openFileButton.setButtonText("Load IR");
@@ -35,10 +35,14 @@ VacancyAudioProcessorEditor::VacancyAudioProcessorEditor (VacancyAudioProcessor&
     level.setPopupDisplayEnabled(true, false, this);
     level.setTextValueSuffix(" dB");
     level.setValue(-50.0);
+    level.addListener(this);
     
     // add format manager
     formatManager.registerBasicFormats();
-    transportSource.addChangeListener(this);
+//    transportSource->addChangeListener(this);
+    
+    thumbnail.addChangeListener(this);
+    // processor._thumbnail.addChangeListener(this);
     
     // display items
     addAndMakeVisible(&level);
@@ -56,7 +60,7 @@ void VacancyAudioProcessorEditor::changeState(TransportState nextState){
             case Starting:
                 break;
             case Playing:
-                transportSource.start();
+                // transportSource->start();
                 break;
             case Stopping:
                 break;
@@ -69,10 +73,14 @@ void VacancyAudioProcessorEditor::buttonClicked (Button* button)
     if (button == &openFileButton) openFileButtonClicked();
     if (button == &playIRButton) playIRButtonClicked();
 }
+void VacancyAudioProcessorEditor::sliderValueChanged(Slider* slider){
+    processor.dry_gain = level.getValue();
+}
 
+// this loads the file and passes it to the backend
+// also sets the thumbnail
 void VacancyAudioProcessorEditor::openFileButtonClicked(){
     DBG("open file clicked");
-    
     FileChooser chooser ("Select a Wave file to play...",
                          File::nonexistent,
                          "*.wav");
@@ -80,37 +88,53 @@ void VacancyAudioProcessorEditor::openFileButtonClicked(){
     if (chooser.browseForFileToOpen())
     {
         File file (chooser.getResult());
-        AudioFormatReader* reader = formatManager.createReaderFor (file);
-        
-        if (reader != nullptr)
-        {
-            ScopedPointer<AudioFormatReaderSource> newSource = new AudioFormatReaderSource (reader, true);
-            transportSource.setSource (newSource, 0, nullptr, reader->sampleRate);
-            // playButton.setEnabled (true);
-            readerSource = newSource.release();
-        }
+        processor.loadIR(file);
+        thumbnail.setSource (new FileInputSource (file));
     }
 }
 
 void VacancyAudioProcessorEditor::playIRButtonClicked(){
     DBG("play ir clicked");
     changeState(Playing);
+    processor.playIR();
 }
 
-void VacancyAudioProcessorEditor::changeListenerCallback(ChangeBroadcaster* source){}
+// this is what gets called if there are changes in any broadcaster
+void VacancyAudioProcessorEditor::changeListenerCallback(ChangeBroadcaster* source){
+    if(source == &thumbnail){
+        repaint();
+    }
+}
 
 
 VacancyAudioProcessorEditor::~VacancyAudioProcessorEditor()
 {
-    VacancyAudioProcessorEditor::transportSource.releaseResources();
+    
 }
 
 //==============================================================================
+void VacancyAudioProcessorEditor::paintNoFileLoaded(Graphics& g, const Rectangle<int>& thumbnailBounds){
+    g.setColour (Colours::darkgrey);
+    g.fillRect (thumbnailBounds);
+    g.setColour (Colours::white);
+    g.drawFittedText ("No File Loaded", thumbnailBounds, Justification::centred, 1.0f);
+}
+
+void VacancyAudioProcessorEditor::paintWithFileLoaded(Graphics& g, const Rectangle<int>& thumbnailBounds){
+    g.setColour (Colours::white);
+    g.fillRect (thumbnailBounds);
+    g.setColour (Colours::black);
+    thumbnail.drawChannels (g, thumbnailBounds, -0.2f, thumbnail.getTotalLength(),  1.0f);
+}
+
 void VacancyAudioProcessorEditor::paint (Graphics& g)
 {
-    // (Our component is opaque, so we must completely fill the background with a solid colour)
-    //g.fillAll (getLookAndFeel().findColour (ResizableWindow::backgroundColourId));
-    g.fillAll(Colours::black);
+    const Rectangle<int> thumbnailBounds (80, 120, getWidth() - 100, getHeight() - 180);
+    
+    if(thumbnail.getNumChannels()==0) paintNoFileLoaded(g, thumbnailBounds);
+    else paintWithFileLoaded(g, thumbnailBounds);
+    
+    // written text at top
     g.setColour (Colours::white);
     g.setFont (15.0f);
     g.drawFittedText ("Convol. Reverb", 0 , 0, getWidth(), 30, Justification::centred, 1);
@@ -118,8 +142,9 @@ void VacancyAudioProcessorEditor::paint (Graphics& g)
 
 void VacancyAudioProcessorEditor::resized()
 {
+    // int center = getWidth()/2;
     // actually add our components to the window
-    openFileButton.setBounds(100, 30, getWidth() - 200, 30);
-    playIRButton.setBounds(100, 70, getWidth()-200, 30);
+    openFileButton.setBounds(150, 30, getWidth() - 300, 30);
+    playIRButton.setBounds(150, 70, getWidth()-300, 30);
     level.setBounds(40, 30, 40, getHeight() - 60);
 }

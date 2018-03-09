@@ -16,22 +16,31 @@
 //==============================================================================
 /**
 */
-class VacancyAudioProcessor  : public AudioProcessor
+class VacancyAudioProcessor  : public AudioProcessor,
+                               public ChangeListener
 {
 public:
     //==============================================================================
     VacancyAudioProcessor();
     ~VacancyAudioProcessor();
-
+    //==============================================================================
+    void loadIR(File file);
+    void playIR();
+    float dry_gain;
+    bool guiShouldRepaint = false;
+    
+    //Convolution convolver;
     //==============================================================================
     void prepareToPlay (double sampleRate, int samplesPerBlock) override;
     void releaseResources() override;
-
+    void changeListenerCallback(ChangeBroadcaster* source) override;
+    
    #ifndef JucePlugin_PreferredChannelConfigurations
     bool isBusesLayoutSupported (const BusesLayout& layouts) const override;
    #endif
 
     void processBlock (AudioBuffer<float>&, MidiBuffer&) override;
+    void getNextAudioBlock (const AudioSourceChannelInfo& bufferToFill);
 
     //==============================================================================
     AudioProcessorEditor* createEditor() override;
@@ -57,6 +66,18 @@ public:
     void setStateInformation (const void* data, int sizeInBytes) override;
 
 private:
+    enum TransportState {
+        Stopped,
+        Starting,
+        Playing,
+        Pausing,
+        Paused,
+        Stopping
+    };
     //==============================================================================
+    AudioTransportSource _transportSource;
+    AudioFormatManager _formatManager;
+    ScopedPointer<AudioFormatReaderSource> _readerSource;
+    
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (VacancyAudioProcessor)
 };
