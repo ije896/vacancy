@@ -51,6 +51,7 @@ private:
     void changeState(TransportState nextState);
     void openFileButtonClicked();
     void playIRButtonClicked();
+    void reverseIRButtonClicked();
     
     // This reference is provided as a quick way for your editor to
     // access the processor object that created it.
@@ -63,6 +64,10 @@ private:
     Label dryGainLabel;
     Slider dryGainSlider;
     ScopedPointer<SliderAttachment> dryGainAttachment;
+    
+    Label wetGainLabel;
+    Slider wetGainSlider;
+    ScopedPointer<SliderAttachment> wetGainAttachment;
     
 //    Label reverseLabel;
     ToggleButton reverseIRButton;

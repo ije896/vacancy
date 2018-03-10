@@ -34,6 +34,7 @@ public:
         if (text == "Reversed")  return 1.0f;
         return 0.0f;
     };
+    bool _useReverseIR = false;
     //==============================================================================
     void updateParams();
     void prepareToPlay (double sampleRate, int samplesPerBlock) override;

@@ -9,27 +9,29 @@
 */
 
 
-/* TODO
- True dry/wet gain (mix input signals)
- Wet gain slider
+/********************TODO************************
  gain in dB
+ 
  Reverse IR
- Reverse IR Button
- Reverse IR button currently doesn't change values
- Remove the play IR button
- Add level meters?
      I guess you can load IR into a readerSource, and then manually reverse it into
      another buffer and convolve with that or save to tmp file worst case?
+ LOOK AT THIS:
+    dsp::Convolution::copyAndLoadImpulseResponseFromBuffer()
+    dsp::Convolution::copyAndLoadImpulseResponseFromBlock()
+ 
+ Remove the play IR button fully
+ Add level meters?
+ 
  Change Length/Start of IR
- Filtering, whether it knobs or visual points like SD
+ Filtering, whether it be knobs or visual points like SD
  Volume envelope
- Variable SR
+ Variable SR for the IR
  Predelay
  Check for mono vs stereo IR
  Maybe accept different types of IR's? Like mp3?...
  Image parsing and convolution!!!!!
  Make all buttons APVTS params
- */
+ *************************************************/
 
 #include "PluginProcessor.h"
 #include "PluginEditor.h"
@@ -50,10 +52,14 @@ VacancyAudioProcessor::VacancyAudioProcessor()
 #endif
 {
     _parameters.createAndAddParameter("dry_gain", "Dry Gain", String(), NormalisableRange<float> (0.0f, 1.0f), 0.7f, nullptr, nullptr);
-    _parameters.createAndAddParameter("reverseIR", "Reverse IR", String(), NormalisableRange<float> (0.0f, 1.0f, 1.0f), 0.0f,
-                                      reverseToText, textToReverse);
+    _parameters.createAndAddParameter("wet_gain", "Wet Gain", String(), NormalisableRange<float> (0.0f, 1.0f), 0.7f, nullptr, nullptr);
+//    _parameters.createAndAddParameter ("reverseIR", "Reverse IR", String(),
+//                                       NormalisableRange<float> (0.0f, 1.0f, 1.0f), 0.0f,
+//                                       reverseToText,    // value to text function
+//                                       textToReverse);
     
     _parameters.state = ValueTree(Identifier("VacancyParams"));
+    
     _formatManager.registerBasicFormats();
     _transportSource.addChangeListener(this);
     
@@ -188,6 +194,7 @@ void VacancyAudioProcessor::prepareToPlay (double sampleRate, int samplesPerBloc
     // Use this method as the place to do any pre-playback
     // initialisation that you need..
     prev_dry_gain = *_parameters.getRawParameterValue("dry_gain");
+    prev_wet_gain = *_parameters.getRawParameterValue("wet_gain");
     setPlayConfigDetails(2, 2, sampleRate, samplesPerBlock);
     _transportSource.prepareToPlay(samplesPerBlock, sampleRate);
     
@@ -233,17 +240,11 @@ void VacancyAudioProcessor::processBlock (AudioBuffer<float>& buffer, MidiBuffer
     ScopedNoDenormals noDenormals;
     auto totalNumInputChannels  = getTotalNumInputChannels();
     auto totalNumOutputChannels = getTotalNumOutputChannels();
-    
-    const bool val = *_parameters.getRawParameterValue("reverseIR") < 0.5f ? false : true;
-    //DBG(val);
-    if(val){
-        DBG("hit");
-    }
-    else if (!val){
-        DBG("miss");
-    }
+
     const float curr_dry_gain = *_parameters.getRawParameterValue("dry_gain");
-    DBG(curr_dry_gain);
+    const float curr_wet_gain = *_parameters.getRawParameterValue("wet_gain");
+    
+    // DBG(curr_wet_gain);
     // In case we have more outputs than inputs, this code clears any output
     // channels that didn't contain input data, (because these aren't
     // guaranteed to be empty - they may contain garbage).
@@ -259,17 +260,36 @@ void VacancyAudioProcessor::processBlock (AudioBuffer<float>& buffer, MidiBuffer
     // the samples and the outer loop is handling the channels.
     // Alternatively, you can process the samples with the channels
     // interleaved by keeping the same state.
-//        for (int channel = 0; channel < totalNumInputChannels; ++channel)
-//        {
-//            const int actualInputChannel = channel % totalNumInputChannels;
+    
+    AudioSampleBuffer dryBuffer(buffer.getNumChannels(), buffer.getNumSamples());
+    // AudioSampleBuffer wetBuffer(buffer.getNumChannels(), buffer.getNumSamples());
+    
+//    for (int channel = 0; channel < totalNumInputChannels; ++channel)
+//    {
+//        const int actualInputChannel = channel % totalNumInputChannels;
 //
-//            auto* inputData = buffer.getReadPointer(actualInputChannel);
-//            auto* channelData = buffer.getWritePointer (channel);
-//            // ..do something to the data...
-//            // _transportSource.getNextAudioBlock(channelData);
-//            for (int sample = 0; sample < buffer.getNumSamples(); ++sample)
-//                channelData[sample] = inputData[sample];
-//        }
+//        auto* inputData = buffer.getReadPointer(actualInputChannel);
+//        auto* channelData = buffer.getWritePointer (channel);
+//
+//         copy samples from input buffer into dry buffer
+//
+//
+//         ..do something to the data...
+//         _transportSource.getNextAudioBlock(channelData);
+//        for (int sample = 0; sample < buffer.getNumSamples(); ++sample)
+//            channelData[sample] = inputData[sample];
+//    }
+    
+    for (int channel = 0; channel < totalNumInputChannels; ++channel){
+    dryBuffer.copyFrom(
+                       channel, // destChannel
+                       0, //destStartSample
+                       buffer, // sourceBuffer
+                       channel, // sourceChannel
+                       0, // sourceStartSample,
+                       buffer.getNumSamples()
+                       );
+    }
     
     dsp::AudioBlock<float> block (buffer);
     
@@ -285,15 +305,34 @@ void VacancyAudioProcessor::processBlock (AudioBuffer<float>& buffer, MidiBuffer
 //
 //    _transportSource.getNextAudioBlock(bufferToFill);
 //
-    // this is really just overall gain rn
-    if(curr_dry_gain == prev_dry_gain){
-        buffer.applyGain(curr_dry_gain);
+    if(curr_wet_gain == prev_wet_gain){
+        buffer.applyGain(curr_wet_gain);
     }
     else{
-        buffer.applyGainRamp(0, buffer.getNumSamples(), prev_dry_gain, curr_dry_gain);
+        buffer.applyGainRamp(0, buffer.getNumSamples(), prev_wet_gain, curr_wet_gain);
+        prev_wet_gain = curr_wet_gain;
+    }
+    
+    if(curr_dry_gain == prev_dry_gain){
+        dryBuffer.applyGain(curr_dry_gain);
+    }
+    else{
+        dryBuffer.applyGainRamp(0, buffer.getNumSamples(), prev_dry_gain, curr_dry_gain);
         prev_dry_gain = curr_dry_gain;
     }
     
+    // combine the wet and dry buffers
+    for (int channel = 0; channel < totalNumInputChannels; ++channel){
+        buffer.addFrom(
+                           channel, // destChannel
+                           0, // destStartSample
+                           dryBuffer, // sourceBuffer
+                           channel, // sourceChannel
+                           0, // soucreStartSample,
+                           buffer.getNumSamples(),
+                           1.0 // gain
+                           );
+    }
 }
 
 //==============================================================================
