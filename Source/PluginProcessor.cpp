@@ -10,7 +10,7 @@
 
 
 /********************TODO************************
- gain in dB
+ gain in dB (not necessary)
  
  Reverse IR
      I guess you can load IR into a readerSource, and then manually reverse it into
@@ -20,7 +20,7 @@
     dsp::Convolution::copyAndLoadImpulseResponseFromBlock()
  
  Remove the play IR button fully
- Add level meters?
+ Add level meters? Not much of a need to
  
  Change Length/Start of IR
  Filtering, whether it be knobs or visual points like SD
@@ -29,6 +29,7 @@
  Predelay
  Check for mono vs stereo IR
  Maybe accept different types of IR's? Like mp3?...
+ Accept MIDI input?
  Image parsing and convolution!!!!!
  Make all buttons APVTS params
  *************************************************/
@@ -100,10 +101,43 @@ void VacancyAudioProcessor::loadIR(File file){
     {
         _convolution.loadImpulseResponse(file, true, false, 0);
         
+        // load sample into buffer for reversal
+        fileBuffer.setSize (reader->numChannels, reader->lengthInSamples);
+        reader->read (&fileBuffer,
+                      0,
+                      reader->lengthInSamples,
+                      0,
+                      true,
+                      true);
+        reverseIR(fileBuffer);
         // sample player
         ScopedPointer<AudioFormatReaderSource> newSource = new AudioFormatReaderSource (reader, true);
         _transportSource.setSource (newSource, 0, nullptr, reader->sampleRate);
         _readerSource = newSource.release();
+    }
+}
+
+void VacancyAudioProcessor::reverseIR(AudioSampleBuffer& inBuffer){
+    // auto totalNumOutputChannels = getTotalNumOutputChannels();
+    auto totalNumInputChannels = getTotalNumInputChannels();
+    for (int channel = 0; channel < inBuffer.getNumChannels(); ++channel)
+    {
+        const int actualInputChannel = channel % totalNumInputChannels;
+        
+        DBG(channel);
+        DBG(actualInputChannel);
+        auto* inputData = inBuffer.getReadPointer(actualInputChannel);
+        auto* reverseData = inBuffer.getWritePointer(actualInputChannel);
+        // auto* outputData = reversedIR.getWritePointer(channel);
+        
+        float tmp;
+        const int end = inBuffer.getNumSamples();
+        for (int sample = 0; sample < end/2; ++sample){
+//            outputData[sample] = inputData[end - sample - 1];
+            tmp = inputData[sample];
+            reverseData[sample] = inputData[end-sample-1];
+            reverseData[end - sample - 1] = tmp;
+        }
     }
 }
 
@@ -262,7 +296,6 @@ void VacancyAudioProcessor::processBlock (AudioBuffer<float>& buffer, MidiBuffer
     // interleaved by keeping the same state.
     
     AudioSampleBuffer dryBuffer(buffer.getNumChannels(), buffer.getNumSamples());
-    // AudioSampleBuffer wetBuffer(buffer.getNumChannels(), buffer.getNumSamples());
     
 //    for (int channel = 0; channel < totalNumInputChannels; ++channel)
 //    {

@@ -25,6 +25,7 @@ public:
     ~VacancyAudioProcessor();
     //==============================================================================
     void loadIR(File file);
+    void reverseIR(AudioSampleBuffer& inBuffer);
     void playIR();
     static String reverseToText(float value){
             return value < 0.5 ? "Normal" : "Reversed";
@@ -89,6 +90,8 @@ private:
     AudioFormatManager _formatManager;
     ScopedPointer<AudioFormatReaderSource> _readerSource;
     AudioProcessorValueTreeState _parameters;
+    AudioSampleBuffer fileBuffer;
+    AudioBuffer<float> reversedIR;
     
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (VacancyAudioProcessor)
 };
