@@ -158,19 +158,12 @@ void VacancyAudioProcessorEditor::paint (Graphics& g)
     
     if(thumbnail.getNumChannels()==0) paintNoFileLoaded(g, thumbnailBounds);
     else paintWithFileLoaded(g, thumbnailBounds);
-    
-    // written text at top
-//    g.setColour (Colours::white);
-//    g.setFont (15.0f);
-//    g.drawFittedText ("Convol. Reverb", 0 , 0, getWidth(), 30, Justification::centred, 1);
 }
 
 void VacancyAudioProcessorEditor::resized()
 {
-    // int center = getWidth()/2;
     // actually add our components to the window
     openFileButton.setBounds(115, 50, getWidth() - 300, 30);
-    // playIRButton.setBounds(150, 70, getWidth()-300, 30);
     dryGainSlider.setBounds(getWidth()-115, 80, 60, 280);
     dryGainLabel.setBounds(getWidth()-115, 350, 60, 20);
     wetGainSlider.setBounds(getWidth()-60, 80, 60, 280);

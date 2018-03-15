@@ -12,12 +12,6 @@
 /********************TODO************************
  gain in dB (not necessary)
  
- Reverse IR
-     I guess you can load IR into a readerSource, and then manually reverse it into
-     another buffer and convolve with that or save to tmp file worst case?
- LOOK AT THIS:
-    dsp::Convolution::copyAndLoadImpulseResponseFromBuffer()
-    dsp::Convolution::copyAndLoadImpulseResponseFromBlock()
  
  Remove the play IR button fully
  Add level meters? Not much of a need to
@@ -26,6 +20,7 @@
  Filtering, whether it be knobs or visual points like SD
  Volume envelope
  Variable SR for the IR
+ Change the thumbnail to show reversed IR when selected
  Predelay
  Check for mono vs stereo IR
  Maybe accept different types of IR's? Like mp3?...
@@ -95,21 +90,24 @@ void VacancyAudioProcessor::changeState(TransportState newState){
 
 void VacancyAudioProcessor::loadIR(File file){
     // somewhere in here, we could pre-emptively reverse the file
+    _IRFile = file;
     AudioFormatReader* reader = _formatManager.createReaderFor(file);
     
     if (reader != nullptr)
     {
+        // standard, load regular IR
         _convolution.loadImpulseResponse(file, true, false, 0);
         
         // load sample into buffer for reversal
-        fileBuffer.setSize (reader->numChannels, reader->lengthInSamples);
-        reader->read (&fileBuffer,
+        reversedIRBuffer.setSize (reader->numChannels, reader->lengthInSamples);
+        reader->read (&reversedIRBuffer,
                       0,
                       reader->lengthInSamples,
                       0,
                       true,
                       true);
-        reverseIR(fileBuffer);
+        reverseIR(reversedIRBuffer);
+        
         // sample player
         ScopedPointer<AudioFormatReaderSource> newSource = new AudioFormatReaderSource (reader, true);
         _transportSource.setSource (newSource, 0, nullptr, reader->sampleRate);
@@ -118,22 +116,19 @@ void VacancyAudioProcessor::loadIR(File file){
 }
 
 void VacancyAudioProcessor::reverseIR(AudioSampleBuffer& inBuffer){
-    // auto totalNumOutputChannels = getTotalNumOutputChannels();
     auto totalNumInputChannels = getTotalNumInputChannels();
     for (int channel = 0; channel < inBuffer.getNumChannels(); ++channel)
     {
         const int actualInputChannel = channel % totalNumInputChannels;
         
-        DBG(channel);
-        DBG(actualInputChannel);
+//        DBG(channel);
+//        DBG(actualInputChannel);
         auto* inputData = inBuffer.getReadPointer(actualInputChannel);
         auto* reverseData = inBuffer.getWritePointer(actualInputChannel);
-        // auto* outputData = reversedIR.getWritePointer(channel);
         
         float tmp;
         const int end = inBuffer.getNumSamples();
         for (int sample = 0; sample < end/2; ++sample){
-//            outputData[sample] = inputData[end - sample - 1];
             tmp = inputData[sample];
             reverseData[sample] = inputData[end-sample-1];
             reverseData[end - sample - 1] = tmp;
@@ -220,7 +215,16 @@ void VacancyAudioProcessor::changeProgramName (int index, const String& newName)
 
 //==============================================================================
 void VacancyAudioProcessor::updateParams(){
-    
+    if (isUsingReversed != _useReverseIR){
+        if (_useReverseIR){
+            _convolution.copyAndLoadImpulseResponseFromBuffer(reversedIRBuffer, getSampleRate(), true, false, false, 0);
+            isUsingReversed = true;
+        }
+        else{
+            _convolution.loadImpulseResponse(_IRFile, true, false, 0);
+            isUsingReversed = false;
+        }
+    }
 }
 void VacancyAudioProcessor::prepareToPlay (double sampleRate, int samplesPerBlock)
 {
@@ -274,6 +278,8 @@ void VacancyAudioProcessor::processBlock (AudioBuffer<float>& buffer, MidiBuffer
     ScopedNoDenormals noDenormals;
     auto totalNumInputChannels  = getTotalNumInputChannels();
     auto totalNumOutputChannels = getTotalNumOutputChannels();
+    
+    updateParams();
 
     const float curr_dry_gain = *_parameters.getRawParameterValue("dry_gain");
     const float curr_wet_gain = *_parameters.getRawParameterValue("wet_gain");

@@ -36,6 +36,7 @@ public:
         return 0.0f;
     };
     bool _useReverseIR = false;
+    bool isUsingReversed = false;
     //==============================================================================
     void updateParams();
     void prepareToPlay (double sampleRate, int samplesPerBlock) override;
@@ -90,8 +91,9 @@ private:
     AudioFormatManager _formatManager;
     ScopedPointer<AudioFormatReaderSource> _readerSource;
     AudioProcessorValueTreeState _parameters;
-    AudioSampleBuffer fileBuffer;
-    AudioBuffer<float> reversedIR;
+    AudioSampleBuffer reversedIRBuffer;
+//    AudioBuffer<float> reversedIR;
+    File _IRFile;
     
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (VacancyAudioProcessor)
 };
