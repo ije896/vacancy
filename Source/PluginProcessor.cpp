@@ -12,9 +12,10 @@
 /********************TODO************************
  gain in dB (not necessary)
  
- 
  Remove the play IR button fully
  Add level meters? Not much of a need to
+ 
+ Crashes on load into DAW
  
  Change Length/Start of IR
  Filtering, whether it be knobs or visual points like SD
@@ -27,6 +28,9 @@
  Accept MIDI input?
  Image parsing and convolution!!!!!
  Make all buttons APVTS params
+ 
+ 
+ // https://forum.juce.com/t/au-plugin-install-working-for-ableton-but-not-logic-pro-x/24211/2
  *************************************************/
 
 #include "PluginProcessor.h"
@@ -89,7 +93,6 @@ void VacancyAudioProcessor::changeState(TransportState newState){
 }
 
 void VacancyAudioProcessor::loadIR(File file){
-    // somewhere in here, we could pre-emptively reverse the file
     _IRFile = file;
     AudioFormatReader* reader = _formatManager.createReaderFor(file);
     
@@ -99,10 +102,10 @@ void VacancyAudioProcessor::loadIR(File file){
         _convolution.loadImpulseResponse(file, true, false, 0);
         
         // load sample into buffer for reversal
-        reversedIRBuffer.setSize (reader->numChannels, reader->lengthInSamples);
+        reversedIRBuffer.setSize (reader->numChannels, int(reader->lengthInSamples));
         reader->read (&reversedIRBuffer,
                       0,
-                      reader->lengthInSamples,
+                      int(reader->lengthInSamples),
                       0,
                       true,
                       true);
@@ -217,7 +220,7 @@ void VacancyAudioProcessor::changeProgramName (int index, const String& newName)
 void VacancyAudioProcessor::updateParams(){
     if (isUsingReversed != _useReverseIR){
         if (_useReverseIR){
-            _convolution.copyAndLoadImpulseResponseFromBuffer(reversedIRBuffer, getSampleRate(), true, false, false, 0);
+            _convolution.copyAndLoadImpulseResponseFromBuffer(reversedIRBuffer, getSampleRate(), true, true, true, 0);
             isUsingReversed = true;
         }
         else{
@@ -319,7 +322,7 @@ void VacancyAudioProcessor::processBlock (AudioBuffer<float>& buffer, MidiBuffer
 //            channelData[sample] = inputData[sample];
 //    }
     
-    for (int channel = 0; channel < totalNumInputChannels; ++channel){
+    for (int channel = 0; channel < buffer.getNumChannels(); ++channel){
     dryBuffer.copyFrom(
                        channel, // destChannel
                        0, //destStartSample
@@ -361,7 +364,7 @@ void VacancyAudioProcessor::processBlock (AudioBuffer<float>& buffer, MidiBuffer
     }
     
     // combine the wet and dry buffers
-    for (int channel = 0; channel < totalNumInputChannels; ++channel){
+    for (int channel = 0; channel < buffer.getNumChannels(); ++channel){
         buffer.addFrom(
                            channel, // destChannel
                            0, // destStartSample
