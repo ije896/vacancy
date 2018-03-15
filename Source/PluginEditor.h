@@ -33,6 +33,7 @@ public:
     
     // to reduce how much we have to type
     typedef AudioProcessorValueTreeState::SliderAttachment SliderAttachment;
+    typedef AudioProcessorValueTreeState::ButtonAttachment ButtonAttachment;
     
     void buttonClicked (Button* button) override;
     void changeListenerCallback(ChangeBroadcaster* source) override;
@@ -50,6 +51,7 @@ private:
     void changeState(TransportState nextState);
     void openFileButtonClicked();
     void playIRButtonClicked();
+    void reverseIRButtonClicked();
     
     // This reference is provided as a quick way for your editor to
     // access the processor object that created it.
@@ -63,6 +65,14 @@ private:
     Slider dryGainSlider;
     ScopedPointer<SliderAttachment> dryGainAttachment;
     
+    Label wetGainLabel;
+    Slider wetGainSlider;
+    ScopedPointer<SliderAttachment> wetGainAttachment;
+    
+//    Label reverseLabel;
+    ToggleButton reverseIRButton;
+    ScopedPointer<ButtonAttachment> reverseIRAttachment;
+
     TextButton openFileButton;
     TextButton playIRButton;
     

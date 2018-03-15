@@ -26,8 +26,17 @@ public:
     //==============================================================================
     void loadIR(File file);
     void playIR();
-    //Convolution convolver;
+    static String reverseToText(float value){
+            return value < 0.5 ? "Normal" : "Reversed";
+    };
+    static float textToReverse(const String& text){
+        if (text == "Normal")    return 0.0f;
+        if (text == "Reversed")  return 1.0f;
+        return 0.0f;
+    };
+    bool _useReverseIR = false;
     //==============================================================================
+    void updateParams();
     void prepareToPlay (double sampleRate, int samplesPerBlock) override;
     void releaseResources() override;
     void changeListenerCallback(ChangeBroadcaster* source) override;
@@ -62,7 +71,9 @@ public:
     void setStateInformation (const void* data, int sizeInBytes) override;
 
 private:
+    dsp::Convolution _convolution;
     float prev_dry_gain;
+    float prev_wet_gain;
     enum TransportState {
         Stopped,
         Starting,
