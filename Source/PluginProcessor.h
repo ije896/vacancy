@@ -24,6 +24,7 @@ public:
     VacancyAudioProcessor();
     ~VacancyAudioProcessor();
     //==============================================================================
+    void do_image_stuff();
     void loadIR(File file);
     void reverseIR(AudioSampleBuffer& inBuffer);
     void playIR();

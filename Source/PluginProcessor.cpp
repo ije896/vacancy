@@ -15,7 +15,6 @@
  Remove the play IR button fully
  Add level meters? Not much of a need to
  
- Crashes on load into DAW
  
  Change Length/Start of IR
  Filtering, whether it be knobs or visual points like SD
@@ -29,13 +28,19 @@
  Image parsing and convolution!!!!!
  Make all buttons APVTS params
  
- 
- // https://forum.juce.com/t/au-plugin-install-working-for-ableton-but-not-logic-pro-x/24211/2
+ for debugging AU:
+ https://forum.juce.com/t/au-plugin-install-working-for-ableton-but-not-logic-pro-x/24211/2
  *************************************************/
+#define cimg_use_magick
+#define cimg_use_jpg
+//#define cimg_use_png
+#include "cimg/CImg.h"
 
 #include "PluginProcessor.h"
 #include "PluginEditor.h"
 
+
+using namespace cimg_library;
 
 //==============================================================================
 VacancyAudioProcessor::VacancyAudioProcessor()
@@ -63,8 +68,16 @@ VacancyAudioProcessor::VacancyAudioProcessor()
     _formatManager.registerBasicFormats();
     _transportSource.addChangeListener(this);
     
+    do_image_stuff();
+    
 }
 
+void VacancyAudioProcessor::do_image_stuff(){
+    
+    CImg<float> defimg("ripples.jpg");
+    CImgDisplay main_disp(defimg,"Original");
+    
+}
 VacancyAudioProcessor::~VacancyAudioProcessor()
 {
     releaseResources();
