@@ -222,6 +222,7 @@ void VacancyAudioProcessor::changeProgramName (int index, const String& newName)
 
 //==============================================================================
 void VacancyAudioProcessor::updateParams(){
+    // in here, multiply the irfile or the buffer by the envelope
     if (isUsingReversed != _useReverseIR){
         if (_useReverseIR){
             _convolution.copyAndLoadImpulseResponseFromBuffer(reversedIRBuffer, getSampleRate(), true, true, true, 0);
