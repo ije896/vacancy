@@ -92,8 +92,8 @@ private:
     ScopedPointer<AudioFormatReaderSource> _readerSource;
     AudioProcessorValueTreeState _parameters;
     AudioSampleBuffer reversedIRBuffer;
-//    AudioBuffer<float> reversedIR;
     File _IRFile;
+    stk::Envelope krum;
     
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (VacancyAudioProcessor)
 };

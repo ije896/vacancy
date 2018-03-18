@@ -30,6 +30,7 @@
 #include <juce_gui_extra/juce_gui_extra.h>
 #include <juce_opengl/juce_opengl.h>
 #include <juce_video/juce_video.h>
+#include <stk_wrapper/stk_wrapper.h>
 
 #include "BinaryData.h"
 

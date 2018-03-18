@@ -64,6 +64,7 @@
 #define JUCE_MODULE_AVAILABLE_juce_gui_extra                1
 #define JUCE_MODULE_AVAILABLE_juce_opengl                   1
 #define JUCE_MODULE_AVAILABLE_juce_video                    1
+#define JUCE_MODULE_AVAILABLE_stk_wrapper                   1
 
 #define JUCE_GLOBAL_MODULE_SETTINGS_INCLUDED 1
 
@@ -349,7 +350,7 @@
  #define JucePlugin_ManufacturerCode       0x4d616e75 // 'Manu'
 #endif
 #ifndef  JucePlugin_PluginCode
- #define JucePlugin_PluginCode             0x5a313577 // 'Z15w'
+ #define JucePlugin_PluginCode             0x426d7074 // 'Bmpt'
 #endif
 #ifndef  JucePlugin_IsSynth
  #define JucePlugin_IsSynth                0
