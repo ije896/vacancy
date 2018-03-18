@@ -14,12 +14,18 @@ from matplotlib import pyplot as plt
 # Traverse the picture in different ways
 # what other metadata can we get from a picture?
 
+##### TODO:
+# try different traversal methods
+# add filters in xcode
+# try different decay functions
+
+
 
 samplerate = 44100.0
 maxlength = 8 # in seconds
 
 file = sys.argv[1]
-name = file[:-3]
+name = file[:-4]
 fp = 'images/' + file
 
 
@@ -85,9 +91,18 @@ def applyRationalEnvDecay(data, start):
 
 # squared rational decay
 
+# linear decay
 
-def applyExpDecay(data, start):
+
+def applyExpEnvDecay(data, start):
+    # this is going to be a matter of timeshifting
+    # so that exp(0) is where you want decay to start
+    size = len(data)
     firstpos = sectosam(start)
+    for i in range(firstpos, size):
+        data[i] *= math.exp(-samtosec(i))
+    return data
+
 
 
 r = loadAndSmoothImage(fp)
@@ -98,7 +113,12 @@ neg, pos = checkPosNegBalance(r)
 print("neg", neg,"pos", pos)
 r = r.astype(np.float32)
 r = r.flatten()
-r = applyRationalEnvDecay(r, 0.001)
+# probably the best combo so far
+# r = applyRationalEnvDecay(r, 0.2)
+# r = applyExpEnvDecay(r, 0)
+r = applyExpEnvDecay(r, 0)
+r = applyRationalEnvDecay(r, 0.2)
 
-outpath = "/Users/iegan/Music/IR/"+name+"wav"
+
+outpath = "/Users/iegan/Music/IR/"+name+"_exprat" + ".wav"
 wavfile.write(outpath, int(samplerate), r)
