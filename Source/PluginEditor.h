@@ -50,7 +50,6 @@ private:
    
     void changeState(TransportState nextState);
     void openFileButtonClicked();
-    void playIRButtonClicked();
     void reverseIRButtonClicked();
     
     // This reference is provided as a quick way for your editor to
@@ -74,7 +73,6 @@ private:
     ScopedPointer<ButtonAttachment> reverseIRAttachment;
 
     TextButton openFileButton;
-    TextButton playIRButton;
     
     AudioFormatManager formatManager;
     ScopedPointer<AudioFormatReaderSource> readerSource;

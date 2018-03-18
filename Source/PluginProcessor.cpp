@@ -11,10 +11,8 @@
 
 /********************TODO************************
  gain in dB (not necessary)
- 
- Remove the play IR button fully
+
  Add level meters? Not much of a need to
- 
  
  Change Length/Start of IR
  Filtering, whether it be knobs or visual points like SD
@@ -31,16 +29,16 @@
  for debugging AU:
  https://forum.juce.com/t/au-plugin-install-working-for-ableton-but-not-logic-pro-x/24211/2
  *************************************************/
-#define cimg_use_magick
-#define cimg_use_jpg
+//#define cimg_use_magick
+//#define cimg_use_jpg
 //#define cimg_use_png
-#include "cimg/CImg.h"
+//#include "cimg/CImg.h"
 
 #include "PluginProcessor.h"
 #include "PluginEditor.h"
 
 
-using namespace cimg_library;
+//using namespace cimg_library;
 
 //==============================================================================
 VacancyAudioProcessor::VacancyAudioProcessor()
@@ -66,18 +64,17 @@ VacancyAudioProcessor::VacancyAudioProcessor()
     _parameters.state = ValueTree(Identifier("VacancyParams"));
     
     _formatManager.registerBasicFormats();
-    _transportSource.addChangeListener(this);
     
-    do_image_stuff();
+//    do_image_stuff();
     
 }
 
-void VacancyAudioProcessor::do_image_stuff(){
-    
-    CImg<float> defimg("ripples.jpg");
-    CImgDisplay main_disp(defimg,"Original");
-    
-}
+//void VacancyAudioProcessor::do_image_stuff(){
+//    
+//    CImg<float> defimg("ripples.jpg");
+//    CImgDisplay main_disp(defimg,"Original");
+//    
+//}
 VacancyAudioProcessor::~VacancyAudioProcessor()
 {
     releaseResources();
@@ -89,16 +86,13 @@ void VacancyAudioProcessor::changeState(TransportState newState){
         transport_state = newState;
         switch (transport_state) {
             case Starting:
-                _transportSource.start();
+            
                 break;
             case Stopped:
-                _transportSource.stop();
-                _transportSource.setPosition(0.0);
+            
                 break;
             case Playing:
-                _transportSource.stop();
-                _transportSource.setPosition(0.0);
-                _transportSource.start();
+                
             default:
                 break;
         }
@@ -123,11 +117,6 @@ void VacancyAudioProcessor::loadIR(File file){
                       true,
                       true);
         reverseIR(reversedIRBuffer);
-        
-        // sample player
-        ScopedPointer<AudioFormatReaderSource> newSource = new AudioFormatReaderSource (reader, true);
-        _transportSource.setSource (newSource, 0, nullptr, reader->sampleRate);
-        _readerSource = newSource.release();
     }
 }
 
@@ -137,8 +126,6 @@ void VacancyAudioProcessor::reverseIR(AudioSampleBuffer& inBuffer){
     {
         const int actualInputChannel = channel % totalNumInputChannels;
         
-//        DBG(channel);
-//        DBG(actualInputChannel);
         auto* inputData = inBuffer.getReadPointer(actualInputChannel);
         auto* reverseData = inBuffer.getWritePointer(actualInputChannel);
         
@@ -157,8 +144,8 @@ void VacancyAudioProcessor::playIR(){
 }
 
 void VacancyAudioProcessor::changeListenerCallback(ChangeBroadcaster* source){
-    if(source==&_transportSource){
-        if(_transportSource.isPlaying()){
+    if(source){
+        if(true){
             changeState(Playing);
         }
         else if (transport_state==Playing){
@@ -250,7 +237,6 @@ void VacancyAudioProcessor::prepareToPlay (double sampleRate, int samplesPerBloc
     prev_dry_gain = *_parameters.getRawParameterValue("dry_gain");
     prev_wet_gain = *_parameters.getRawParameterValue("wet_gain");
     setPlayConfigDetails(2, 2, sampleRate, samplesPerBlock);
-    _transportSource.prepareToPlay(samplesPerBlock, sampleRate);
     
     // setup convolution
     auto channels = static_cast<uint32> (jmin (getMainBusNumInputChannels(), getMainBusNumOutputChannels()));
@@ -262,7 +248,7 @@ void VacancyAudioProcessor::releaseResources()
 {
     // When playback stops, you can use this as an opportunity to free up any
     // spare memory, etc.
-    _transportSource.releaseResources();
+    
 }
 
 #ifndef JucePlugin_PreferredChannelConfigurations
@@ -319,22 +305,6 @@ void VacancyAudioProcessor::processBlock (AudioBuffer<float>& buffer, MidiBuffer
     
     AudioSampleBuffer dryBuffer(buffer.getNumChannels(), buffer.getNumSamples());
     
-//    for (int channel = 0; channel < totalNumInputChannels; ++channel)
-//    {
-//        const int actualInputChannel = channel % totalNumInputChannels;
-//
-//        auto* inputData = buffer.getReadPointer(actualInputChannel);
-//        auto* channelData = buffer.getWritePointer (channel);
-//
-//         copy samples from input buffer into dry buffer
-//
-//
-//         ..do something to the data...
-//         _transportSource.getNextAudioBlock(channelData);
-//        for (int sample = 0; sample < buffer.getNumSamples(); ++sample)
-//            channelData[sample] = inputData[sample];
-//    }
-    
     for (int channel = 0; channel < buffer.getNumChannels(); ++channel){
     dryBuffer.copyFrom(
                        channel, // destChannel
@@ -353,13 +323,6 @@ void VacancyAudioProcessor::processBlock (AudioBuffer<float>& buffer, MidiBuffer
     
     _convolution.process(dsp::ProcessContextReplacing<float> (block));
 
-//    AudioSourceChannelInfo bufferToFill;
-//    bufferToFill.buffer = &buffer;
-//    bufferToFill.startSample = 0;
-//    bufferToFill.numSamples = buffer.getNumSamples();
-//
-//    _transportSource.getNextAudioBlock(bufferToFill);
-//
     if(curr_wet_gain == prev_wet_gain){
         buffer.applyGain(curr_wet_gain);
     }

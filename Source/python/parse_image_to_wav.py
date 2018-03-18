@@ -1,19 +1,32 @@
 import wave
 import struct
 import numpy as np
+import sys
+import math
 from scipy.io import wavfile
-from skimage import data, color, io, filters
+import skimage
+from skimage import data, color, io, filters, util
+from skimage.transform import rescale
 from matplotlib import pyplot as plt
 
-samplerate = 44100
+# what can we do to make this more interesting?
+#
+# Traverse the picture in different ways
+# what other metadata can we get from a picture?
 
-fp = 'images/droplet.jpg'
+
+samplerate = 44100.0
+maxlength = 8 # in seconds
+
+file = sys.argv[1]
+name = file[:-3]
+fp = 'images/' + file
+
 
 def loadAndSmoothImage(fp):
     im = io.imread(fp, as_grey=True)
     im = filters.gaussian(im)
     return im
-
 
 def normalizeImage(im):
     peakIndexTuple = np.unravel_index(np.argmax(im), im.shape)
@@ -21,7 +34,7 @@ def normalizeImage(im):
     yind = peakIndexTuple[1]
     max  = im [xind][yind]
     im = (im * 2 / max) - 1
-    im *= 0.707
+    im *= 0.866
     return im
 
 def showImage(im):
@@ -40,14 +53,52 @@ def checkPosNegBalance(im):
     posperc = 1- negperc
     return negperc, posperc
 
+def sectosam(sec):
+    global samplerate
+    return int(sec * samplerate)
+
+def samtosec(sam):
+    global samplerate
+    return sam / samplerate
+
+def checkForLength(im):
+    x = im.shape
+    total = x[0] * x[1] # currently the total samples
+    length = samtosec(total)
+    if length>maxlength:
+        how_many_times = math.ceil(length/8)
+        im = rescale(im, math.sqrt(1.0/float(how_many_times)), mode='constant')
+    return im
+
+
+def applyRationalEnvDecay(data, start):
+    firstpos = sectosam(start)
+    diff = 1 - start
+    size = len(data)
+    if(diff<1):
+        for i in range(firstpos,size):
+            data[i]/= diff + samtosec(i)
+    else:
+        for i in range(firstpos,size):
+            data[i]/= diff + samtosec(i)
+    return data
+
+# squared rational decay
+
+
+def applyExpDecay(data, start):
+    firstpos = sectosam(start)
 
 
 r = loadAndSmoothImage(fp)
+r = checkForLength(r)
+# showImage(r)
 r = normalizeImage(r)
 neg, pos = checkPosNegBalance(r)
 print("neg", neg,"pos", pos)
+r = r.astype(np.float32)
+r = r.flatten()
+r = applyRationalEnvDecay(r, 0.001)
 
-outpath = "/Users/iegan/Music/IR/test.wav"
-wavfile.write(outpath, samplerate, r)
-
-# showImage(r)
+outpath = "/Users/iegan/Music/IR/"+name+"wav"
+wavfile.write(outpath, int(samplerate), r)

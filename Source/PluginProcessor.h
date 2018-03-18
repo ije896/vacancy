@@ -88,7 +88,6 @@ private:
     void changeState(TransportState newState);
     //==============================================================================
     TransportState transport_state;
-    AudioTransportSource _transportSource;
     AudioFormatManager _formatManager;
     ScopedPointer<AudioFormatReaderSource> _readerSource;
     AudioProcessorValueTreeState _parameters;

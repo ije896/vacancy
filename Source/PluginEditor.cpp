@@ -21,10 +21,7 @@ thumbnailCache(5), thumbnail(512, formatManager, thumbnailCache)
     // openIR button init
     openFileButton.setButtonText("Load IR");
     openFileButton.addListener(this);
-    
-    playIRButton.setButtonText("Play IR");
-    playIRButton.addListener(this);
-    
+  
     // gain sliders init
     dryGainSlider.setSliderStyle(Slider::LinearVertical);
     dryGainSlider.setTextBoxStyle(Slider::NoTextBox, false, 90, 30);
@@ -63,7 +60,6 @@ thumbnailCache(5), thumbnail(512, formatManager, thumbnailCache)
     // display items
     // addAndMakeVisible(&dryGainSlider);
     addAndMakeVisible(&openFileButton);
-    addAndMakeVisible(&playIRButton);
     
     // Make sure that before the constructor has finished, you've set the
     // editor's size to whatever you need it to be.
@@ -91,7 +87,6 @@ void VacancyAudioProcessorEditor::changeState(TransportState nextState){
 void VacancyAudioProcessorEditor::buttonClicked (Button* button)
 {
     if (button == &openFileButton) openFileButtonClicked();
-    if (button == &playIRButton) playIRButtonClicked();
     if (button == &reverseIRButton) reverseIRButtonClicked();
 }
 void VacancyAudioProcessorEditor::sliderValueChanged(Slider* slider){
@@ -113,10 +108,6 @@ void VacancyAudioProcessorEditor::openFileButtonClicked(){
     }
 }
 
-void VacancyAudioProcessorEditor::playIRButtonClicked(){
-    changeState(Playing);
-    processor.playIR();
-}
 
 void VacancyAudioProcessorEditor::reverseIRButtonClicked(){
     processor._useReverseIR = !processor._useReverseIR;
