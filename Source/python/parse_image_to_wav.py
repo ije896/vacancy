@@ -18,7 +18,7 @@ from matplotlib import pyplot as plt
 # try different traversal methods
 # add filters in xcode
 # try different decay functions
-# write decay function into xcode
+# write decay function into xcode (volume envelope)
 # write report
 # build web interface for impulse creator?
 

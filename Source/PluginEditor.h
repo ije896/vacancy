@@ -68,11 +68,15 @@ private:
     Slider wetGainSlider;
     ScopedPointer<SliderAttachment> wetGainAttachment;
     
-//    Label reverseLabel;
     ToggleButton reverseIRButton;
     ScopedPointer<ButtonAttachment> reverseIRAttachment;
 
     TextButton openFileButton;
+    
+    Label HPFCutoffLabel, LPFCutoffLabel;
+    Slider HPFCutoffSlider, LPFCutoffSlider;
+    ScopedPointer<SliderAttachment> HPFAttachment;
+    ScopedPointer<SliderAttachment> LPFAttachment;
     
     AudioFormatManager formatManager;
     ScopedPointer<AudioFormatReaderSource> readerSource;

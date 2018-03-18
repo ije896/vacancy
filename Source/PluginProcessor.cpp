@@ -51,11 +51,15 @@ VacancyAudioProcessor::VacancyAudioProcessor()
                        .withOutput ("Output", AudioChannelSet::stereo(), true)
                      #endif
                        ),
+        _lowPassFilter  (dsp::IIR::Coefficients<float>::makeFirstOrderLowPass  (44100.0, 21000.0f)),
+        _highPassFilter (dsp::IIR::Coefficients<float>::makeFirstOrderHighPass (44100.0, 20.0f)),
         _parameters(*this, nullptr)
 #endif
 {
     _parameters.createAndAddParameter("dry_gain", "Dry Gain", String(), NormalisableRange<float> (0.0f, 1.0f), 0.7f, nullptr, nullptr);
     _parameters.createAndAddParameter("wet_gain", "Wet Gain", String(), NormalisableRange<float> (0.0f, 1.0f), 0.7f, nullptr, nullptr);
+    _parameters.createAndAddParameter("lpf_cutoff", "LP Cutoff", String(), NormalisableRange<float> (500.0f, 21000.0f), 21000.0f, nullptr, nullptr);
+    _parameters.createAndAddParameter("hpf_cutoff", "HP Cutoff", String(), NormalisableRange<float> (20.0f, 10000.0f), 20.0f, nullptr, nullptr);
 //    _parameters.createAndAddParameter ("reverseIR", "Reverse IR", String(),
 //                                       NormalisableRange<float> (0.0f, 1.0f, 1.0f), 0.0f,
 //                                       reverseToText,    // value to text function
@@ -145,7 +149,7 @@ void VacancyAudioProcessor::playIR(){
 
 void VacancyAudioProcessor::changeListenerCallback(ChangeBroadcaster* source){
     if(source){
-        if(true){
+        if(/* DISABLES CODE */ (true)){
             changeState(Playing);
         }
         else if (transport_state==Playing){
@@ -228,6 +232,8 @@ void VacancyAudioProcessor::updateParams(){
             isUsingReversed = false;
         }
     }
+    *_lowPassFilter.state  = *dsp::IIR::Coefficients<float>::makeLowPass  (getSampleRate(), *_parameters.getRawParameterValue("lpf_cutoff"));
+    *_highPassFilter.state = *dsp::IIR::Coefficients<float>::makeHighPass (getSampleRate(), *_parameters.getRawParameterValue("hpf_cutoff"));
 }
 void VacancyAudioProcessor::prepareToPlay (double sampleRate, int samplesPerBlock)
 {
@@ -242,6 +248,8 @@ void VacancyAudioProcessor::prepareToPlay (double sampleRate, int samplesPerBloc
     auto channels = static_cast<uint32> (jmin (getMainBusNumInputChannels(), getMainBusNumOutputChannels()));
     dsp::ProcessSpec spec { sampleRate, static_cast<uint32> (samplesPerBlock), channels };
     _convolution.prepare(spec);
+    _lowPassFilter.prepare(spec);
+    _highPassFilter.prepare(spec);
 }
 
 void VacancyAudioProcessor::releaseResources()
@@ -277,16 +285,21 @@ bool VacancyAudioProcessor::isBusesLayoutSupported (const BusesLayout& layouts) 
 
 void VacancyAudioProcessor::processBlock (AudioBuffer<float>& buffer, MidiBuffer& midiMessages)
 {
+    updateParams();
+    
     ScopedNoDenormals noDenormals;
     auto totalNumInputChannels  = getTotalNumInputChannels();
     auto totalNumOutputChannels = getTotalNumOutputChannels();
     
-    updateParams();
-
+    dsp::AudioBlock<float> block (buffer);
+    if (block.getNumChannels() > 2)
+        block = block.getSubsetChannelBlock (0, 2);
+    
+    _highPassFilter.process(dsp::ProcessContextReplacing<float> (block));
+    
     const float curr_dry_gain = *_parameters.getRawParameterValue("dry_gain");
     const float curr_wet_gain = *_parameters.getRawParameterValue("wet_gain");
     
-    // DBG(curr_wet_gain);
     // In case we have more outputs than inputs, this code clears any output
     // channels that didn't contain input data, (because these aren't
     // guaranteed to be empty - they may contain garbage).
@@ -316,12 +329,12 @@ void VacancyAudioProcessor::processBlock (AudioBuffer<float>& buffer, MidiBuffer
                        );
     }
     
-    dsp::AudioBlock<float> block (buffer);
-    
-    if (block.getNumChannels() > 2)
-        block = block.getSubsetChannelBlock (0, 2);
+   
+    _lowPassFilter.process(dsp::ProcessContextReplacing<float> (block));
     
     _convolution.process(dsp::ProcessContextReplacing<float> (block));
+    
+    
 
     if(curr_wet_gain == prev_wet_gain){
         buffer.applyGain(curr_wet_gain);

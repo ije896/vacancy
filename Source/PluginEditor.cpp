@@ -46,6 +46,25 @@ thumbnailCache(5), thumbnail(512, formatManager, thumbnailCache)
 //    dryGainSlider.setValue(-50.0);
     // dryGainSlider.addListener(this);
     
+    LPFCutoffSlider.setSliderStyle(Slider::RotaryVerticalDrag);
+    LPFCutoffSlider.setTextBoxStyle(Slider::NoTextBox, false, 90, 30);
+    LPFCutoffSlider.setPopupDisplayEnabled(true, true, this);
+    
+    LPFCutoffLabel.setText("LP Cutoff", dontSendNotification);
+    addAndMakeVisible(LPFCutoffLabel);
+    addAndMakeVisible(LPFCutoffSlider);
+    LPFAttachment = new SliderAttachment (valueTreeState, "lpf_cutoff", LPFCutoffSlider);
+    
+    HPFCutoffSlider.setSliderStyle(Slider::RotaryVerticalDrag);
+    HPFCutoffSlider.setTextBoxStyle(Slider::NoTextBox, false, 90, 30);
+    HPFCutoffSlider.setPopupDisplayEnabled(true, true, this);
+    
+    HPFCutoffLabel.setText("HP Cutoff", dontSendNotification);
+    addAndMakeVisible(HPFCutoffLabel);
+    addAndMakeVisible(HPFCutoffSlider);
+    HPFAttachment = new SliderAttachment (valueTreeState, "hpf_cutoff", HPFCutoffSlider);
+    
+    
     // reverse button
     reverseIRButton.setButtonText("Reverse");
     addAndMakeVisible(reverseIRButton);
@@ -124,6 +143,8 @@ void VacancyAudioProcessorEditor::changeListenerCallback(ChangeBroadcaster* sour
 VacancyAudioProcessorEditor::~VacancyAudioProcessorEditor()
 {
     dryGainAttachment = nullptr;
+    LPFAttachment = nullptr;
+    HPFAttachment = nullptr;
     // reverseIRAttachment = nullptr;
 }
 
@@ -144,7 +165,7 @@ void VacancyAudioProcessorEditor::paintWithFileLoaded(Graphics& g, const Rectang
 
 void VacancyAudioProcessorEditor::paint (Graphics& g)
 {
-    const Rectangle<int> thumbnailBounds (30, 105, getWidth() - 150, getHeight() - 180);
+    const Rectangle<int> thumbnailBounds (30, 50, getWidth() - 150, getHeight() - 180);
     g.fillAll(Colours::black);
     
     if(thumbnail.getNumChannels()==0) paintNoFileLoaded(g, thumbnailBounds);
@@ -154,10 +175,15 @@ void VacancyAudioProcessorEditor::paint (Graphics& g)
 void VacancyAudioProcessorEditor::resized()
 {
     // actually add our components to the window
-    openFileButton.setBounds(115, 50, getWidth() - 300, 30);
-    dryGainSlider.setBounds(getWidth()-115, 80, 60, 280);
-    dryGainLabel.setBounds(getWidth()-115, 350, 60, 20);
-    wetGainSlider.setBounds(getWidth()-60, 80, 60, 280);
-    wetGainLabel.setBounds(getWidth()-60, 350, 60, 20);
-    reverseIRButton.setBounds(30, 330, 80, 20);
+    openFileButton.setBounds(105, 10, getWidth() - 300, 30);
+    dryGainSlider.setBounds(getWidth()-115, 0, 60, 280);
+    dryGainLabel.setBounds(getWidth()-115, 280, 60, 20);
+    wetGainSlider.setBounds(getWidth()-60, 0, 60, 280);
+    wetGainLabel.setBounds(getWidth()-60, 280, 60, 20);
+    reverseIRButton.setBounds(30, 275, 80, 20);
+    HPFCutoffSlider.setBounds(15, 300, 60, 60);
+    HPFCutoffLabel.setBounds(15, 350, 60, 20);
+    LPFCutoffSlider.setBounds(70, 300, 60, 60);
+    LPFCutoffLabel.setBounds(70, 350, 60, 20);
+
 }

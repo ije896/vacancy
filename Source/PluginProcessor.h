@@ -75,6 +75,7 @@ public:
 
 private:
     dsp::Convolution _convolution;
+    dsp::ProcessorDuplicator<dsp::IIR::Filter<float>, dsp::IIR::Coefficients<float>> _lowPassFilter, _highPassFilter;
     float prev_dry_gain;
     float prev_wet_gain;
     enum TransportState {
