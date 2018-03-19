@@ -78,6 +78,11 @@ private:
     ScopedPointer<SliderAttachment> HPFAttachment;
     ScopedPointer<SliderAttachment> LPFAttachment;
     
+    // envelope params
+    Label InitialLevelLabel, AttackTimeLabel, FinalLevelLabel, DecayTimeLabel;
+    Slider InitialLevelSlider, AttackTimeSlider, FinalLevelSlider, DecayTimeSlider;
+    ScopedPointer<SliderAttachment> InitialLevelAttachment, AttackTimeAttachement, FinalLevelAttachement, DecayTimeAttachement;
+    
     AudioFormatManager formatManager;
     ScopedPointer<AudioFormatReaderSource> readerSource;
     // controls playback of AudioFormatReaderSource object

@@ -46,6 +46,7 @@ thumbnailCache(5), thumbnail(512, formatManager, thumbnailCache)
 //    dryGainSlider.setValue(-50.0);
     // dryGainSlider.addListener(this);
     
+    // filters
     LPFCutoffSlider.setSliderStyle(Slider::RotaryVerticalDrag);
     LPFCutoffSlider.setTextBoxStyle(Slider::NoTextBox, false, 90, 30);
     LPFCutoffSlider.setPopupDisplayEnabled(true, true, this);
@@ -64,6 +65,42 @@ thumbnailCache(5), thumbnail(512, formatManager, thumbnailCache)
     addAndMakeVisible(HPFCutoffSlider);
     HPFAttachment = new SliderAttachment (valueTreeState, "hpf_cutoff", HPFCutoffSlider);
     
+    // Volume Envelope Params
+    InitialLevelSlider.setSliderStyle(Slider::RotaryVerticalDrag);
+    InitialLevelSlider.setTextBoxStyle(Slider::NoTextBox, false, 90, 30);
+    InitialLevelSlider.setPopupDisplayEnabled(true, true, this);
+    
+    InitialLevelLabel.setText("Initial Level", dontSendNotification);
+    addAndMakeVisible(InitialLevelLabel);
+    addAndMakeVisible(InitialLevelSlider);
+    InitialLevelAttachment = new SliderAttachment (valueTreeState, "initial_level", InitialLevelSlider);
+    
+    AttackTimeSlider.setSliderStyle(Slider::RotaryVerticalDrag);
+    AttackTimeSlider.setTextBoxStyle(Slider::NoTextBox, false, 90, 30);
+    AttackTimeSlider.setPopupDisplayEnabled(true, true, this);
+    
+    AttackTimeLabel.setText("Attack Time", dontSendNotification);
+    addAndMakeVisible(AttackTimeLabel);
+    addAndMakeVisible(AttackTimeSlider);
+    AttackTimeAttachement = new SliderAttachment (valueTreeState, "attack_time", AttackTimeSlider);
+    
+    FinalLevelSlider.setSliderStyle(Slider::RotaryVerticalDrag);
+    FinalLevelSlider.setTextBoxStyle(Slider::NoTextBox, false, 90, 30);
+    FinalLevelSlider.setPopupDisplayEnabled(true, true, this);
+    
+    FinalLevelLabel.setText("Final Level", dontSendNotification);
+    addAndMakeVisible(FinalLevelLabel);
+    addAndMakeVisible(FinalLevelSlider);
+    FinalLevelAttachement = new SliderAttachment (valueTreeState, "attack_time", FinalLevelSlider);
+    
+    DecayTimeSlider.setSliderStyle(Slider::RotaryVerticalDrag);
+    DecayTimeSlider.setTextBoxStyle(Slider::NoTextBox, false, 90, 30);
+    DecayTimeSlider.setPopupDisplayEnabled(true, true, this);
+    
+    DecayTimeLabel.setText("Decay Time", dontSendNotification);
+    addAndMakeVisible(DecayTimeLabel);
+    addAndMakeVisible(DecayTimeSlider);
+    DecayTimeAttachement = new SliderAttachment (valueTreeState, "decay_time", DecayTimeSlider);
     
     // reverse button
     reverseIRButton.setButtonText("Reverse");
@@ -145,6 +182,10 @@ VacancyAudioProcessorEditor::~VacancyAudioProcessorEditor()
     dryGainAttachment = nullptr;
     LPFAttachment = nullptr;
     HPFAttachment = nullptr;
+    AttackTimeAttachement = nullptr;
+    InitialLevelAttachment = nullptr;
+    FinalLevelAttachement = nullptr;
+    DecayTimeAttachement = nullptr;
     // reverseIRAttachment = nullptr;
 }
 
@@ -166,7 +207,13 @@ void VacancyAudioProcessorEditor::paintWithFileLoaded(Graphics& g, const Rectang
 void VacancyAudioProcessorEditor::paint (Graphics& g)
 {
     const Rectangle<int> thumbnailBounds (30, 50, getWidth() - 150, getHeight() - 180);
+    const Rectangle<int> envelopeBounds (175, 295, 295, 80);
+    // draw bounds for filterBounds
+    
     g.fillAll(Colours::black);
+    
+    g.setColour (Colours::grey);
+    g.drawRect(envelopeBounds);
     
     if(thumbnail.getNumChannels()==0) paintNoFileLoaded(g, thumbnailBounds);
     else paintWithFileLoaded(g, thumbnailBounds);
@@ -181,9 +228,19 @@ void VacancyAudioProcessorEditor::resized()
     wetGainSlider.setBounds(getWidth()-60, 0, 60, 280);
     wetGainLabel.setBounds(getWidth()-60, 280, 60, 20);
     reverseIRButton.setBounds(30, 275, 80, 20);
+    
     HPFCutoffSlider.setBounds(15, 300, 60, 60);
     HPFCutoffLabel.setBounds(15, 350, 60, 20);
     LPFCutoffSlider.setBounds(70, 300, 60, 60);
     LPFCutoffLabel.setBounds(70, 350, 60, 20);
+    
+    InitialLevelSlider.setBounds(185, 300, 60, 60);
+    InitialLevelLabel.setBounds(180, 330, 70, 60);
+    AttackTimeSlider.setBounds(255, 300, 60, 60);
+    AttackTimeLabel.setBounds(250, 330, 70, 60);
+    FinalLevelSlider.setBounds(325, 300, 60, 60);
+    FinalLevelLabel.setBounds(325, 330, 60, 60);
+    DecayTimeSlider.setBounds(395, 300, 60, 60);
+    DecayTimeLabel.setBounds(390, 330, 70, 60);
 
 }

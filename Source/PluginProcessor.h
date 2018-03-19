@@ -40,6 +40,7 @@ public:
     bool isUsingReversed = false;
     //==============================================================================
     void updateParams();
+    void applyIREnvelope();
     void prepareToPlay (double sampleRate, int samplesPerBlock) override;
     void releaseResources() override;
     void changeListenerCallback(ChangeBroadcaster* source) override;
@@ -93,8 +94,10 @@ private:
     ScopedPointer<AudioFormatReaderSource> _readerSource;
     AudioProcessorValueTreeState _parameters;
     AudioSampleBuffer reversedIRBuffer;
+    AudioSampleBuffer forwardIRBuffer;
+    AudioSampleBuffer envelopedIRBuffer;
     File _IRFile;
-    stk::Envelope krum;
+    stk::ADSR IRVolumeEnvelope;
     
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (VacancyAudioProcessor)
 };
