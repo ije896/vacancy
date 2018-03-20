@@ -41,7 +41,7 @@ max_square_side = math.sqrt(int(math.pow(4, maxp)))
 
 file = sys.argv[1]
 name = file[:-4]
-fp = 'images/' + file
+fp = '../../media/images/' + file
 
 def loadAndSmoothImage(fp):
     print("Smoothing image...")
