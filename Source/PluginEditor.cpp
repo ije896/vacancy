@@ -78,6 +78,7 @@ thumbnailCache(5), thumbnail(512, formatManager, thumbnailCache)
     AttackTimeSlider.setSliderStyle(Slider::RotaryVerticalDrag);
     AttackTimeSlider.setTextBoxStyle(Slider::NoTextBox, false, 90, 30);
     AttackTimeSlider.setPopupDisplayEnabled(true, true, this);
+    AttackTimeSlider.addListener(this);
     
     AttackTimeLabel.setText("Attack Time", dontSendNotification);
     addAndMakeVisible(AttackTimeLabel);
@@ -91,11 +92,12 @@ thumbnailCache(5), thumbnail(512, formatManager, thumbnailCache)
     FinalLevelLabel.setText("Final Level", dontSendNotification);
     addAndMakeVisible(FinalLevelLabel);
     addAndMakeVisible(FinalLevelSlider);
-    FinalLevelAttachement = new SliderAttachment (valueTreeState, "attack_time", FinalLevelSlider);
+    FinalLevelAttachement = new SliderAttachment (valueTreeState, "final_level", FinalLevelSlider);
     
     DecayTimeSlider.setSliderStyle(Slider::RotaryVerticalDrag);
     DecayTimeSlider.setTextBoxStyle(Slider::NoTextBox, false, 90, 30);
     DecayTimeSlider.setPopupDisplayEnabled(true, true, this);
+    DecayTimeSlider.addListener(this);
     
     DecayTimeLabel.setText("Decay Time", dontSendNotification);
     addAndMakeVisible(DecayTimeLabel);
@@ -174,6 +176,7 @@ void VacancyAudioProcessorEditor::changeListenerCallback(ChangeBroadcaster* sour
     if(source == &thumbnail){
         repaint();
     }
+    // update parameters if attack or decay time sliders are updated
 }
 
 

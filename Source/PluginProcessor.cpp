@@ -69,12 +69,17 @@ VacancyAudioProcessor::VacancyAudioProcessor()
     _parameters.createAndAddParameter("lpf_cutoff", "LP Cutoff", String(), NormalisableRange<float> (500.0f, 21000.0f), 21000.0f, nullptr, nullptr);
     _parameters.createAndAddParameter("hpf_cutoff", "HP Cutoff", String(), NormalisableRange<float> (20.0f, 700.0f), 20.0f, nullptr, nullptr);
     
-    _parameters.createAndAddParameter("initial_level", "Initial Level", String(), NormalisableRange<float> (0.0f, 1.0f), 1.0f, nullptr, nullptr);
-    _parameters.createAndAddParameter("attack_time", "Attack Time", String(), NormalisableRange<float> (0.0f, 1.0f), 1.0f, nullptr, nullptr);
-//    _parameters.createAndAddParameter ("reverseIR", "Reverse IR", String(),
-//                                       NormalisableRange<float> (0.0f, 1.0f, 1.0f), 0.0f,
-//                                       reverseToText,    // value to text function
-//                                       textToReverse);
+    _parameters.createAndAddParameter("initial_level", "Initial Level", String(), NormalisableRange<float> (0.001f, 1.0f), 1.0f, nullptr, nullptr);
+    _parameters.addParameterListener("initial_level", this);
+    _parameters.createAndAddParameter("final_level", "Final Level", String(), NormalisableRange<float> (0.001f, 1.0f), 1.0f, nullptr, nullptr);
+    _parameters.addParameterListener("final_level", this);
+    
+    _parameters.createAndAddParameter("decay_time", "Decay Time", String(), NormalisableRange<float> (0.001f, 5.0f), 5.0f, nullptr, nullptr);
+    _parameters.addParameterListener("decay_time", this);
+    
+    _parameters.createAndAddParameter("attack_time", "Attack Time", String(), NormalisableRange<float> (0.001f, 5.0f), 0.001f, nullptr, nullptr);
+    _parameters.addParameterListener("attack_time", this);
+
     
     _parameters.state = ValueTree(Identifier("VacancyParams"));
     
@@ -121,54 +126,105 @@ void VacancyAudioProcessor::loadIR(File file){
     if (reader != nullptr)
     {
         // load IR into buffer for reversal
-        reversedIRBuffer.setSize (reader->numChannels, int(reader->lengthInSamples));
-        reader->read (&reversedIRBuffer,
+        numIRChannels = reader->numChannels;
+        IRSampleRate = reader->sampleRate;
+        forwardIRBuffer.setSize (numIRChannels, int(reader->lengthInSamples));
+        reader->read (&forwardIRBuffer,
                       0,
                       int(reader->lengthInSamples),
                       0,
                       true,
                       true);
+        IRLengthInSeconds = forwardIRBuffer.getNumSamples() / IRSampleRate;
         
         // copy reversedIR again for volume envelope
         
-        forwardIRBuffer = AudioSampleBuffer(reversedIRBuffer);
-        envelopedIRBuffer = AudioSampleBuffer(reversedIRBuffer);
-//        DBG(reversedIRBuffer.getNumChannels());
-//        for (int channel = 0; channel< reversedIRBuffer.getNumChannels(); channel++){
-//            DBG("Channel");
-//            DBG(channel);
-//            DBG("LoadIR forwardBuffer copy");
-//            forwardIRBuffer.copyFrom(
-//                                     2, // destChannel
-//                                     0, //destStartSample
-//                                     reversedIRBuffer, // sourceBuffer
-//                                     2, // sourceChannel
-//                                     0, // sourceStartSample,
-//                                     reversedIRBuffer.getNumSamples()
-//                                     );
-//            DBG("LoadIR envelopedBuffer copy");
-//            envelopedIRBuffer.copyFrom(
-//                                       2, // destChannel
-//                                       0, //destStartSample
-//                                       reversedIRBuffer, // sourceBuffer
-//                                       2, // sourceChannel
-//                                       0, // sourceStartSample,
-//                                       reversedIRBuffer.getNumSamples()
-//                                       );
-//        }
+        reversedIRBuffer = AudioSampleBuffer(forwardIRBuffer);
         
-        // standard, load regular IR
-        _convolution.copyAndLoadImpulseResponseFromBuffer(envelopedIRBuffer, getSampleRate(), true, true, true, 0);
+        // load regular IR
+        // this happens before envelope assignment because essentially all-pass envelope
+        _convolution.copyAndLoadImpulseResponseFromBuffer(forwardIRBuffer, IRSampleRate, true, true, true, 0);
         
         reverseIR(reversedIRBuffer);
         
         // set volume envelope params
-        IRVolumeEnvelope.setInitialValue(1.0f);
-        float IRLengthInSeconds = forwardIRBuffer.getNumSamples() / getSampleRate();
-        // attack, decaytime, slevel, rtime
-        IRVolumeEnvelope.setAllTimes(0.0f, IRLengthInSeconds, 1.0f, 0.001f);
+        setEnvelopeAfterIRLoad();
+        applyIREnvelope();
+        IRIsLoaded = true;
     }
 }
+
+void VacancyAudioProcessor::setEnvelopeAfterIRLoad(){
+    
+    IRVolumeEnvelope.setInitialValue(1.0f);
+    // attack, decaytime, slevel, rtime
+    IRVolumeEnvelope.setAllTimes(0.001f, IRLengthInSeconds, 1.0f, 0.001f);
+}
+
+void VacancyAudioProcessor::updateDecayTimeParameterBounds(){
+    // this should check if attack is ahead of decay, and move decay
+    // notify user of their ways
+    
+    // set times according to the current IR, doesn't matter if it's reversed or not
+    float attackTime = *_parameters.getRawParameterValue("attack_time");
+    float decayTime = *_parameters.getRawParameterValue("decay_time");
+    // float IRLengthInMS = 1000.0f * IRLengthInSeconds;
+    
+    if (attackTime > decayTime){
+        Value dtime = _parameters.getParameterAsValue("decay_time");
+        dtime = attackTime;
+    }
+    // then should update envelope, you just updated a param
+    // actually, listener should handle it
+}
+
+
+void VacancyAudioProcessor::updateAndApplyActualVolumeEnvelope(){
+    float attackTime = *_parameters.getRawParameterValue("attack_time");
+    float decayTime = *_parameters.getRawParameterValue("decay_time");
+    float initialLevel = *_parameters.getRawParameterValue("initial_level");
+    float finalLevel = *_parameters.getRawParameterValue("final_level");
+    IRVolumeEnvelope.setInitialValue(initialLevel);
+    IRVolumeEnvelope.setAllTimes(attackTime/1000.0f, decayTime/1000.0f, finalLevel, 0.001f);
+    applyIREnvelope();
+}
+
+void VacancyAudioProcessor::applyIREnvelope(){
+    // first, clear buffers, then re-copy each IR
+    envelopedReversedIRBuffer.clear();
+    envelopedForwardIRBuffer.clear();
+    envelopedForwardIRBuffer = AudioSampleBuffer(forwardIRBuffer);
+    envelopedReversedIRBuffer = AudioSampleBuffer(reversedIRBuffer);
+    
+    float attackTime = *_parameters.getRawParameterValue("attack_time");
+    float decayTime = *_parameters.getRawParameterValue("decay_time");
+    
+    float key_off_sample = IRSampleRate * (attackTime + decayTime)/1000.0f;
+    
+    
+    for (int channel = 0; channel < numIRChannels; ++channel)
+    {
+        // change the state of the ADSR
+        IRVolumeEnvelope.keyOn();
+        
+        // auto* readData = envelopedIRBuffer.getReadPointer(actualInputChannel);
+        auto* forwardWriteData = envelopedForwardIRBuffer.getWritePointer(channel);
+        auto* reversedWriteData = envelopedReversedIRBuffer.getWritePointer(channel);
+
+        for (int sample = 0; sample<forwardIRBuffer.getNumSamples(); sample++){
+            // check if we need to do keyOff()
+            if(sample == key_off_sample) IRVolumeEnvelope.keyOff();
+            float tick = IRVolumeEnvelope.tick();
+            reversedWriteData[sample] *= tick;
+            forwardWriteData[sample] *= tick;
+        }
+    }
+    newlyEnvelopedIR = true;
+}
+
+    
+
+    
 
 void VacancyAudioProcessor::reverseIR(AudioSampleBuffer& inBuffer){
     auto totalNumInputChannels = getTotalNumInputChannels();
@@ -189,9 +245,22 @@ void VacancyAudioProcessor::reverseIR(AudioSampleBuffer& inBuffer){
     }
 }
 
-void VacancyAudioProcessor::playIR(){
-    changeState(Starting);
+void VacancyAudioProcessor::parameterChanged(const String& parameterID, float newValue){
+    if(parameterID=="attack_time"){
+        updateDecayTimeParameterBounds();
+        updateAndApplyActualVolumeEnvelope();
+    }
+    if(parameterID=="decay_time"){
+        updateAndApplyActualVolumeEnvelope();
+    }
+    if(parameterID=="initial_level"){
+        updateAndApplyActualVolumeEnvelope();
+    }
+    if(parameterID=="final_level"){
+        updateAndApplyActualVolumeEnvelope();
+    }
 }
+
 
 void VacancyAudioProcessor::changeListenerCallback(ChangeBroadcaster* source){
     if(source){
@@ -268,68 +337,27 @@ void VacancyAudioProcessor::changeProgramName (int index, const String& newName)
 
 //==============================================================================
 void VacancyAudioProcessor::updateParams(){
-    // in here, multiply the irfile or the buffer by the envelope
     
-    //applyIREnvelope();
-    
-    if (isUsingReversed != _useReverseIR){
-        if (_useReverseIR){
-            _convolution.copyAndLoadImpulseResponseFromBuffer(reversedIRBuffer, getSampleRate(), true, true, true, 0);
-            isUsingReversed = true;
-        }
-        else{
-            _convolution.loadImpulseResponse(_IRFile, true, false, 0);
-            isUsingReversed = false;
+    // change the buffers to the enveloped ones
+    if(IRIsLoaded){
+        if ((isUsingReversed != _useReverseIR) || newlyEnvelopedIR){
+            if (_useReverseIR){
+                _convolution.copyAndLoadImpulseResponseFromBuffer(envelopedReversedIRBuffer, IRSampleRate, true, true, true, 0);
+                isUsingReversed = true;
+            }
+            else{
+                // _convolution.loadImpulseResponse(_IRFile, true, false, 0);
+                _convolution.copyAndLoadImpulseResponseFromBuffer(envelopedForwardIRBuffer, IRSampleRate, true, true, true, 0);
+                isUsingReversed = false;
+            }
+            newlyEnvelopedIR = false;
         }
     }
     *_lowPassFilter.state  = *dsp::IIR::Coefficients<float>::makeLowPass  (getSampleRate(), *_parameters.getRawParameterValue("lpf_cutoff"));
     *_highPassFilter.state = *dsp::IIR::Coefficients<float>::makeHighPass (getSampleRate(), *_parameters.getRawParameterValue("hpf_cutoff"));
 }
 
-void VacancyAudioProcessor::applyIREnvelope(){
-    // first, clear buffer, then copy correct buffer into envelope buffer
-    envelopedIRBuffer.clear();
-    if(isUsingReversed){
-        for (int channel = 0; channel< reversedIRBuffer.getNumChannels(); channel++){
-            DBG("apply envelope reverse copy");
-            envelopedIRBuffer.copyFrom(
-                                     channel, // destChannel
-                                     0, //destStartSample
-                                     reversedIRBuffer, // sourceBuffer
-                                     channel, // sourceChannel
-                                     0, // sourceStartSample,
-                                     reversedIRBuffer.getNumSamples()
-                                     );
-        }
-    }
-    else{
-        for (int channel = 0; channel< forwardIRBuffer.getNumChannels(); channel++){
-            DBG("apply envelope forwardBuffer copy");
-            envelopedIRBuffer.copyFrom(
-                                              channel, // destChannel
-                                              0, //destStartSample
-                                              forwardIRBuffer, // sourceBuffer
-                                              channel, // sourceChannel
-                                              0, // sourceStartSample,
-                                              forwardIRBuffer.getNumSamples()
-                                              );
-        }
-    }
 
-    auto totalNumInputChannels = getTotalNumInputChannels();
-    for (int channel = 0; channel < envelopedIRBuffer.getNumChannels(); ++channel)
-    {
-        const int actualInputChannel = channel % totalNumInputChannels;
-        
-        // auto* readData = envelopedIRBuffer.getReadPointer(actualInputChannel);
-        auto* writeData = envelopedIRBuffer.getWritePointer(actualInputChannel);
-        
-        for (int sample = 0; sample<envelopedIRBuffer.getNumSamples(); sample++){
-            writeData[sample] *= IRVolumeEnvelope.tick();
-        }
-    }
-    
-}
 void VacancyAudioProcessor::prepareToPlay (double sampleRate, int samplesPerBlock)
 {
     // Use this method as the place to do any pre-playback
@@ -391,6 +419,7 @@ void VacancyAudioProcessor::processBlock (AudioBuffer<float>& buffer, MidiBuffer
         block = block.getSubsetChannelBlock (0, 2);
     
     _highPassFilter.process(dsp::ProcessContextReplacing<float> (block));
+    _lowPassFilter.process(dsp::ProcessContextReplacing<float> (block));
     
     const float curr_dry_gain = *_parameters.getRawParameterValue("dry_gain");
     const float curr_wet_gain = *_parameters.getRawParameterValue("wet_gain");
@@ -425,7 +454,6 @@ void VacancyAudioProcessor::processBlock (AudioBuffer<float>& buffer, MidiBuffer
     }
     
    
-    _lowPassFilter.process(dsp::ProcessContextReplacing<float> (block));
     
     _convolution.process(dsp::ProcessContextReplacing<float> (block));
     

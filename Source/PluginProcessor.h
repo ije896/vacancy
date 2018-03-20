@@ -17,7 +17,8 @@
 /**
 */
 class VacancyAudioProcessor  : public AudioProcessor,
-                               public ChangeListener
+                               public ChangeListener,
+                               public AudioProcessorValueTreeState::Listener
 {
 public:
     //==============================================================================
@@ -26,8 +27,11 @@ public:
     //==============================================================================
     void do_image_stuff();
     void loadIR(File file);
+    void setEnvelopeAfterIRLoad();
+    void updateDecayTimeParameterBounds();
+    void updateAndApplyActualVolumeEnvelope();
+    void parameterChanged(const String& parameterID, float newValue) override;
     void reverseIR(AudioSampleBuffer& inBuffer);
-    void playIR();
     static String reverseToText(float value){
             return value < 0.5 ? "Normal" : "Reversed";
     };
@@ -38,6 +42,8 @@ public:
     };
     bool _useReverseIR = false;
     bool isUsingReversed = false;
+    bool newlyEnvelopedIR = false;
+    bool IRIsLoaded = false;
     //==============================================================================
     void updateParams();
     void applyIREnvelope();
@@ -79,6 +85,9 @@ private:
     dsp::ProcessorDuplicator<dsp::IIR::Filter<float>, dsp::IIR::Coefficients<float>> _lowPassFilter, _highPassFilter;
     float prev_dry_gain;
     float prev_wet_gain;
+    int numIRChannels;
+    float IRSampleRate;
+    float IRLengthInSeconds;
     enum TransportState {
         Stopped,
         Starting,
@@ -95,7 +104,9 @@ private:
     AudioProcessorValueTreeState _parameters;
     AudioSampleBuffer reversedIRBuffer;
     AudioSampleBuffer forwardIRBuffer;
-    AudioSampleBuffer envelopedIRBuffer;
+    AudioSampleBuffer envelopedReversedIRBuffer;
+    AudioSampleBuffer envelopedForwardIRBuffer;
+    
     File _IRFile;
     stk::ADSR IRVolumeEnvelope;
     

@@ -61,6 +61,7 @@ def normalizeImage(im):
     max  = im [xind][yind]
     im = (im * 2 / max) - 1
     im *= 0.866
+    im = im.astype(np.float32)
     return im
 
 def checkPosNegBalance(im):
@@ -163,18 +164,23 @@ r = checkForLength(r, hil=True)
 r = normalizeImage(r)
 neg, pos = checkPosNegBalance(r)
 print("neg", neg,"pos", pos)
-r = hilbertTraversal(r)
+# r = hilbertTraversal(r)
 # showImage(r)
-#r = r.astype(np.float32)
+"""
+
+#probably the best combo so far
+
+r = applyExpEnvDecay(r, 0)
+
+r = applyRationalEnvDecay(r, 0.2)
 """
 r = r.flatten()
-#probably the best combo so far
-r = applyRationalEnvDecay(r, 0.2)
 r = applyExpEnvDecay(r, 0)
-r = applyExpEnvDecay(r, 0)
+
 r = applyRationalEnvDecay(r, 0.2)
-"""
-
-
-outpath = "/Users/iegan/Music/IR/"+name+"_hilb" + ".wav"
-wavfile.write(outpath, int(samplerate), r)
+if (len(r.shape)==1):
+    # duplicate channel
+    r = np.array([r, r])
+outpath = "/Users/iegan/Music/IR/"+name+"_test" + ".wav"
+# make the write stereo!
+wavfile.write(outpath, int(samplerate), r.T)
