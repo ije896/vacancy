@@ -109,6 +109,7 @@ private:
     
     File _IRFile;
     stk::ADSR IRVolumeEnvelope;
+    SpinLock processLock;
     
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (VacancyAudioProcessor)
 };

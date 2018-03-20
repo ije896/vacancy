@@ -10,28 +10,22 @@
 
 
 /********************TODO************************
- gain in dB (not necessary)
-
  Add level meters? Not much of a need to
  
  Change Length/Start of IR
-
  
- Volume envelope
-    - initial level
-    - attack (start point for envelope)
-    - end level
-    - decay (end point for envelope)
- 
- Line 306 for applying filter func
- 
- Variable SR for the IR
  Change the thumbnail to show reversed IR when selected
  Predelay
+ Draw
  Check for mono vs stereo IR
- Maybe accept different types of IR's? Like mp3?...
  Accept MIDI input?
- Image parsing and convolution!!!!!
+ 
+ Find clever way to wrap python:
+    literally wrap in C++
+    make website
+    have app call...
+ You're gonna face a lot of issues with file-picking, though
+ 
  Make all buttons APVTS params
  
  for debugging AU:
@@ -74,12 +68,11 @@ VacancyAudioProcessor::VacancyAudioProcessor()
     _parameters.createAndAddParameter("final_level", "Final Level", String(), NormalisableRange<float> (0.001f, 1.0f), 1.0f, nullptr, nullptr);
     _parameters.addParameterListener("final_level", this);
     
-    _parameters.createAndAddParameter("decay_time", "Decay Time", String(), NormalisableRange<float> (0.001f, 5.0f), 5.0f, nullptr, nullptr);
+    _parameters.createAndAddParameter("decay_time", "Decay Time", String(), NormalisableRange<float> (0.001f, 1.0f), 1.0f, nullptr, nullptr);
     _parameters.addParameterListener("decay_time", this);
     
-    _parameters.createAndAddParameter("attack_time", "Attack Time", String(), NormalisableRange<float> (0.001f, 5.0f), 0.001f, nullptr, nullptr);
+    _parameters.createAndAddParameter("attack_time", "Attack Time", String(), NormalisableRange<float> (0.001f, 1.0f), 0.001f, nullptr, nullptr);
     _parameters.addParameterListener("attack_time", this);
-
     
     _parameters.state = ValueTree(Identifier("VacancyParams"));
     
@@ -98,6 +91,8 @@ VacancyAudioProcessor::VacancyAudioProcessor()
 VacancyAudioProcessor::~VacancyAudioProcessor()
 {
     releaseResources();
+    delete _readerSource;
+//    writeIRToFile();
 }
 
 //==============================================================================
@@ -137,8 +132,7 @@ void VacancyAudioProcessor::loadIR(File file){
                       true);
         IRLengthInSeconds = forwardIRBuffer.getNumSamples() / IRSampleRate;
         
-        // copy reversedIR again for volume envelope
-        
+        // copy buffer again for reverse
         reversedIRBuffer = AudioSampleBuffer(forwardIRBuffer);
         
         // load regular IR
@@ -158,6 +152,7 @@ void VacancyAudioProcessor::setEnvelopeAfterIRLoad(){
     
     IRVolumeEnvelope.setInitialValue(1.0f);
     // attack, decaytime, slevel, rtime
+    DBG(IRLengthInSeconds);
     IRVolumeEnvelope.setAllTimes(0.001f, IRLengthInSeconds, 1.0f, 0.001f);
 }
 
@@ -168,61 +163,95 @@ void VacancyAudioProcessor::updateDecayTimeParameterBounds(){
     // set times according to the current IR, doesn't matter if it's reversed or not
     float attackTime = *_parameters.getRawParameterValue("attack_time");
     float decayTime = *_parameters.getRawParameterValue("decay_time");
-    // float IRLengthInMS = 1000.0f * IRLengthInSeconds;
     
     if (attackTime > decayTime){
         Value dtime = _parameters.getParameterAsValue("decay_time");
         dtime = attackTime;
     }
-    // then should update envelope, you just updated a param
-    // actually, listener should handle it
 }
 
 
 void VacancyAudioProcessor::updateAndApplyActualVolumeEnvelope(){
-    float attackTime = *_parameters.getRawParameterValue("attack_time");
-    float decayTime = *_parameters.getRawParameterValue("decay_time");
-    float initialLevel = *_parameters.getRawParameterValue("initial_level");
-    float finalLevel = *_parameters.getRawParameterValue("final_level");
-    IRVolumeEnvelope.setInitialValue(initialLevel);
-    IRVolumeEnvelope.setAllTimes(attackTime/1000.0f, decayTime/1000.0f, finalLevel, 0.001f);
-    applyIREnvelope();
+    if(IRIsLoaded){
+        // 0-5
+        float attackTime = *_parameters.getRawParameterValue("attack_time");
+        float decayTime = *_parameters.getRawParameterValue("decay_time");
+        // 0-1
+        float initialLevel = *_parameters.getRawParameterValue("initial_level");
+        float finalLevel = *_parameters.getRawParameterValue("final_level");
+        
+        float setAttackTime = attackTime * (IRLengthInSeconds);
+        float setDecayTime = decayTime * (IRLengthInSeconds - setAttackTime);
+        
+        IRVolumeEnvelope.keyOn();
+        IRVolumeEnvelope.keyOff();
+        
+        IRVolumeEnvelope.setInitialValue(initialLevel);
+        
+        IRVolumeEnvelope.setAllTimes(setAttackTime, setDecayTime, finalLevel, 0.001f);
+        applyIREnvelope();
+    }
 }
 
 void VacancyAudioProcessor::applyIREnvelope(){
-    // first, clear buffers, then re-copy each IR
-    envelopedReversedIRBuffer.clear();
-    envelopedForwardIRBuffer.clear();
-    envelopedForwardIRBuffer = AudioSampleBuffer(forwardIRBuffer);
-    envelopedReversedIRBuffer = AudioSampleBuffer(reversedIRBuffer);
-    
-    float attackTime = *_parameters.getRawParameterValue("attack_time");
-    float decayTime = *_parameters.getRawParameterValue("decay_time");
-    
-    float key_off_sample = IRSampleRate * (attackTime + decayTime)/1000.0f;
-    
-    
-    for (int channel = 0; channel < numIRChannels; ++channel)
-    {
-        // change the state of the ADSR
-        IRVolumeEnvelope.keyOn();
+    if(IRIsLoaded){
+        const SpinLock::ScopedLockType sl (processLock);
         
-        // auto* readData = envelopedIRBuffer.getReadPointer(actualInputChannel);
-        auto* forwardWriteData = envelopedForwardIRBuffer.getWritePointer(channel);
-        auto* reversedWriteData = envelopedReversedIRBuffer.getWritePointer(channel);
+        // first, clear buffers, then re-copy each IR
+        envelopedReversedIRBuffer.clear();
+        envelopedForwardIRBuffer.clear();
+        envelopedForwardIRBuffer = AudioSampleBuffer(forwardIRBuffer);
+        envelopedReversedIRBuffer = AudioSampleBuffer(reversedIRBuffer);
+        
+        for (int channel = 0; channel < numIRChannels; ++channel)
+        {
+            // change the state of the ADSR
+            IRVolumeEnvelope.keyOn();
+            auto* forwardWriteData = envelopedForwardIRBuffer.getWritePointer(channel);
+            auto* reversedWriteData = envelopedReversedIRBuffer.getWritePointer(channel);
 
-        for (int sample = 0; sample<forwardIRBuffer.getNumSamples(); sample++){
-            // check if we need to do keyOff()
-            if(sample == key_off_sample) IRVolumeEnvelope.keyOff();
-            float tick = IRVolumeEnvelope.tick();
-            reversedWriteData[sample] *= tick;
-            forwardWriteData[sample] *= tick;
+//            const SpinLock::ScopedLockType sl (processLock);
+            int susCount = 0;
+            int attCount = 0;
+            int decCount = 0;
+            int relCount = 0;
+            int idlCount = 0;
+            for (int sample = 0; sample<forwardIRBuffer.getNumSamples(); sample++){
+                if(IRVolumeEnvelope.getState()==stk::ADSR::SUSTAIN){
+                    IRVolumeEnvelope.keyOff();
+                    susCount++;
+                }
+                if(IRVolumeEnvelope.getState()==stk::ADSR::ATTACK){
+                    attCount++;
+                }
+                if(IRVolumeEnvelope.getState()==stk::ADSR::DECAY){
+                    decCount++;
+                }
+                if(IRVolumeEnvelope.getState()==stk::ADSR::RELEASE){
+                    relCount++;
+                }
+                if(IRVolumeEnvelope.getState()==stk::ADSR::IDLE){
+                    idlCount++;
+                }
+                float tick = IRVolumeEnvelope.tick();
+                reversedWriteData[sample] *= tick;
+                forwardWriteData[sample] *= tick;
+            }
+            while(IRVolumeEnvelope.getState()!=stk::ADSR::IDLE){
+                DBG("shit left over");
+                IRVolumeEnvelope.tick();
+            }
+            DBG("start");
+            DBG(attCount);
+            DBG(decCount);
+            DBG(susCount);
+            DBG(relCount);
+            DBG(idlCount);
+            DBG("end");
         }
+        newlyEnvelopedIR = true;
     }
-    newlyEnvelopedIR = true;
 }
-
-    
 
     
 
@@ -514,10 +543,12 @@ void VacancyAudioProcessor::setStateInformation (const void* data, int sizeInByt
 {
     // You should use this method to restore your parameters from this memory block,
     // whose contents will have been created by the getStateInformation() call.
-    ScopedPointer<XmlElement> xmlState (getXmlFromBinary (data, sizeInBytes));
-    if (xmlState != nullptr)
-        if (xmlState->hasTagName (_parameters.state.getType()))
-            _parameters.state = ValueTree::fromXml (*xmlState);
+    
+//    ScopedPointer<XmlElement> xmlState (getXmlFromBinary (data, sizeInBytes));
+//    if (xmlState != nullptr)
+//        if (xmlState->hasTagName (_parameters.state.getType()))
+//            _parameters.state = ValueTree::fromXml (*xmlState);
+  
 }
 
 //==============================================================================

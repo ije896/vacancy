@@ -176,7 +176,6 @@ void VacancyAudioProcessorEditor::changeListenerCallback(ChangeBroadcaster* sour
     if(source == &thumbnail){
         repaint();
     }
-    // update parameters if attack or decay time sliders are updated
 }
 
 
