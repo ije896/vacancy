@@ -44,12 +44,14 @@ name = file[:-4]
 fp = 'images/' + file
 
 def loadAndSmoothImage(fp):
+    print("Smoothing image...")
     im = io.imread(fp, as_grey=True)
     im = filters.gaussian(im)
     im = im.astype(np.float32)
     return im
 
 def normalizeImage(im):
+    print("Normalizing image...")
     peakIndexTuple = np.unravel_index(np.argmax(im), im.shape)
     xind = peakIndexTuple[0]
     yind = peakIndexTuple[1]
@@ -72,6 +74,7 @@ def checkPosNegBalance(im):
     return negperc, posperc
 
 def checkForLength(im, hil=False):
+    print("Checking if the image needs to be resized...")
     if(hil):
         if(imgIsSquare(im)==False):
             im = makeImgSquare(im)
@@ -157,8 +160,8 @@ r = orig
 r = checkForLength(r, hil=True)
 # showImage(r)
 r = normalizeImage(r)
-neg, pos = checkPosNegBalance(r)
-print("neg", neg,"pos", pos)
+# neg, pos = checkPosNegBalance(r)
+# print("neg", neg,"pos", pos)
 # r = hilbertTraversal(r)
 # showImage(r)
 """
@@ -170,12 +173,13 @@ r = applyExpEnvDecay(r, 0)
 r = applyRationalEnvDecay(r, 0.2)
 """
 r = r.flatten()
-r = applyExpEnvDecay(r, 0)
-
-r = applyRationalEnvDecay(r, 0.2)
+# r = applyExpEnvDecay(r, 0)
+#
+# r = applyRationalEnvDecay(r, 0.2)
 if (len(r.shape)==1):
     # duplicate channel
     r = np.array([r, r])
-outpath = "/Users/iegan/Desktop/vacancy/media/IR/"+name+"_test" + ".wav"
+outpath = "../../media/IR/"+name+ ".wav"
 # make the write stereo!
 wavfile.write(outpath, int(samplerate), r.T)
+print("Image parsed successfully!")
