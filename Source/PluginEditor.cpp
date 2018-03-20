@@ -68,7 +68,7 @@ thumbnailCache(5), thumbnail(512, formatManager, thumbnailCache)
     // Volume Envelope Params
     InitialLevelSlider.setSliderStyle(Slider::RotaryVerticalDrag);
     InitialLevelSlider.setTextBoxStyle(Slider::NoTextBox, false, 90, 30);
-    InitialLevelSlider.setPopupDisplayEnabled(true, true, this);
+    InitialLevelSlider.setPopupDisplayEnabled(false, false, this);
     
     InitialLevelLabel.setText("Initial Level", dontSendNotification);
     addAndMakeVisible(InitialLevelLabel);
@@ -77,7 +77,7 @@ thumbnailCache(5), thumbnail(512, formatManager, thumbnailCache)
     
     AttackTimeSlider.setSliderStyle(Slider::RotaryVerticalDrag);
     AttackTimeSlider.setTextBoxStyle(Slider::NoTextBox, false, 90, 30);
-    AttackTimeSlider.setPopupDisplayEnabled(true, true, this);
+    AttackTimeSlider.setPopupDisplayEnabled(false, false, this);
     AttackTimeSlider.addListener(this);
     
     AttackTimeLabel.setText("Attack Time", dontSendNotification);
@@ -87,7 +87,7 @@ thumbnailCache(5), thumbnail(512, formatManager, thumbnailCache)
     
     FinalLevelSlider.setSliderStyle(Slider::RotaryVerticalDrag);
     FinalLevelSlider.setTextBoxStyle(Slider::NoTextBox, false, 90, 30);
-    FinalLevelSlider.setPopupDisplayEnabled(true, true, this);
+    FinalLevelSlider.setPopupDisplayEnabled(false, false, this);
     
     FinalLevelLabel.setText("Final Level", dontSendNotification);
     addAndMakeVisible(FinalLevelLabel);
@@ -96,7 +96,7 @@ thumbnailCache(5), thumbnail(512, formatManager, thumbnailCache)
     
     DecayTimeSlider.setSliderStyle(Slider::RotaryVerticalDrag);
     DecayTimeSlider.setTextBoxStyle(Slider::NoTextBox, false, 90, 30);
-    DecayTimeSlider.setPopupDisplayEnabled(true, true, this);
+    DecayTimeSlider.setPopupDisplayEnabled(false, false, this);
     DecayTimeSlider.addListener(this);
     
     DecayTimeLabel.setText("Decay Time", dontSendNotification);
