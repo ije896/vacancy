@@ -25,8 +25,8 @@ Construct an open source plugin for personal education, and hopefully for usable
   - MatPlotLib
   - SciKit-Image
 - JUCE:
-  - STK Wrapper Module
-(see installation section for more details)
+  - STK Wrapper Module (https://github.com/adamski/stk_wrapper)
+(you don't need to download that module ^^. See installation instructions for more details)
   
 ## Installation and Usage
 If you wish to edit or build Vacancy, download this repo and move the *stk_wrapper* folder into your JUCE modules folder. Then, open *vacancy.projucer* and add the *stk_wrapper* folder path to the project. Click save and export for your IDE of choice. Then select your build target, and *TA DA*, you have a build.
