@@ -13,6 +13,8 @@
       <FILE id="w8fJnL" name="surface.jpg" compile="0" resource="1" file="Source/images/surface.jpg"/>
     </GROUP>
     <GROUP id="{E8BBCC22-9497-BF12-890F-89A0661EC36D}" name="Source">
+      <FILE id="Y4QlBa" name="ADS.cpp" compile="1" resource="0" file="Source/ADS.cpp"/>
+      <FILE id="n7HP1n" name="ADS.h" compile="0" resource="0" file="Source/ADS.h"/>
       <FILE id="Vr8wmM" name="PluginProcessor.cpp" compile="1" resource="0"
             file="Source/PluginProcessor.cpp"/>
       <FILE id="qhg041" name="PluginProcessor.h" compile="0" resource="0"

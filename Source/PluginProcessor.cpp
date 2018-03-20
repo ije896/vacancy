@@ -14,6 +14,8 @@
  
  Change Length/Start of IR
  
+ for envelope: 145, 277
+ 
  Change the thumbnail to show reversed IR when selected
  Predelay
  Draw
@@ -135,6 +137,7 @@ void VacancyAudioProcessor::loadIR(File file){
         // copy buffer again for reverse
         reversedIRBuffer = AudioSampleBuffer(forwardIRBuffer);
         
+        
         // load regular IR
         // this happens before envelope assignment because essentially all-pass envelope
         _convolution.copyAndLoadImpulseResponseFromBuffer(forwardIRBuffer, IRSampleRate, true, true, true, 0);
@@ -142,8 +145,10 @@ void VacancyAudioProcessor::loadIR(File file){
         reverseIR(reversedIRBuffer);
         
         // set volume envelope params
-        setEnvelopeAfterIRLoad();
-        applyIREnvelope();
+//        setEnvelopeAfterIRLoad();
+//        applyIREnvelope();
+        envelopedForwardIRBuffer = AudioSampleBuffer(forwardIRBuffer);
+        envelopedReversedIRBuffer = AudioSampleBuffer(reversedIRBuffer);
         IRIsLoaded = true;
     }
 }
@@ -237,10 +242,8 @@ void VacancyAudioProcessor::applyIREnvelope(){
                 reversedWriteData[sample] *= tick;
                 forwardWriteData[sample] *= tick;
             }
-            while(IRVolumeEnvelope.getState()!=stk::ADSR::IDLE){
-                DBG("shit left over");
-                IRVolumeEnvelope.tick();
-            }
+            DBG("buffer total");
+            DBG(forwardIRBuffer.getNumSamples());
             DBG("start");
             DBG(attCount);
             DBG(decCount);
@@ -276,17 +279,17 @@ void VacancyAudioProcessor::reverseIR(AudioSampleBuffer& inBuffer){
 
 void VacancyAudioProcessor::parameterChanged(const String& parameterID, float newValue){
     if(parameterID=="attack_time"){
-        updateDecayTimeParameterBounds();
-        updateAndApplyActualVolumeEnvelope();
+//        updateDecayTimeParameterBounds();
+//        updateAndApplyActualVolumeEnvelope();
     }
     if(parameterID=="decay_time"){
-        updateAndApplyActualVolumeEnvelope();
+//        updateAndApplyActualVolumeEnvelope();
     }
     if(parameterID=="initial_level"){
-        updateAndApplyActualVolumeEnvelope();
+//        updateAndApplyActualVolumeEnvelope();
     }
     if(parameterID=="final_level"){
-        updateAndApplyActualVolumeEnvelope();
+//        updateAndApplyActualVolumeEnvelope();
     }
 }
 
