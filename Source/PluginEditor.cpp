@@ -41,11 +41,6 @@ thumbnailCache(5), thumbnail(512, formatManager, thumbnailCache)
     addAndMakeVisible (wetGainSlider);
     wetGainAttachment = new SliderAttachment (valueTreeState, "wet_gain", wetGainSlider);
     
-    //    dryGainSlider.setRange(-60.0, 0.0);
-//    dryGainSlider.setTextValueSuffix(" dB");
-//    dryGainSlider.setValue(-50.0);
-    // dryGainSlider.addListener(this);
-    
     // filters
     LPFCutoffSlider.setSliderStyle(Slider::RotaryVerticalDrag);
     LPFCutoffSlider.setTextBoxStyle(Slider::NoTextBox, false, 90, 30);

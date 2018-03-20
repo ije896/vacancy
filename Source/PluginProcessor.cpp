@@ -215,42 +215,14 @@ void VacancyAudioProcessor::applyIREnvelope(){
             auto* forwardWriteData = envelopedForwardIRBuffer.getWritePointer(channel);
             auto* reversedWriteData = envelopedReversedIRBuffer.getWritePointer(channel);
 
-//            const SpinLock::ScopedLockType sl (processLock);
-            int susCount = 0;
-            int attCount = 0;
-            int decCount = 0;
-            int relCount = 0;
-            int idlCount = 0;
             for (int sample = 0; sample<forwardIRBuffer.getNumSamples(); sample++){
                 if(IRVolumeEnvelope.getState()==stk::ADSR::SUSTAIN){
                     IRVolumeEnvelope.keyOff();
-                    susCount++;
-                }
-                if(IRVolumeEnvelope.getState()==stk::ADSR::ATTACK){
-                    attCount++;
-                }
-                if(IRVolumeEnvelope.getState()==stk::ADSR::DECAY){
-                    decCount++;
-                }
-                if(IRVolumeEnvelope.getState()==stk::ADSR::RELEASE){
-                    relCount++;
-                }
-                if(IRVolumeEnvelope.getState()==stk::ADSR::IDLE){
-                    idlCount++;
                 }
                 float tick = IRVolumeEnvelope.tick();
                 reversedWriteData[sample] *= tick;
                 forwardWriteData[sample] *= tick;
             }
-//            DBG("buffer total");
-//            DBG(forwardIRBuffer.getNumSamples());
-//            DBG("start");
-//            DBG(attCount);
-//            DBG(decCount);
-//            DBG(susCount);
-//            DBG(relCount);
-//            DBG(idlCount);
-//            DBG("end");
         }
         newlyEnvelopedIR = true;
     }

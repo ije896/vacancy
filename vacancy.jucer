@@ -3,18 +3,7 @@
 <JUCERPROJECT name="Vacancy" projectType="audioplug" buildStandalone="1" jucerVersion="5.2.1"
               version="0.0.2">
   <MAINGROUP id="JpdRx3" name="Vacancy">
-    <GROUP id="{98117AE5-29AF-1242-283A-278E4FF708C7}" name="cimg">
-      <FILE id="oFDXWX" name="CImg.h" compile="0" resource="0" file="Source/cimg/CImg.h"/>
-    </GROUP>
-    <GROUP id="{E49F66F5-DAB8-F32D-22AF-D8010C8AEE85}" name="images">
-      <FILE id="imfjD6" name="choppy.jpg" compile="0" resource="1" file="Source/images/choppy.jpg"/>
-      <FILE id="K2AHv8" name="droplet.jpg" compile="0" resource="1" file="Source/images/droplet.jpg"/>
-      <FILE id="A9BcP0" name="ripples.jpg" compile="0" resource="1" file="Source/images/ripples.jpg"/>
-      <FILE id="w8fJnL" name="surface.jpg" compile="0" resource="1" file="Source/images/surface.jpg"/>
-    </GROUP>
     <GROUP id="{E8BBCC22-9497-BF12-890F-89A0661EC36D}" name="Source">
-      <FILE id="Y4QlBa" name="ADS.cpp" compile="1" resource="0" file="Source/ADS.cpp"/>
-      <FILE id="n7HP1n" name="ADS.h" compile="0" resource="0" file="Source/ADS.h"/>
       <FILE id="Vr8wmM" name="PluginProcessor.cpp" compile="1" resource="0"
             file="Source/PluginProcessor.cpp"/>
       <FILE id="qhg041" name="PluginProcessor.h" compile="0" resource="0"
