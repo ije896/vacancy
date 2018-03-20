@@ -145,8 +145,8 @@ void VacancyAudioProcessor::loadIR(File file){
         reverseIR(reversedIRBuffer);
         
         // set volume envelope params
-//        setEnvelopeAfterIRLoad();
-//        applyIREnvelope();
+        setEnvelopeAfterIRLoad();
+        applyIREnvelope();
         envelopedForwardIRBuffer = AudioSampleBuffer(forwardIRBuffer);
         envelopedReversedIRBuffer = AudioSampleBuffer(reversedIRBuffer);
         IRIsLoaded = true;
@@ -242,15 +242,15 @@ void VacancyAudioProcessor::applyIREnvelope(){
                 reversedWriteData[sample] *= tick;
                 forwardWriteData[sample] *= tick;
             }
-            DBG("buffer total");
-            DBG(forwardIRBuffer.getNumSamples());
-            DBG("start");
-            DBG(attCount);
-            DBG(decCount);
-            DBG(susCount);
-            DBG(relCount);
-            DBG(idlCount);
-            DBG("end");
+//            DBG("buffer total");
+//            DBG(forwardIRBuffer.getNumSamples());
+//            DBG("start");
+//            DBG(attCount);
+//            DBG(decCount);
+//            DBG(susCount);
+//            DBG(relCount);
+//            DBG(idlCount);
+//            DBG("end");
         }
         newlyEnvelopedIR = true;
     }
@@ -279,17 +279,17 @@ void VacancyAudioProcessor::reverseIR(AudioSampleBuffer& inBuffer){
 
 void VacancyAudioProcessor::parameterChanged(const String& parameterID, float newValue){
     if(parameterID=="attack_time"){
-//        updateDecayTimeParameterBounds();
-//        updateAndApplyActualVolumeEnvelope();
+        updateDecayTimeParameterBounds();
+        updateAndApplyActualVolumeEnvelope();
     }
     if(parameterID=="decay_time"){
-//        updateAndApplyActualVolumeEnvelope();
+        updateAndApplyActualVolumeEnvelope();
     }
     if(parameterID=="initial_level"){
-//        updateAndApplyActualVolumeEnvelope();
+        updateAndApplyActualVolumeEnvelope();
     }
     if(parameterID=="final_level"){
-//        updateAndApplyActualVolumeEnvelope();
+        updateAndApplyActualVolumeEnvelope();
     }
 }
 
