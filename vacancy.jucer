@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <JUCERPROJECT name="Vacancy" projectType="audioplug" buildStandalone="1" jucerVersion="5.2.1"
-              version="0.0.1">
+              version="0.0.2">
   <MAINGROUP id="JpdRx3" name="Vacancy">
     <GROUP id="{E8BBCC22-9497-BF12-890F-89A0661EC36D}" name="Source">
       <FILE id="Vr8wmM" name="PluginProcessor.cpp" compile="1" resource="0"
@@ -14,7 +14,8 @@
     </GROUP>
   </MAINGROUP>
   <EXPORTFORMATS>
-    <XCODE_MAC targetFolder="Builds/MacOSX">
+    <XCODE_MAC targetFolder="Builds/MacOSX" extraLinkerFlags="-O2 -lm -lpthread -L/opt/X11/include -I/usr/X11R6/include -L/usr/X11R6/lib  -lm -lpthread -lX11"
+               extraCompilerFlags="-Wno-comma" useHeaderMap="1">
       <CONFIGURATIONS>
         <CONFIGURATION isDebug="1" name="Debug"/>
         <CONFIGURATION isDebug="0" name="Release"/>
@@ -34,9 +35,9 @@
         <MODULEPATH id="juce_audio_processors" path="../../../../Applications/JUCE/modules"/>
         <MODULEPATH id="juce_audio_plugin_client" path="../../../../Applications/JUCE/modules"/>
         <MODULEPATH id="juce_audio_utils" path="../../../../Applications/JUCE/modules"/>
-        <MODULEPATH id="dRowAudio" path="../../../../Applications/JUCE/modules"/>
         <MODULEPATH id="juce_dsp" path="../../../../Applications/JUCE/modules"/>
         <MODULEPATH id="juce_cryptography" path="../../../../Applications/JUCE/modules"/>
+        <MODULEPATH id="stk_wrapper" path="../../../../Applications/JUCE/modules"/>
       </MODULEPATHS>
     </XCODE_MAC>
     <CODEBLOCKS_WINDOWS targetFolder="Builds/CodeBlocksWindows">
@@ -59,9 +60,9 @@
         <MODULEPATH id="juce_audio_processors" path="../../../../Applications/JUCE/modules"/>
         <MODULEPATH id="juce_audio_plugin_client" path="../../../../Applications/JUCE/modules"/>
         <MODULEPATH id="juce_audio_utils" path="../../../../Applications/JUCE/modules"/>
-        <MODULEPATH id="dRowAudio" path="../../../../Applications/JUCE/modules"/>
         <MODULEPATH id="juce_dsp" path="../../../../Applications/JUCE/modules"/>
         <MODULEPATH id="juce_cryptography" path="../../../../Applications/JUCE/modules"/>
+        <MODULEPATH id="stk_wrapper" path="../../../../Applications/JUCE/modules"/>
       </MODULEPATHS>
     </CODEBLOCKS_WINDOWS>
     <CODEBLOCKS_LINUX targetFolder="Builds/CodeBlocksLinux">
@@ -84,14 +85,13 @@
         <MODULEPATH id="juce_audio_processors" path="../../../../Applications/JUCE/modules"/>
         <MODULEPATH id="juce_audio_plugin_client" path="../../../../Applications/JUCE/modules"/>
         <MODULEPATH id="juce_audio_utils" path="../../../../Applications/JUCE/modules"/>
-        <MODULEPATH id="dRowAudio" path="../../../../Applications/JUCE/modules"/>
         <MODULEPATH id="juce_dsp" path="../../../../Applications/JUCE/modules"/>
         <MODULEPATH id="juce_cryptography" path="../../../../Applications/JUCE/modules"/>
+        <MODULEPATH id="stk_wrapper" path="../../../../Applications/JUCE/modules"/>
       </MODULEPATHS>
     </CODEBLOCKS_LINUX>
   </EXPORTFORMATS>
   <MODULES>
-    <MODULE id="dRowAudio" showAllCode="1" useLocalCopy="0" useGlobalPath="0"/>
     <MODULE id="juce_audio_basics" showAllCode="1" useLocalCopy="0" useGlobalPath="0"/>
     <MODULE id="juce_audio_devices" showAllCode="1" useLocalCopy="0" useGlobalPath="0"/>
     <MODULE id="juce_audio_formats" showAllCode="1" useLocalCopy="0" useGlobalPath="0"/>
@@ -109,6 +109,7 @@
     <MODULE id="juce_gui_extra" showAllCode="1" useLocalCopy="0" useGlobalPath="0"/>
     <MODULE id="juce_opengl" showAllCode="1" useLocalCopy="0" useGlobalPath="0"/>
     <MODULE id="juce_video" showAllCode="1" useLocalCopy="0" useGlobalPath="0"/>
+    <MODULE id="stk_wrapper" showAllCode="1" useLocalCopy="0" useGlobalPath="0"/>
   </MODULES>
   <JUCEOPTIONS JUCE_USE_MP3AUDIOFORMAT="1"/>
 </JUCERPROJECT>

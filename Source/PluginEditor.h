@@ -50,7 +50,6 @@ private:
    
     void changeState(TransportState nextState);
     void openFileButtonClicked();
-    void playIRButtonClicked();
     void reverseIRButtonClicked();
     
     // This reference is provided as a quick way for your editor to
@@ -69,12 +68,20 @@ private:
     Slider wetGainSlider;
     ScopedPointer<SliderAttachment> wetGainAttachment;
     
-//    Label reverseLabel;
     ToggleButton reverseIRButton;
     ScopedPointer<ButtonAttachment> reverseIRAttachment;
 
     TextButton openFileButton;
-    TextButton playIRButton;
+    
+    Label HPFCutoffLabel, LPFCutoffLabel;
+    Slider HPFCutoffSlider, LPFCutoffSlider;
+    ScopedPointer<SliderAttachment> HPFAttachment;
+    ScopedPointer<SliderAttachment> LPFAttachment;
+    
+    // envelope params
+    Label InitialLevelLabel, AttackTimeLabel, FinalLevelLabel, DecayTimeLabel;
+    Slider InitialLevelSlider, AttackTimeSlider, FinalLevelSlider, DecayTimeSlider;
+    ScopedPointer<SliderAttachment> InitialLevelAttachment, AttackTimeAttachement, FinalLevelAttachement, DecayTimeAttachement;
     
     AudioFormatManager formatManager;
     ScopedPointer<AudioFormatReaderSource> readerSource;

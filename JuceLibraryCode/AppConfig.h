@@ -48,7 +48,6 @@
 #define JUCE_USE_DARK_SPLASH_SCREEN 1
 
 //==============================================================================
-#define JUCE_MODULE_AVAILABLE_dRowAudio                     1
 #define JUCE_MODULE_AVAILABLE_juce_audio_basics             1
 #define JUCE_MODULE_AVAILABLE_juce_audio_devices            1
 #define JUCE_MODULE_AVAILABLE_juce_audio_formats            1
@@ -65,27 +64,9 @@
 #define JUCE_MODULE_AVAILABLE_juce_gui_extra                1
 #define JUCE_MODULE_AVAILABLE_juce_opengl                   1
 #define JUCE_MODULE_AVAILABLE_juce_video                    1
+#define JUCE_MODULE_AVAILABLE_stk_wrapper                   1
 
 #define JUCE_GLOBAL_MODULE_SETTINGS_INCLUDED 1
-
-//==============================================================================
-// dRowAudio flags:
-
-#ifndef    DROWAUDIO_USE_FFTREAL
- //#define DROWAUDIO_USE_FFTREAL 0
-#endif
-
-#ifndef    DROWAUDIO_USE_VDSP
- //#define DROWAUDIO_USE_VDSP 0
-#endif
-
-#ifndef    DROWAUDIO_USE_SOUNDTOUCH
- //#define DROWAUDIO_USE_SOUNDTOUCH 0
-#endif
-
-#ifndef    DROWAUDIO_USE_CURL
- //#define DROWAUDIO_USE_CURL 0
-#endif
 
 //==============================================================================
 // juce_audio_devices flags:
@@ -369,7 +350,7 @@
  #define JucePlugin_ManufacturerCode       0x4d616e75 // 'Manu'
 #endif
 #ifndef  JucePlugin_PluginCode
- #define JucePlugin_PluginCode             0x59613868 // 'Ya8h'
+ #define JucePlugin_PluginCode             0x516c7176 // 'Qlqv'
 #endif
 #ifndef  JucePlugin_IsSynth
  #define JucePlugin_IsSynth                0
@@ -387,13 +368,13 @@
  #define JucePlugin_EditorRequiresKeyboardFocus  0
 #endif
 #ifndef  JucePlugin_Version
- #define JucePlugin_Version                0.0.1
+ #define JucePlugin_Version                0.0.2
 #endif
 #ifndef  JucePlugin_VersionCode
- #define JucePlugin_VersionCode            0x1
+ #define JucePlugin_VersionCode            0x2
 #endif
 #ifndef  JucePlugin_VersionString
- #define JucePlugin_VersionString          "0.0.1"
+ #define JucePlugin_VersionString          "0.0.2"
 #endif
 #ifndef  JucePlugin_VSTUniqueID
  #define JucePlugin_VSTUniqueID            JucePlugin_PluginCode

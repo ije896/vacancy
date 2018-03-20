@@ -17,15 +17,21 @@
 /**
 */
 class VacancyAudioProcessor  : public AudioProcessor,
-                               public ChangeListener
+                               public ChangeListener,
+                               public AudioProcessorValueTreeState::Listener
 {
 public:
     //==============================================================================
     VacancyAudioProcessor();
     ~VacancyAudioProcessor();
     //==============================================================================
+    void do_image_stuff();
     void loadIR(File file);
-    void playIR();
+    void setEnvelopeAfterIRLoad();
+    void updateDecayTimeParameterBounds();
+    void updateAndApplyActualVolumeEnvelope();
+    void parameterChanged(const String& parameterID, float newValue) override;
+    void reverseIR(AudioSampleBuffer& inBuffer);
     static String reverseToText(float value){
             return value < 0.5 ? "Normal" : "Reversed";
     };
@@ -35,8 +41,12 @@ public:
         return 0.0f;
     };
     bool _useReverseIR = false;
+    bool isUsingReversed = false;
+    bool newlyEnvelopedIR = false;
+    bool IRIsLoaded = false;
     //==============================================================================
     void updateParams();
+    void applyIREnvelope();
     void prepareToPlay (double sampleRate, int samplesPerBlock) override;
     void releaseResources() override;
     void changeListenerCallback(ChangeBroadcaster* source) override;
@@ -72,8 +82,12 @@ public:
 
 private:
     dsp::Convolution _convolution;
+    dsp::ProcessorDuplicator<dsp::IIR::Filter<float>, dsp::IIR::Coefficients<float>> _lowPassFilter, _highPassFilter;
     float prev_dry_gain;
     float prev_wet_gain;
+    int numIRChannels;
+    float IRSampleRate;
+    float IRLengthInSeconds;
     enum TransportState {
         Stopped,
         Starting,
@@ -85,10 +99,17 @@ private:
     void changeState(TransportState newState);
     //==============================================================================
     TransportState transport_state;
-    AudioTransportSource _transportSource;
     AudioFormatManager _formatManager;
     ScopedPointer<AudioFormatReaderSource> _readerSource;
     AudioProcessorValueTreeState _parameters;
+    AudioSampleBuffer reversedIRBuffer;
+    AudioSampleBuffer forwardIRBuffer;
+    AudioSampleBuffer envelopedReversedIRBuffer;
+    AudioSampleBuffer envelopedForwardIRBuffer;
+    
+    File _IRFile;
+    stk::ADSR IRVolumeEnvelope;
+    SpinLock processLock;
     
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (VacancyAudioProcessor)
 };

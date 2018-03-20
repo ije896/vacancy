@@ -21,10 +21,7 @@ thumbnailCache(5), thumbnail(512, formatManager, thumbnailCache)
     // openIR button init
     openFileButton.setButtonText("Load IR");
     openFileButton.addListener(this);
-    
-    playIRButton.setButtonText("Play IR");
-    playIRButton.addListener(this);
-    
+  
     // gain sliders init
     dryGainSlider.setSliderStyle(Slider::LinearVertical);
     dryGainSlider.setTextBoxStyle(Slider::NoTextBox, false, 90, 30);
@@ -44,10 +41,63 @@ thumbnailCache(5), thumbnail(512, formatManager, thumbnailCache)
     addAndMakeVisible (wetGainSlider);
     wetGainAttachment = new SliderAttachment (valueTreeState, "wet_gain", wetGainSlider);
     
-    //    dryGainSlider.setRange(-60.0, 0.0);
-//    dryGainSlider.setTextValueSuffix(" dB");
-//    dryGainSlider.setValue(-50.0);
-    // dryGainSlider.addListener(this);
+    // filters
+    LPFCutoffSlider.setSliderStyle(Slider::RotaryVerticalDrag);
+    LPFCutoffSlider.setTextBoxStyle(Slider::NoTextBox, false, 90, 30);
+    LPFCutoffSlider.setPopupDisplayEnabled(true, true, this);
+    
+    LPFCutoffLabel.setText("LP Cutoff", dontSendNotification);
+    addAndMakeVisible(LPFCutoffLabel);
+    addAndMakeVisible(LPFCutoffSlider);
+    LPFAttachment = new SliderAttachment (valueTreeState, "lpf_cutoff", LPFCutoffSlider);
+    
+    HPFCutoffSlider.setSliderStyle(Slider::RotaryVerticalDrag);
+    HPFCutoffSlider.setTextBoxStyle(Slider::NoTextBox, false, 90, 30);
+    HPFCutoffSlider.setPopupDisplayEnabled(true, true, this);
+    
+    HPFCutoffLabel.setText("HP Cutoff", dontSendNotification);
+    addAndMakeVisible(HPFCutoffLabel);
+    addAndMakeVisible(HPFCutoffSlider);
+    HPFAttachment = new SliderAttachment (valueTreeState, "hpf_cutoff", HPFCutoffSlider);
+    
+    // Volume Envelope Params
+    InitialLevelSlider.setSliderStyle(Slider::RotaryVerticalDrag);
+    InitialLevelSlider.setTextBoxStyle(Slider::NoTextBox, false, 90, 30);
+    InitialLevelSlider.setPopupDisplayEnabled(false, false, this);
+    
+    InitialLevelLabel.setText("Initial Level", dontSendNotification);
+    addAndMakeVisible(InitialLevelLabel);
+    addAndMakeVisible(InitialLevelSlider);
+    InitialLevelAttachment = new SliderAttachment (valueTreeState, "initial_level", InitialLevelSlider);
+    
+    AttackTimeSlider.setSliderStyle(Slider::RotaryVerticalDrag);
+    AttackTimeSlider.setTextBoxStyle(Slider::NoTextBox, false, 90, 30);
+    AttackTimeSlider.setPopupDisplayEnabled(false, false, this);
+    AttackTimeSlider.addListener(this);
+    
+    AttackTimeLabel.setText("Attack Time", dontSendNotification);
+    addAndMakeVisible(AttackTimeLabel);
+    addAndMakeVisible(AttackTimeSlider);
+    AttackTimeAttachement = new SliderAttachment (valueTreeState, "attack_time", AttackTimeSlider);
+    
+    FinalLevelSlider.setSliderStyle(Slider::RotaryVerticalDrag);
+    FinalLevelSlider.setTextBoxStyle(Slider::NoTextBox, false, 90, 30);
+    FinalLevelSlider.setPopupDisplayEnabled(false, false, this);
+    
+    FinalLevelLabel.setText("Final Level", dontSendNotification);
+    addAndMakeVisible(FinalLevelLabel);
+    addAndMakeVisible(FinalLevelSlider);
+    FinalLevelAttachement = new SliderAttachment (valueTreeState, "final_level", FinalLevelSlider);
+    
+    DecayTimeSlider.setSliderStyle(Slider::RotaryVerticalDrag);
+    DecayTimeSlider.setTextBoxStyle(Slider::NoTextBox, false, 90, 30);
+    DecayTimeSlider.setPopupDisplayEnabled(false, false, this);
+    DecayTimeSlider.addListener(this);
+    
+    DecayTimeLabel.setText("Decay Time", dontSendNotification);
+    addAndMakeVisible(DecayTimeLabel);
+    addAndMakeVisible(DecayTimeSlider);
+    DecayTimeAttachement = new SliderAttachment (valueTreeState, "decay_time", DecayTimeSlider);
     
     // reverse button
     reverseIRButton.setButtonText("Reverse");
@@ -63,7 +113,6 @@ thumbnailCache(5), thumbnail(512, formatManager, thumbnailCache)
     // display items
     // addAndMakeVisible(&dryGainSlider);
     addAndMakeVisible(&openFileButton);
-    addAndMakeVisible(&playIRButton);
     
     // Make sure that before the constructor has finished, you've set the
     // editor's size to whatever you need it to be.
@@ -91,7 +140,6 @@ void VacancyAudioProcessorEditor::changeState(TransportState nextState){
 void VacancyAudioProcessorEditor::buttonClicked (Button* button)
 {
     if (button == &openFileButton) openFileButtonClicked();
-    if (button == &playIRButton) playIRButtonClicked();
     if (button == &reverseIRButton) reverseIRButtonClicked();
 }
 void VacancyAudioProcessorEditor::sliderValueChanged(Slider* slider){
@@ -113,10 +161,6 @@ void VacancyAudioProcessorEditor::openFileButtonClicked(){
     }
 }
 
-void VacancyAudioProcessorEditor::playIRButtonClicked(){
-    changeState(Playing);
-    processor.playIR();
-}
 
 void VacancyAudioProcessorEditor::reverseIRButtonClicked(){
     processor._useReverseIR = !processor._useReverseIR;
@@ -133,6 +177,12 @@ void VacancyAudioProcessorEditor::changeListenerCallback(ChangeBroadcaster* sour
 VacancyAudioProcessorEditor::~VacancyAudioProcessorEditor()
 {
     dryGainAttachment = nullptr;
+    LPFAttachment = nullptr;
+    HPFAttachment = nullptr;
+    AttackTimeAttachement = nullptr;
+    InitialLevelAttachment = nullptr;
+    FinalLevelAttachement = nullptr;
+    DecayTimeAttachement = nullptr;
     // reverseIRAttachment = nullptr;
 }
 
@@ -153,27 +203,41 @@ void VacancyAudioProcessorEditor::paintWithFileLoaded(Graphics& g, const Rectang
 
 void VacancyAudioProcessorEditor::paint (Graphics& g)
 {
-    const Rectangle<int> thumbnailBounds (30, 105, getWidth() - 150, getHeight() - 180);
+    const Rectangle<int> thumbnailBounds (30, 50, getWidth() - 150, getHeight() - 180);
+    const Rectangle<int> envelopeBounds (175, 295, 295, 80);
+    // draw bounds for filterBounds
+    
     g.fillAll(Colours::black);
+    
+    g.setColour (Colours::grey);
+    g.drawRect(envelopeBounds);
     
     if(thumbnail.getNumChannels()==0) paintNoFileLoaded(g, thumbnailBounds);
     else paintWithFileLoaded(g, thumbnailBounds);
-    
-    // written text at top
-//    g.setColour (Colours::white);
-//    g.setFont (15.0f);
-//    g.drawFittedText ("Convol. Reverb", 0 , 0, getWidth(), 30, Justification::centred, 1);
 }
 
 void VacancyAudioProcessorEditor::resized()
 {
-    // int center = getWidth()/2;
     // actually add our components to the window
-    openFileButton.setBounds(115, 50, getWidth() - 300, 30);
-    // playIRButton.setBounds(150, 70, getWidth()-300, 30);
-    dryGainSlider.setBounds(getWidth()-115, 80, 60, 280);
-    dryGainLabel.setBounds(getWidth()-115, 350, 60, 20);
-    wetGainSlider.setBounds(getWidth()-60, 80, 60, 280);
-    wetGainLabel.setBounds(getWidth()-60, 350, 60, 20);
-    reverseIRButton.setBounds(30, 330, 80, 20);
+    openFileButton.setBounds(105, 10, getWidth() - 300, 30);
+    dryGainSlider.setBounds(getWidth()-115, 0, 60, 280);
+    dryGainLabel.setBounds(getWidth()-115, 280, 60, 20);
+    wetGainSlider.setBounds(getWidth()-60, 0, 60, 280);
+    wetGainLabel.setBounds(getWidth()-60, 280, 60, 20);
+    reverseIRButton.setBounds(30, 275, 80, 20);
+    
+    HPFCutoffSlider.setBounds(15, 300, 60, 60);
+    HPFCutoffLabel.setBounds(15, 350, 60, 20);
+    LPFCutoffSlider.setBounds(70, 300, 60, 60);
+    LPFCutoffLabel.setBounds(70, 350, 60, 20);
+    
+    InitialLevelSlider.setBounds(185, 300, 60, 60);
+    InitialLevelLabel.setBounds(180, 330, 70, 60);
+    AttackTimeSlider.setBounds(255, 300, 60, 60);
+    AttackTimeLabel.setBounds(250, 330, 70, 60);
+    FinalLevelSlider.setBounds(325, 300, 60, 60);
+    FinalLevelLabel.setBounds(325, 330, 60, 60);
+    DecayTimeSlider.setBounds(395, 300, 60, 60);
+    DecayTimeLabel.setBounds(390, 330, 70, 60);
+
 }
