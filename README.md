@@ -42,4 +42,3 @@ If you wish to use the image parser, place whatever photos you want to parse int
 - Better plugin memory management
 - Find way to wrap python in C++ code to unify Vacancy and the image parser
 - Add current builds to the repo
-- Make python paths relative, not absolute
