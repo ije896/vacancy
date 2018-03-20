@@ -1,4 +1,3 @@
-import wave
 import struct
 import numpy as np
 import sys
@@ -10,6 +9,9 @@ from skimage import data, color, io, filters, util
 from skimage.transform import rescale, resize
 from matplotlib import pyplot as plt
 
+samplerate = 44100.0
+maxlength = 8 # in seconds
+
 """
 what can we do to make this more interesting?
 
@@ -17,10 +19,7 @@ Traverse the picture in different ways
 what other metadata can we get from a picture?
 
 ##### TODO:
-try different traversal methods
 add filters in xcode
-try different decay functions
-write decay function into xcode (volume envelope)
 write report
 build web interface for impulse creator?
 
@@ -37,16 +36,12 @@ def showImage(im):
     io.imshow(im)
     plt.show()
 
-
-samplerate = 44100.0
-maxlength = 8 # in seconds
 maxp = int(math.log(sectosam(maxlength), 4))
 max_square_side = math.sqrt(int(math.pow(4, maxp)))
 
 file = sys.argv[1]
 name = file[:-4]
 fp = 'images/' + file
-
 
 def loadAndSmoothImage(fp):
     im = io.imread(fp, as_grey=True)
@@ -181,6 +176,6 @@ r = applyRationalEnvDecay(r, 0.2)
 if (len(r.shape)==1):
     # duplicate channel
     r = np.array([r, r])
-outpath = "/Users/iegan/Music/IR/"+name+"_test" + ".wav"
+outpath = "/Users/iegan/Desktop/vacancy/media/IR/"+name+"_test" + ".wav"
 # make the write stereo!
 wavfile.write(outpath, int(samplerate), r.T)
