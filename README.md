@@ -31,8 +31,7 @@ Construct an open source plugin for personal education, and hopefully for usable
 ## Installation and Usage
 If you wish to edit or build Vacancy, download this repo and move the *stk_wrapper* folder into your JUCE modules folder. Then, open *vacancy.projucer* and add the *stk_wrapper* folder path to the project. Click save and export for your IDE of choice. Then select your build target, and *TA DA*, you have a build.
 
-(I still need to update filepaths in the script, this will not work unless you change the filepaths to your own)
-If you wish to use the image parser, place whatever photos you want to parse into Source/python/images/, where you will find some examples. Then run `python3 parse_image_to_wav.py theNameOfYourImage.jpg`. An audio file of the same name should appear in 
+If you wish to use the image parser, place whatever photos you want to parse into 'media/images/', where you will find some examples. Then run `python3 parse_image_to_wav.py theNameOfYourImage.jpg`. An audio file of the same name should appear in 
   media/IR/
   
  ## Future goals
