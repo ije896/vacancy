@@ -350,7 +350,7 @@
  #define JucePlugin_ManufacturerCode       0x4d616e75 // 'Manu'
 #endif
 #ifndef  JucePlugin_PluginCode
- #define JucePlugin_PluginCode             0x516c7176 // 'Qlqv'
+ #define JucePlugin_PluginCode             0x51326978 // 'Q2ix'
 #endif
 #ifndef  JucePlugin_IsSynth
  #define JucePlugin_IsSynth                0

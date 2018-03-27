@@ -37,7 +37,7 @@
         <MODULEPATH id="juce_audio_utils" path="../../../../Applications/JUCE/modules"/>
         <MODULEPATH id="juce_dsp" path="../../../../Applications/JUCE/modules"/>
         <MODULEPATH id="juce_cryptography" path="../../../../Applications/JUCE/modules"/>
-        <MODULEPATH id="stk_wrapper" path="../../../../Applications/JUCE/modules"/>
+        <MODULEPATH id="stk_wrapper" path="."/>
       </MODULEPATHS>
     </XCODE_MAC>
     <CODEBLOCKS_WINDOWS targetFolder="Builds/CodeBlocksWindows">
@@ -62,7 +62,7 @@
         <MODULEPATH id="juce_audio_utils" path="../../../../Applications/JUCE/modules"/>
         <MODULEPATH id="juce_dsp" path="../../../../Applications/JUCE/modules"/>
         <MODULEPATH id="juce_cryptography" path="../../../../Applications/JUCE/modules"/>
-        <MODULEPATH id="stk_wrapper" path="../../../../Applications/JUCE/modules"/>
+        <MODULEPATH id="stk_wrapper" path="."/>
       </MODULEPATHS>
     </CODEBLOCKS_WINDOWS>
     <CODEBLOCKS_LINUX targetFolder="Builds/CodeBlocksLinux">
@@ -87,7 +87,7 @@
         <MODULEPATH id="juce_audio_utils" path="../../../../Applications/JUCE/modules"/>
         <MODULEPATH id="juce_dsp" path="../../../../Applications/JUCE/modules"/>
         <MODULEPATH id="juce_cryptography" path="../../../../Applications/JUCE/modules"/>
-        <MODULEPATH id="stk_wrapper" path="../../../../Applications/JUCE/modules"/>
+        <MODULEPATH id="stk_wrapper" path="."/>
       </MODULEPATHS>
     </CODEBLOCKS_LINUX>
   </EXPORTFORMATS>

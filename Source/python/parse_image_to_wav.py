@@ -76,6 +76,7 @@ def checkPosNegBalance(im):
 def checkForLength(im, hil=False):
     print("Checking if the image needs to be resized...")
     if(hil):
+        print("Creating Hilbert appropriate image...")
         if(imgIsSquare(im)==False):
             im = makeImgSquare(im)
         if im.shape[0]>max_square_side:
@@ -157,9 +158,11 @@ def hilbertTraversal(im):
 
 orig = loadAndSmoothImage(fp)
 r = orig
-r = checkForLength(r, hil=True)
-# showImage(r)
+r = checkForLength(r)
+
 r = normalizeImage(r)
+# showImage(r)
+#showImage(im)
 # neg, pos = checkPosNegBalance(r)
 # print("neg", neg,"pos", pos)
 # r = hilbertTraversal(r)

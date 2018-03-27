@@ -220,8 +220,10 @@ void VacancyAudioProcessor::applyIREnvelope(){
                     IRVolumeEnvelope.keyOff();
                 }
                 float tick = IRVolumeEnvelope.tick();
-                reversedWriteData[sample] *= tick;
                 forwardWriteData[sample] *= tick;
+                // reversedWriteData[sample] *= tick;
+                // reverses the envelope as well
+                reversedWriteData[forwardIRBuffer.getNumSamples() - sample - 1] *= tick;
             }
         }
         newlyEnvelopedIR = true;
